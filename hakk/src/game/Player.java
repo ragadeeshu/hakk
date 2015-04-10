@@ -7,14 +7,17 @@ import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 
 public class Player extends Character {
+	private Action action;
+	private boolean tryingToRunLeft;
+	private boolean tryingToRunRight;
 
 	public Player(HakkStage stage) {
 		super();
+		action = Action.STOPPING;
 		KeyboardFocusManager.getCurrentKeyboardFocusManager()
 				.addKeyEventDispatcher(new KeyEventDispatcher() {
 					@Override
 					public boolean dispatchKeyEvent(KeyEvent e) {
-						System.out.println("Got key event!");
 						if (e.getID() == KeyEvent.KEY_PRESSED) {
 							int keyCode = e.getKeyCode();
 							switch (keyCode) {
@@ -25,6 +28,7 @@ public class Player extends Character {
 								runLeft();
 								break;
 							case KeyEvent.VK_RIGHT:
+								System.out.println("Got key event!");
 								runRight();
 								break;
 							}
@@ -33,10 +37,10 @@ public class Player extends Character {
 							int keyCode = e.getKeyCode();
 							switch (keyCode) {
 							case KeyEvent.VK_LEFT:
-								
+								stopLeft();
 								break;
 							case KeyEvent.VK_RIGHT:
-								
+								stopRight();
 								break;
 							}
 						}
@@ -44,40 +48,102 @@ public class Player extends Character {
 					}
 
 				});
-		// addBindings(stage);
+	}
+
+	private void stopLeft() {
+		tryingToRunLeft = false;
+		if (action != Action.IN_AIR) {
+			if (!tryingToRunRight) {
+				action = Action.STOPPING;
+			} else
+				action = Action.RUNNING_RIGHT;
+		}
+
+	}
+
+	private void stopRight() {
+		tryingToRunRight = false;
+		if (action != Action.IN_AIR) {
+			if (!tryingToRunLeft) {
+				action = Action.STOPPING;
+			} else
+				action = Action.RUNNING_LEFT;
+		}
+
 	}
 
 	private void runLeft() {
-		if (y >= 299) {
-			if (xspeed > -5)
-				xspeed -= 1;
-			else
-				xspeed = -5;
-		}
+		tryingToRunLeft = true;
+		if (action != Action.IN_AIR)
+			action = Action.RUNNING_LEFT;
 	}
 
 	protected void runRight() {
-		if (y >= 299) {
-			if (xspeed < 5)
-				xspeed += 1;
-			else
-				xspeed = 5;
-		}
+		tryingToRunRight = true;
+		if (action != Action.IN_AIR)
+			action = Action.RUNNING_RIGHT;
 	}
 
 	protected void jump() {
-		if (y >= 299) {
-			yspeed -= 10;
-			System.out.println("did a jump");
-			System.out.println("yspeed is:" + yspeed);
-		}
+		if (action != Action.IN_AIR)
+			action = Action.JUMPING;
 
 	}
 
 	@Override
 	public void doPhysics() {
+		doAction();
 		doGravity();
 		doMovement();
+	}
+
+	private void doAction() {
+		switch (action) {
+		case JUMPING:
+
+			yspeed -= 10;
+			System.out.println("did a jump");
+			System.out.println("yspeed is:" + yspeed);
+			action = Action.IN_AIR;
+
+			break;
+		case RUNNING_LEFT:
+
+			if (xspeed > -5)
+				xspeed -= 1;
+			else
+				xspeed = -5;
+
+			break;
+		case RUNNING_RIGHT:
+
+			if (xspeed < 5)
+				xspeed += 1;
+			else
+				xspeed = 5;
+
+			break;
+		case STOPPING:
+			if (xspeed != 0) {
+				xspeed += xspeed * -0.7;
+			}
+
+			break;
+		case IN_AIR:
+			if (y > 299.99)
+				if (tryingToRunLeft && tryingToRunRight
+						|| !(tryingToRunLeft || tryingToRunRight)) {
+					action = Action.STOPPING;
+				} else if (tryingToRunLeft)
+					action = Action.RUNNING_LEFT;
+				else
+					action = Action.RUNNING_RIGHT;
+			break;
+		default:
+			break;
+
+		}
+
 	}
 
 	@Override
@@ -86,31 +152,6 @@ public class Player extends Character {
 		int inty = (int) Math.round(y);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.fillOval(intx, inty, 30, 30);
+		g2d.fillOval(intx, inty, 30, 50);
 	}
-
-	// protected void addBindings(HakkStage stage) {
-	// InputMap inputMap = stage.getInputMap();
-	//
-	// // Ctrl-b to go backward one character
-	// KeyStroke key = KeyStroke.getKeyStroke(KeyEvent.VK_B, Event.CTRL_MASK);
-	// inputMap.put(key, this.BackAction());
-	//
-	// // Ctrl-f to go forward one character
-	// key = KeyStroke.getKeyStroke(KeyEvent.VK_F, Event.CTRL_MASK);
-	// inputMap.put(key, DefaultEditorKit.forwardAction);
-	//
-	// // Ctrl-p to go up one line
-	// key = KeyStroke.getKeyStroke(KeyEvent.VK_P, Event.CTRL_MASK);
-	// inputMap.put(key, DefaultEditorKit.upAction);
-	//
-	// // Ctrl-n to go down one line
-	// key = KeyStroke.getKeyStroke(KeyEvent.VK_N, Event.CTRL_MASK);
-	// inputMap.put(key, DefaultEditorKit.downAction);
-	// }
-	//
-	// private Action BackAction() {
-	// // TODO Auto-generated method stub
-	// return new Action;
-	// }
 }

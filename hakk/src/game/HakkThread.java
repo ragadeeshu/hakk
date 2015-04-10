@@ -16,7 +16,7 @@ public class HakkThread extends Thread {
 		stage = new HakkStage();
 		frame.add(stage);
 		stage.add(new Player(stage));
-		frame.setSize(800, 400);
+		frame.setSize(900, 500);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		new Timer().schedule(new TimerTask() {
