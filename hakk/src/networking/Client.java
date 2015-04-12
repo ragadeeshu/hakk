@@ -1,13 +1,9 @@
 package networking;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.*;
 import java.net.*;
 
-import javax.swing.JFrame;
-
-public class Client extends JFrame implements KeyListener {
+public class Client {
 	
 	String address = "localhost";
 	int portNbr = 4444;
@@ -16,14 +12,13 @@ public class Client extends JFrame implements KeyListener {
 	OutputStream outputStream = null;
 
 	public Client(){
-		super();
-		addKeyListener(this);
-		setTitle("hakk client");
-		setSize(500, 400);
-        setVisible(true);
+		this.connect();
+		this.run();
+		this.disconnect();
 	}
 	
 	private void connect(){
+		System.out.println("haba");
 		try{
 			socket = new Socket(address, portNbr);
 			inputStream = socket.getInputStream();
@@ -58,33 +53,4 @@ public class Client extends JFrame implements KeyListener {
 		}
 	}
 
-	public void keyTyped(KeyEvent e) {
-	}
-
-	public void keyPressed(KeyEvent e) {
-		int key = e.getKeyCode();
-		if(key == KeyEvent.VK_UP){
-			System.out.println("Upp!");
-		}
-		if(key == KeyEvent.VK_RIGHT){
-			System.out.println("Höger!");
-		}
-		if(key == KeyEvent.VK_DOWN){
-			System.out.println("Ner!");
-		}
-		if(key == KeyEvent.VK_LEFT){
-			System.out.println("Vänster!");
-		}
-	}
-
-	public void keyReleased(KeyEvent e) {
-	}
-	
-	public static void main(String[] args) {
-		Client client = new Client();
-		//client.connect();
-		//client.run();
-		//client.disconnect();
-	}
-	
 }
