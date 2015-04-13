@@ -5,10 +5,14 @@ import java.util.TimerTask;
 
 import javax.swing.JFrame;
 
+import networking.Client;
+
 public class HakkThread extends Thread {
 	private HakkStage stage;
+	private Client client;
 
-	public HakkThread() {
+	public HakkThread(Client client) {
+		this.client = client;
 	}
 
 	public void run() {
