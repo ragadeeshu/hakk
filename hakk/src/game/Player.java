@@ -7,13 +7,12 @@ import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 
 public class Player extends Character {
-	private Action action;
 	private boolean tryingToRunLeft;
 	private boolean tryingToRunRight;
 
 	public Player(HakkStage stage) {
 		super();
-		action = Action.STOPPING;
+		state.action = Action.STOPPING;
 		KeyboardFocusManager.getCurrentKeyboardFocusManager()
 				.addKeyEventDispatcher(new KeyEventDispatcher() {
 					@Override
@@ -52,41 +51,41 @@ public class Player extends Character {
 
 	private void stopLeft() {
 		tryingToRunLeft = false;
-		if (action != Action.IN_AIR) {
+		if (state.action != Action.IN_AIR) {
 			if (!tryingToRunRight) {
-				action = Action.STOPPING;
+				state.action = Action.STOPPING;
 			} else
-				action = Action.RUNNING_RIGHT;
+				state.action = Action.RUNNING_RIGHT;
 		}
 
 	}
 
 	private void stopRight() {
 		tryingToRunRight = false;
-		if (action != Action.IN_AIR) {
+		if (state.action != Action.IN_AIR) {
 			if (!tryingToRunLeft) {
-				action = Action.STOPPING;
+				state.action = Action.STOPPING;
 			} else
-				action = Action.RUNNING_LEFT;
+				state.action = Action.RUNNING_LEFT;
 		}
 
 	}
 
 	private void runLeft() {
 		tryingToRunLeft = true;
-		if (action != Action.IN_AIR)
-			action = Action.RUNNING_LEFT;
+		if (state.action != Action.IN_AIR)
+			state.action = Action.RUNNING_LEFT;
 	}
 
 	protected void runRight() {
 		tryingToRunRight = true;
-		if (action != Action.IN_AIR)
-			action = Action.RUNNING_RIGHT;
+		if (state.action != Action.IN_AIR)
+			state.action = Action.RUNNING_RIGHT;
 	}
 
 	protected void jump() {
-		if (action != Action.IN_AIR)
-			action = Action.JUMPING;
+		if (state.action != Action.IN_AIR)
+			state.action = Action.JUMPING;
 
 	}
 
@@ -98,46 +97,46 @@ public class Player extends Character {
 	}
 
 	private void doAction() {
-		switch (action) {
+		switch (state.action) {
 		case JUMPING:
 
-			yspeed -= 10;
+			state.yspeed -= 10;
 			System.out.println("did a jump");
-			System.out.println("yspeed is:" + yspeed);
-			action = Action.IN_AIR;
+			System.out.println("yspeed is:" + state.yspeed);
+			state.action = Action.IN_AIR;
 
 			break;
 		case RUNNING_LEFT:
 
-			if (xspeed > -5)
-				xspeed -= 1;
+			if (state.xspeed > -5)
+				state.xspeed -= 1;
 			else
-				xspeed = -5;
+				state.xspeed = -5;
 
 			break;
 		case RUNNING_RIGHT:
 
-			if (xspeed < 5)
-				xspeed += 1;
+			if (state.xspeed < 5)
+				state.xspeed += 1;
 			else
-				xspeed = 5;
+				state.xspeed = 5;
 
 			break;
 		case STOPPING:
-			if (xspeed != 0) {
-				xspeed += xspeed * -0.7;
+			if (state.xspeed != 0) {
+				state.xspeed += state.xspeed * -0.7;
 			}
 
 			break;
 		case IN_AIR:
-			if (y > 299.99)
+			if (state.y > 299.99)
 				if (tryingToRunLeft && tryingToRunRight
 						|| !(tryingToRunLeft || tryingToRunRight)) {
-					action = Action.STOPPING;
+					state.action = Action.STOPPING;
 				} else if (tryingToRunLeft)
-					action = Action.RUNNING_LEFT;
+					state.action = Action.RUNNING_LEFT;
 				else
-					action = Action.RUNNING_RIGHT;
+					state.action = Action.RUNNING_RIGHT;
 			break;
 		default:
 			break;
@@ -148,8 +147,8 @@ public class Player extends Character {
 
 	@Override
 	public void draw(Graphics2D g2d) {
-		int intx = (int) Math.round(x);
-		int inty = (int) Math.round(y);
+		int intx = (int) Math.round(state.x);
+		int inty = (int) Math.round(state.y);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.fillOval(intx, inty, 30, 50);

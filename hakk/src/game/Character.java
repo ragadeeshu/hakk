@@ -3,25 +3,23 @@ package game;
 import java.awt.Graphics2D;
 
 public abstract class Character {
-	protected double x = 0;
-	protected double y = 0;
-	protected double xspeed = 0;
-	protected double yspeed = 0;
+
+	protected CharacterState state;
 
 	public abstract void draw(Graphics2D g2d);
 
 	public abstract void doPhysics();
 
 	protected void doGravity() {
-		yspeed -= -.5;
+		state.yspeed -= -.5;
 	}
 
 	protected void doMovement() {
-		x += xspeed;
-		y += yspeed;
-		if (y >= 300) {
-			y = 300;
-			yspeed = 0;
+		state.x += state.xspeed;
+		state.y += state.yspeed;
+		if (state.y >= 300) {
+			state.y = 300;
+			state.yspeed = 0;
 		}
 	}
 }
