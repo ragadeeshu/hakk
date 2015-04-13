@@ -19,13 +19,14 @@ public class HakkThread extends Thread {
 		JFrame frame = new JFrame("hakk");
 		stage = new HakkStage();
 		frame.add(stage);
-		stage.add(new Player(stage));
+		stage.add(client.getAddress(), new Player(stage));
 		frame.setSize(900, 500);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		new Timer().schedule(new TimerTask() {
 
 			public void run() {
+				stage.update(client);
 				stage.doPhysics();
 				stage.repaint();
 			}

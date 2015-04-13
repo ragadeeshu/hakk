@@ -32,18 +32,19 @@ public class RequestHandler implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		new Timer().schedule(new TimerTask() {
+		// new Timer().schedule(new TimerTask() {
 
-			public void run() {
-				try {
-					server.updateCharacterState(socket.getInetAddress()
-							.toString(), inputStream.readObject());
-					outputStream.writeObject(server.getStates());
-				} catch (ClassNotFoundException | IOException e) {
-					e.printStackTrace();
-				}
+		// public void run() {
+		while (true) {
+			try {
+				server.updateCharacterState(socket.getInetAddress().toString(),
+						inputStream.readObject());
+				outputStream.writeObject(server.getStates());
+			} catch (ClassNotFoundException | IOException e) {
+				e.printStackTrace();
 			}
-		}, 0, 17);
+		}
+		// }, 0, 17);
 
 	}
 

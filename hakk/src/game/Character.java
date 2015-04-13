@@ -3,7 +3,7 @@ package game;
 import java.awt.Graphics2D;
 
 public abstract class Character {
-	public Character(){
+	public Character() {
 		state = new CharacterState();
 	}
 
@@ -24,5 +24,9 @@ public abstract class Character {
 			state.y = 300;
 			state.yspeed = 0;
 		}
+	}
+
+	public void setState(CharacterState value) {
+		state = value;
 	}
 }
