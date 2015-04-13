@@ -5,22 +5,22 @@ import java.net.*;
 
 public class Client {
 	
-	String address = "localhost";
-	int portNbr = 4444;
-	Socket socket = null;
-	InputStream inputStream = null;
-	OutputStream outputStream = null;
+	private String address = "";
+	private int portNbr = 4444;
+	private Socket socket = null;
+	private InputStream inputStream = null;
+	private OutputStream outputStream = null;
 
-	public Client(){
-		this.connect();
+	public Client(String serverAddress){
+		this.connect(serverAddress);
 		this.run();
 		this.disconnect();
 	}
 	
-	private void connect(){
+	private void connect(String serverAddress){
 		System.out.println("haba");
 		try{
-			socket = new Socket(address, portNbr);
+			socket = new Socket(serverAddress, portNbr);
 			inputStream = socket.getInputStream();
 			outputStream = socket.getOutputStream();
 		} catch(IOException e){

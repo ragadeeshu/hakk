@@ -3,6 +3,9 @@ package game;
 import java.awt.Graphics2D;
 
 public abstract class Character {
+	public Character(){
+		state = new CharacterState();
+	}
 
 	protected CharacterState state;
 
