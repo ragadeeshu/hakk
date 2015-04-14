@@ -14,6 +14,7 @@ public class Server {
 	private HashMap<String, CharacterState> states;
 
 	public Server() {
+		states = new HashMap<String, CharacterState>();
 
 		ServerSocket serverSocket = null;
 		int portNbr = 4444;
@@ -34,7 +35,7 @@ public class Server {
 			Socket socket = null;
 			try {
 				socket = serverSocket.accept();
-				pool.submit(new RequestHandler(socket));
+				pool.submit(new RequestHandler(socket, this));
 			} catch (IOException e) {
 				System.out.println(e);
 				try {

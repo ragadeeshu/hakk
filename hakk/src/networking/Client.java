@@ -15,8 +15,8 @@ public class Client {
 	private String address = "";
 	private int portNbr = 4444;
 	private Socket socket = null;
-//	private ObjectInputStream inputStream = null;
-//	private ObjectOutputStream outputStream = null;
+	private ObjectInputStream inputStream = null;
+	private ObjectOutputStream outputStream = null;
 
 	public Client(String serverAddress) {
 		this.connect(serverAddress);
@@ -27,6 +27,8 @@ public class Client {
 		try {
 			socket = new Socket(serverAddress, portNbr);
 			System.out.println("Client socket established");
+			outputStream = new ObjectOutputStream(socket.getOutputStream());
+			inputStream = new ObjectInputStream(socket.getInputStream());
 		} catch (IOException e) {
 			System.out.println(e);
 			System.exit(1);
@@ -44,13 +46,13 @@ public class Client {
 	}
 
 	public String getAddress() {
-		return socket.getLocalAddress().toString();
+		return socket.getLocalAddress().getHostAddress();
 	}
 
 	public void send(CharacterState state) {
 		try {
-			ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
 			outputStream.writeObject(state);
+			outputStream.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -58,7 +60,6 @@ public class Client {
 
 	public HashMap<String, CharacterState> getUpdate() {
 		try {
-			ObjectInputStream inputStream = new ObjectInputStream(socket.getInputStream());
 			return (HashMap<String, CharacterState>) inputStream.readObject();
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();

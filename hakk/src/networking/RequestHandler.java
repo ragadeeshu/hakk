@@ -15,8 +15,9 @@ public class RequestHandler implements Runnable {
 	private ObjectInputStream inputStream = null;
 	private ObjectOutputStream outputStream = null;
 
-	public RequestHandler(Socket socket) {
+	public RequestHandler(Socket socket, Server server) {
 		this.socket = socket;
+		this.server = server;
 	}
 
 	@Override
@@ -32,19 +33,22 @@ public class RequestHandler implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		// new Timer().schedule(new TimerTask() {
+		boolean connected = true;
 
-		// public void run() {
-		while (true) {
+		while (connected) {
 			try {
-				server.updateCharacterState(socket.getInetAddress().toString(),
-						inputStream.readObject());
+				Object obj = inputStream.readObject();
+				server.updateCharacterState(socket.getInetAddress()
+						.getHostAddress(), obj);
 				outputStream.writeObject(server.getStates());
+				outputStream.flush();
 			} catch (ClassNotFoundException | IOException e) {
-				e.printStackTrace();
+				System.out.println("Client "
+						+ socket.getInetAddress().getHostAddress()
+						+ " disconnected");
+				connected = false;
 			}
 		}
-		// }, 0, 17);
 
 	}
 

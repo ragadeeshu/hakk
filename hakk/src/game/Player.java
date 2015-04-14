@@ -27,7 +27,6 @@ public class Player extends Character {
 								runLeft();
 								break;
 							case KeyEvent.VK_RIGHT:
-								System.out.println("Got key event!");
 								runRight();
 								break;
 							}
@@ -101,8 +100,6 @@ public class Player extends Character {
 		case JUMPING:
 
 			state.yspeed -= 10;
-			System.out.println("did a jump");
-			System.out.println("yspeed is:" + state.yspeed);
 			state.action = Action.IN_AIR;
 
 			break;

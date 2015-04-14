@@ -9,6 +9,7 @@ import networking.Client;
 public class Launcher {
 
 	public static void main(String[] args) throws InterruptedException {
+		System.out.println("Enter server address: ");
 		Scanner scan = new Scanner(System.in);
 		String serverAddress = scan.nextLine();
 		Client client = new Client(serverAddress);
