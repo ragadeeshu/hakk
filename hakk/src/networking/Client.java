@@ -3,8 +3,11 @@ package networking;
 import game.CharacterState;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
 //import java.io.ObjectInputStream;
 //import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -15,8 +18,8 @@ public class Client {
 	private String address = "";
 	private int portNbr = 4444;
 	private Socket socket = null;
-	private ObjectInputStream inputStream = null;
-	private ObjectOutputStream outputStream = null;
+	private InputStream inputStream = null;
+	private OutputStream outputStream = null;
 
 	public Client(String serverAddress) {
 		this.connect(serverAddress);
@@ -27,8 +30,8 @@ public class Client {
 		try {
 			socket = new Socket(serverAddress, portNbr);
 			System.out.println("Client socket established");
-			outputStream = new ObjectOutputStream(socket.getOutputStream());
-			inputStream = new ObjectInputStream(socket.getInputStream());
+			outputStream = socket.getOutputStream();
+			inputStream = socket.getInputStream();
 		} catch (IOException e) {
 			System.out.println(e);
 			System.exit(1);
@@ -46,22 +49,27 @@ public class Client {
 	}
 
 	public String getAddress() {
-		return socket.getLocalAddress().getHostAddress();
+		return socket.getInetAddress().getHostName()
+				+ ":"
+				+ ((InetSocketAddress) socket.getLocalSocketAddress())
+						.getPort();
 	}
 
-	public void send(CharacterState state) {
+	public void send(String string) {
 		try {
-			outputStream.writeObject(state);
+			outputStream.write(string.getBytes());
 			outputStream.flush();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public HashMap<String, CharacterState> getUpdate() {
+	public String getUpdate() {
 		try {
-			return (HashMap<String, CharacterState>) inputStream.readObject();
-		} catch (ClassNotFoundException | IOException e) {
+			byte[] bytes = new byte[1024];
+			inputStream.read(bytes);
+			return new String(bytes);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;

@@ -40,12 +40,27 @@ public class HakkStage extends JPanel {
 	}
 
 	public void update(Client client) {
-		client.send(characters.get(client.getAddress()).state);
-		for(Entry<String, CharacterState> ent:
-			client.getUpdate().entrySet()){
-			characters.get(ent.getKey()).setState(ent.getValue());
-			
+		client.send(characters.get(client.getAddress()).state.toString());
+		String gup = client.getUpdate();
+		System.out.println("GUP: " + gup);
+		for (String ent : gup.split(";")) {
+			System.out.println("ENT: " + ent);
+			String[] splatEnt = ent.split("%");
+
+			Character character = characters.get(splatEnt[0]);
+			if (character == null) {
+				character = new Opponent(this);
+				characters.put(splatEnt[0], character);
+			}
+			// System.out.println("updated character "+ent.getKey());
+			System.out.println(splatEnt[0]);
+			System.out.println(client.getAddress());
+			if (!splatEnt[0].equals(client.getAddress())) {
+				System.out.println("Not ignoring");
+				character.setState(new CharacterState(splatEnt[1]));
+			}
+
 		}
-				
+
 	}
 }

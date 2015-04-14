@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -12,8 +13,8 @@ public class RequestHandler implements Runnable {
 
 	private Socket socket;
 	private Server server;
-	private ObjectInputStream inputStream = null;
-	private ObjectOutputStream outputStream = null;
+	private InputStream inputStream = null;
+	private OutputStream outputStream = null;
 
 	public RequestHandler(Socket socket, Server server) {
 		this.socket = socket;
@@ -28,8 +29,8 @@ public class RequestHandler implements Runnable {
 				+ socket.getPort() + ". Local port: " + socket.getLocalPort());
 
 		try {
-			inputStream = new ObjectInputStream(socket.getInputStream());
-			outputStream = new ObjectOutputStream(socket.getOutputStream());
+			inputStream = socket.getInputStream();
+			outputStream = socket.getOutputStream();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -37,15 +38,17 @@ public class RequestHandler implements Runnable {
 
 		while (connected) {
 			try {
-				Object obj = inputStream.readObject();
+				byte[] bytes = new byte[512];
+				inputStream.read(bytes);
+				String state = new String(bytes);
 				server.updateCharacterState(socket.getInetAddress()
-						.getHostAddress(), obj);
-				outputStream.writeObject(server.getStates());
+						.getHostName() + ":" + socket.getPort(), state);
+				outputStream.write(server.getStates().getBytes());
 				outputStream.flush();
-			} catch (ClassNotFoundException | IOException e) {
+			} catch ( IOException e) {
 				System.out.println("Client "
-						+ socket.getInetAddress().getHostAddress()
-						+ " disconnected");
+						+ socket.getInetAddress().getHostName() + ":"
+						+ socket.getPort() + " disconnected");
 				connected = false;
 			}
 		}

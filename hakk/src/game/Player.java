@@ -1,5 +1,6 @@
 package game;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
@@ -88,14 +89,7 @@ public class Player extends Character {
 
 	}
 
-	@Override
-	public void doPhysics() {
-		doAction();
-		doGravity();
-		doMovement();
-	}
-
-	private void doAction() {
+	protected void doAction() {
 		switch (state.action) {
 		case JUMPING:
 
@@ -148,6 +142,7 @@ public class Player extends Character {
 		int inty = (int) Math.round(state.y);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setColor(Color.BLACK);
 		g2d.fillOval(intx, inty, 30, 50);
 	}
 }

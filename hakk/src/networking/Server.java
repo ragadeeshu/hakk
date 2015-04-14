@@ -7,14 +7,15 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server {
-	private HashMap<String, CharacterState> states;
+	private HashMap<String, String> states;
 
 	public Server() {
-		states = new HashMap<String, CharacterState>();
+		states = new HashMap<String, String>();
 
 		ServerSocket serverSocket = null;
 		int portNbr = 4444;
@@ -54,13 +55,23 @@ public class Server {
 	}
 
 	public synchronized void updateCharacterState(String inetAddress,
-			Object readObject) {
-		states.put(inetAddress, (CharacterState) readObject);
+			String state) {
+		// System.out.println(inetAddress + " updated");
+		states.put(inetAddress, state);
 
 	}
 
-	public synchronized Object getStates() {
-		return states;
+	public synchronized String getStates() {
+		StringBuilder sb = new StringBuilder();
+		for (Entry<String, String> e : states.entrySet()) {
+			sb.append(";");
+			sb.append(e.getKey());
+			sb.append("%");
+			sb.append(e.getValue().trim());
+		}
+		sb.append(":END");
+		System.out.println(sb.toString());
+		return sb.substring(1);
 	}
 
 }

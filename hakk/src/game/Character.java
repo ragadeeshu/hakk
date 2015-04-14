@@ -3,15 +3,13 @@ package game;
 import java.awt.Graphics2D;
 
 public abstract class Character {
+	protected CharacterState state;
+
 	public Character() {
 		state = new CharacterState();
 	}
 
-	protected CharacterState state;
-
 	public abstract void draw(Graphics2D g2d);
-
-	public abstract void doPhysics();
 
 	protected void doGravity() {
 		state.yspeed -= -.5;
@@ -29,4 +27,14 @@ public abstract class Character {
 	public void setState(CharacterState value) {
 		state = value;
 	}
+
+	public void doPhysics() {
+		doAction();
+		doGravity();
+		doMovement();
+		System.out.println(state.action);
+	}
+
+	protected abstract void doAction();
+
 }

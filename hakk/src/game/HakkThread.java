@@ -26,8 +26,8 @@ public class HakkThread extends Thread {
 		new Timer().schedule(new TimerTask() {
 
 			public void run() {
-				stage.update(client);
 				stage.doPhysics();
+				stage.update(client);
 				stage.repaint();
 			}
 		}, 0, 17);
