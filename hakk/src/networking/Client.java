@@ -52,6 +52,10 @@ public class Client {
 	}
 
 	public String getAddress() {
+//		System.out.println("sak: " + socket.getInetAddress().getHostName()
+//				+ ":"
+//				+ ((InetSocketAddress) socket.getLocalSocketAddress())
+//						.getPort());
 		return socket.getInetAddress().getHostName()
 				+ ":"
 				+ ((InetSocketAddress) socket.getLocalSocketAddress())
