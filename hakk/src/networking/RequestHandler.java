@@ -38,7 +38,7 @@ public class RequestHandler implements Runnable {
 
 		while (connected) {
 			try {
-				byte[] bytes = new byte[512];
+				byte[] bytes = new byte[Networking.BUFFER_SIZE];
 				inputStream.read(bytes);
 				String state = new String(bytes);
 				server.updateCharacterState(socket.getInetAddress()

@@ -29,6 +29,9 @@ public class Client {
 		System.out.println("haba");
 		try {
 			socket = new Socket(serverAddress, portNbr);
+			socket.setTcpNoDelay(true);
+			socket.setReceiveBufferSize(Networking.BUFFER_SIZE);
+			socket.setSendBufferSize(Networking.BUFFER_SIZE);
 			System.out.println("Client socket established");
 			outputStream = socket.getOutputStream();
 			inputStream = socket.getInputStream();
@@ -66,7 +69,7 @@ public class Client {
 
 	public String getUpdate() {
 		try {
-			byte[] bytes = new byte[1024];
+			byte[] bytes = new byte[Networking.BUFFER_SIZE];
 			inputStream.read(bytes);
 			return new String(bytes);
 		} catch (IOException e) {

@@ -36,6 +36,9 @@ public class Server {
 			Socket socket = null;
 			try {
 				socket = serverSocket.accept();
+				socket.setTcpNoDelay(true);
+				socket.setReceiveBufferSize(Networking.BUFFER_SIZE);
+				socket.setSendBufferSize(Networking.BUFFER_SIZE);
 				pool.submit(new RequestHandler(socket, this));
 			} catch (IOException e) {
 				System.out.println(e);
