@@ -100,6 +100,7 @@ public class Player extends Character {
 
 			break;
 		case RUNNING_LEFT:
+			animation.run();
 
 			if (state.xspeed > -5)
 				state.xspeed -= 1;
@@ -108,7 +109,7 @@ public class Player extends Character {
 
 			break;
 		case RUNNING_RIGHT:
-
+			animation.run();
 			if (state.xspeed < 5)
 				state.xspeed += 1;
 			else
