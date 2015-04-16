@@ -10,9 +10,11 @@ import java.awt.event.KeyEvent;
 public class Player extends Character {
 	private boolean tryingToRunLeft;
 	private boolean tryingToRunRight;
+	private PlayerAnimation animation;
 
 	public Player(HakkStage stage) {
 		super();
+		animation = new PlayerAnimation();
 		state.action = Action.STOPPING;
 		KeyboardFocusManager.getCurrentKeyboardFocusManager()
 				.addKeyEventDispatcher(new KeyEventDispatcher() {
@@ -143,6 +145,7 @@ public class Player extends Character {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setColor(Color.BLACK);
-		g2d.fillOval(intx, inty, 30, 50);
+		g2d.drawImage(animation.getImage(), intx, inty, null);
+		// g2d.fillOval(intx, inty, 30, 50);
 	}
 }
