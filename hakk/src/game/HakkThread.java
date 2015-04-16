@@ -9,17 +9,14 @@ import networking.Client;
 
 public class HakkThread extends Thread {
 	private HakkStage stage;
-	private Client client;
 
-	public HakkThread(Client client) {
-		this.client = client;
+	public HakkThread(HakkStage stage) {
+		this.stage = stage;
 	}
 
 	public void run() {
 		JFrame frame = new JFrame("hakk");
-		stage = new HakkStage();
 		frame.add(stage);
-		stage.add(client.getAddress(), new Player(stage));
 		frame.setSize(900, 500);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -27,7 +24,6 @@ public class HakkThread extends Thread {
 
 			public void run() {
 				stage.doPhysics();
-				stage.update(client);
 				stage.repaint();
 			}
 		}, 0, 17);

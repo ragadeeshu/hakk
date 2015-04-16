@@ -1,6 +1,8 @@
 package start;
 
+import game.HakkStage;
 import game.HakkThread;
+import game.UpdateThread;
 
 import java.util.Scanner;
 
@@ -14,7 +16,8 @@ public class Launcher {
 //		String serverAddress = scan.nextLine();
 		String serverAddress = "localhost";
 		Client client = new Client(serverAddress);
-		new HakkThread(client).start();
-
+		HakkStage stage = new HakkStage();
+		new HakkThread(stage).start();
+		new UpdateThread(client, stage).start();
 	}
 }

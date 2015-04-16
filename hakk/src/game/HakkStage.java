@@ -19,7 +19,7 @@ public class HakkStage extends JPanel {
 	}
 
 	@Override
-	public void paint(Graphics g) {
+	public synchronized void paint(Graphics g) {
 		super.paint(g);
 		Graphics2D g2d = (Graphics2D) g;
 		for (Entry<String, Character> character : characters.entrySet()) {
@@ -28,23 +28,23 @@ public class HakkStage extends JPanel {
 
 	}
 
-	public void doPhysics() {
+	public synchronized void doPhysics() {
 		for (Entry<String, Character> character : characters.entrySet()) {
 			character.getValue().doPhysics();
 		}
 	}
 
-	public void add(String address, Character character) {
+	public synchronized void add(String address, Character character) {
 		characters.put(address, character);
 
 	}
 
-	public void update(Client client) {
+	public synchronized void update(Client client) {
 		client.send(characters.get(client.getAddress()).state.toString());
 		String gup = client.getUpdate();
-		System.out.println("GUP: " + gup);
+//		System.out.println("GUP: " + gup);
 		for (String ent : gup.split(";")) {
-			System.out.println("ENT: " + ent);
+//			System.out.println("ENT: " + ent);
 			String[] splatEnt = ent.split("%");
 
 			Character character = characters.get(splatEnt[0]);
@@ -53,10 +53,10 @@ public class HakkStage extends JPanel {
 				characters.put(splatEnt[0], character);
 			}
 			// System.out.println("updated character "+ent.getKey());
-			System.out.println(splatEnt[0]);
-			System.out.println(client.getAddress());
+//			System.out.println(splatEnt[0]);
+//			System.out.println(client.getAddress());
 			if (!splatEnt[0].equals(client.getAddress())) {
-				System.out.println("Not ignoring");
+//				System.out.println("Not ignoring");
 				character.setState(new CharacterState(splatEnt[1]));
 			}
 

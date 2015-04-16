@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class CharacterState implements Serializable {
 	public CharacterState(String state) {
-		System.out.println("State: " + state);
+//		System.out.println("State: " + state);
 		String[] s = state.split(":");
 
 		this.x = Double.parseDouble(s[0]);

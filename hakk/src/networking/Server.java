@@ -70,8 +70,12 @@ public class Server {
 			sb.append(e.getValue().trim());
 		}
 		sb.append(":END");
-		System.out.println(sb.toString());
+		// System.out.println(sb.toString());
 		return sb.substring(1);
+	}
+
+	public synchronized void disconnect(String string) {
+		states.remove(string);
 	}
 
 }

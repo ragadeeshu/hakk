@@ -46,12 +46,14 @@ public class RequestHandler implements Runnable {
 				outputStream.write(server.getStates().getBytes());
 				outputStream.flush();
 			} catch ( IOException e) {
-				System.out.println("Client "
-						+ socket.getInetAddress().getHostName() + ":"
-						+ socket.getPort() + " disconnected");
 				connected = false;
 			}
 		}
+		System.out.println("Client "
+				+ socket.getInetAddress().getHostName() + ":"
+				+ socket.getPort() + " disconnected");
+		server.disconnect(socket.getInetAddress().getHostName() + ":"
+				+ socket.getPort());
 
 	}
 
