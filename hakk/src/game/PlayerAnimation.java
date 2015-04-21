@@ -20,7 +20,7 @@ public class PlayerAnimation {
 
 			try {
 				System.out.println("sprites"+File.pathSeparator+"playerrunni__"+String.format("%03d", i)+".png");
-				img = ImageIO.read(new File("sprites/playerrunni__"+String.format("%03d", i)+".png"));
+				img = ImageIO.read(new File("sprites/player2runni__"+String.format("%03d", i)+".png"));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
