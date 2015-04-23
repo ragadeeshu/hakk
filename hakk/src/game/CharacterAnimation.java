@@ -18,7 +18,7 @@ public class CharacterAnimation {
 		running = new ArrayList<Image>();
 		BufferedImage img = null;
 		for (int i = 0; i < NUM_RUNNING; i++) {
-			//System.out.println("sprites"+File.pathSeparator+baseName+"runni__"+String.format("%03d", i)+".png");
+//			System.out.println("sprites"+File.pathSeparator+baseName+"runni__"+String.format("%03d", i)+".png");
 			try {
 				img = ImageIO.read(new File("sprites/"+baseName+"runni__"+String.format("%03d", i)+".png"));
 			} catch (IOException e) {

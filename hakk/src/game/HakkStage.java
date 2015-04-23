@@ -4,7 +4,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javafx.scene.shape.Rectangle;
 
@@ -52,10 +54,14 @@ public class HakkStage extends JPanel {
 	}
 
 	public synchronized void update(Client client) {
+		HashSet<String> keyset = new HashSet(characters.keySet());
 		client.send(characters.get(client.getAddress()).state.toString()+"&"+swords.get(client.getAddress()).toString());
 		String gup = client.getUpdate();
 		for (String ent : gup.split(";")) {
 			String[] splatEnt = ent.split("%");
+			
+			keyset.remove(splatEnt[0]);
+
 			Character character = characters.get(splatEnt[0]);
 			if (character == null) {
 				character = new Opponent(this);
@@ -64,8 +70,10 @@ public class HakkStage extends JPanel {
 			if (!splatEnt[0].equals(client.getAddress())) {
 				character.setState(new CharacterState(splatEnt[1]));
 			}
-
 		}
-
+		for(String key : keyset){
+			System.out.println("Removing player " + key);
+			characters.remove(key);
+		}
 	}
 }
