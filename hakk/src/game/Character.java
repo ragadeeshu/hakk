@@ -1,15 +1,26 @@
 package game;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 
 public abstract class Character {
 	protected CharacterState state;
+	protected CharacterAnimation animation;
+
 
 	public Character() {
 		state = new CharacterState();
 	}
 
-	public abstract void draw(Graphics2D g2d);
+	public void draw(Graphics2D g2d) {
+		int intx = (int) Math.round(state.x);
+		int inty = (int) Math.round(state.y);
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		int height = animation.getImage().getHeight(null);
+		g2d.drawImage(animation.getImage(), intx, inty-height, null);
+	}
 
 	protected void doGravity() {
 		state.yspeed -= -.5;

@@ -9,6 +9,8 @@ public class Opponent extends Character {
 	public Opponent(HakkStage stage) {
 		super();
 		state.action = Action.STOPPING;
+		animation = new CharacterAnimation("player2");
+
 	}
 
 	protected void doAction() {
@@ -20,6 +22,8 @@ public class Opponent extends Character {
 
 			break;
 		case RUNNING_LEFT:
+			animation.run();
+
 
 			if (state.xspeed > -5)
 				state.xspeed -= 1;
@@ -28,6 +32,8 @@ public class Opponent extends Character {
 
 			break;
 		case RUNNING_RIGHT:
+			animation.run();
+
 
 			if (state.xspeed < 5)
 				state.xspeed += 1;
@@ -50,15 +56,5 @@ public class Opponent extends Character {
 
 		}
 
-	}
-
-	@Override
-	public void draw(Graphics2D g2d) {
-		int intx = (int) Math.round(state.x);
-		int inty = (int) Math.round(state.y);
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setColor(Color.RED);
-		g2d.fillOval(intx, inty, 30, 50);
 	}
 }
