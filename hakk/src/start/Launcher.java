@@ -15,7 +15,8 @@ public class Launcher {
 		Scanner scan = new Scanner(System.in);
 //		String serverAddress = scan.nextLine();
 		String serverAddress = "127.0.0.1";
-		Client client = new Client(serverAddress);
+		String playerName = "Player1";
+		Client client = new Client(serverAddress, playerName);
 		HakkStage stage = new HakkStage();
 		new HakkThread(stage).start();
 		new UpdateThread(client, stage).start();

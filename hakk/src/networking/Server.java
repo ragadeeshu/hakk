@@ -3,6 +3,8 @@ package networking;
 import game.CharacterState;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -41,6 +43,17 @@ public class Server {
 				socket.setTcpNoDelay(true);
 				socket.setReceiveBufferSize(Networking.BUFFER_SIZE);
 				socket.setSendBufferSize(Networking.BUFFER_SIZE);
+				InputStream inputStream = socket.getInputStream();
+				OutputStream outputStream = socket.getOutputStream();
+				String clientHandshake = Networking.getUpdate(inputStream);
+//				System.out.println("Handshake: " + clientHandshake);
+				while(!clientHandshake.trim().startsWith(Networking.CLIENT_HANDSHAKE)){
+					System.out.println("Waiting for handshake");
+					clientHandshake = Networking.getUpdate(inputStream);
+				}
+				String playerName = clientHandshake.split(";")[1];
+//				System.out.println("Name: " + playerName);
+				Networking.send(outputStream, Networking.SERVER_HANDSHAKE);
 				pool.submit(new RequestHandler(socket, this));
 			} catch (IOException e) {
 				System.out.println(e);

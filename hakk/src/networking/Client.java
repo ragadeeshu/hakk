@@ -14,14 +14,15 @@ import java.net.Socket;
 import java.util.HashMap;
 
 public class Client {
-
+	private String playerName = "Default Name";
 	private String address = "";
 	private int portNbr = 4444;
 	private Socket socket = null;
 	private InputStream inputStream = null;
 	private OutputStream outputStream = null;
 
-	public Client(String serverAddress) {
+	public Client(String serverAddress, String playerName) {
+		this.playerName = playerName;
 		this.connect(serverAddress);
 	}
 
@@ -34,6 +35,13 @@ public class Client {
 			System.out.println("Client socket established");
 			outputStream = socket.getOutputStream();
 			inputStream = socket.getInputStream();
+			send(Networking.CLIENT_HANDSHAKE+";"+playerName);
+//			System.out.println("Player name: "+playerName);
+//			send(playerName);
+			String reply = getUpdate();
+//			System.out.println("Reply: "+reply);
+			if(!reply.trim().equals(Networking.SERVER_HANDSHAKE))
+				System.exit(1);
 		} catch (IOException e) {
 			System.out.println(e);
 			System.exit(1);
