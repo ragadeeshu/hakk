@@ -48,7 +48,6 @@ public class Server {
 				InputStream inputStream = socket.getInputStream();
 				OutputStream outputStream = socket.getOutputStream();
 				String clientHandshake = Networking.getUpdate(inputStream);
-//				System.out.println("Handshake: " + clientHandshake);
 				while(!clientHandshake.trim().startsWith(Networking.CLIENT_HANDSHAKE)){
 					System.out.println("Waiting for handshake");
 					clientHandshake = Networking.getUpdate(inputStream);
@@ -56,7 +55,6 @@ public class Server {
 				String playerName = clientHandshake.split(";")[1];
 				playerNames.put(socket.getInetAddress()
 						.getHostName() + ":" + socket.getPort(), playerName);
-//				System.out.println("Name: " + playerName);
 				Networking.send(outputStream, Networking.SERVER_HANDSHAKE);
 				pool.submit(new RequestHandler(socket, this));
 			} catch (IOException e) {
@@ -77,19 +75,16 @@ public class Server {
 	}
 
 	public synchronized void updateCharacterState(String inetAddress, String state) {
-//		 System.out.println(inetAddress + " updated");
 		characterStates.put(inetAddress, new CharacterState(state));
 
 	}
 	
 	public synchronized void updateSwordState(String inetAddress, String state) {
-//		System.out.println(state);
 		Sword s = new Sword(state);
-//		System.out.println("made new blade");
 		swordStates.put(inetAddress, s);
 		for(CharacterState chState : characterStates.values()){
 			if(chState.isHit(s)){
-				System.out.println("du dog!");
+				//System.out.println("du dog!");
 			}
 		}
 	}
@@ -103,7 +98,6 @@ public class Server {
 			sb.append(e.getValue().toString().trim());
 		}
 		sb.append(":END");
-//		 System.out.println(sb.toString());
 		return sb.substring(1);
 	}
 	

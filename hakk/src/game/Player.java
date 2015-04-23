@@ -74,8 +74,9 @@ public class Player extends Character {
 
 	private void runLeft() {
 		tryingToRunLeft = true;
-		if (state.action != Action.IN_AIR)
+		if (state.action != Action.IN_AIR){
 			state.action = Action.RUNNING_LEFT;
+		}
 	}
 
 	protected void runRight() {
@@ -99,9 +100,12 @@ public class Player extends Character {
 
 			break;
 		case RUNNING_LEFT:
+			if(hitLeftWall()){
+				state.action = Action.STOPPING;
+				break;
+			}
 			animation.run();
 			state.currentImage= animation.getCurrentImageName();
-
 			if (state.xspeed > -5)
 				state.xspeed -= 1;
 			else
@@ -109,6 +113,10 @@ public class Player extends Character {
 
 			break;
 		case RUNNING_RIGHT:
+			if(hitRightWall()){
+				state.action = Action.STOPPING;
+				break;
+			}
 			animation.run();
 			if (state.xspeed < 5)
 				state.xspeed += 1;
@@ -124,8 +132,7 @@ public class Player extends Character {
 			break;
 		case IN_AIR:
 			if (state.y > 299.99)
-				if (tryingToRunLeft && tryingToRunRight
-						|| !(tryingToRunLeft || tryingToRunRight)) {
+				if (hitLeftWall() || hitRightWall() || tryingToRunLeft && tryingToRunRight || !(tryingToRunLeft || tryingToRunRight)) {
 					state.action = Action.STOPPING;
 				} else if (tryingToRunLeft)
 					state.action = Action.RUNNING_LEFT;
