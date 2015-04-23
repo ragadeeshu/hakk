@@ -3,7 +3,9 @@ package game;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.swing.JPanel;
 
@@ -40,12 +42,15 @@ public class HakkStage extends JPanel {
 	}
 
 	public synchronized void update(Client client) {
+		HashSet<String> keyset = new HashSet(characters.keySet());
 		client.send(characters.get(client.getAddress()).state.toString());
 		String gup = client.getUpdate();
 //		System.out.println("GUP: " + gup);
 		for (String ent : gup.split(";")) {
 //			System.out.println("ENT: " + ent);
 			String[] splatEnt = ent.split("%");
+			
+			keyset.remove(splatEnt[0]);
 
 			Character character = characters.get(splatEnt[0]);
 			if (character == null) {
@@ -59,8 +64,10 @@ public class HakkStage extends JPanel {
 //				System.out.println("Not ignoring");
 				character.setState(new CharacterState(splatEnt[1]));
 			}
-
 		}
-
+		for(String key : keyset){
+			System.out.println("Removing player " + key);
+			characters.remove(key);
+		}
 	}
 }

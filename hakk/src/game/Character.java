@@ -43,7 +43,7 @@ public abstract class Character {
 		doAction();
 		doGravity();
 		doMovement();
-		System.out.println(state.action);
+//		System.out.println(state.action);
 	}
 
 	protected abstract void doAction();
