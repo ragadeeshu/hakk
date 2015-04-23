@@ -14,8 +14,8 @@ public class UpdateThread extends Thread {
 	public UpdateThread(Client client, HakkStage stage) {
 		this.client = client;
 		this.stage = stage;
-		stage.add(client.getAddress(), new Player(stage));
-
+		stage.addCharacter(client.getAddress(), new Player(stage));
+		stage.addSword(client.getAddress(), new Sword(400, 220));
 	}
 
 	public void run() {

@@ -14,10 +14,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server {
-	private HashMap<String, String> states;
+	private HashMap<String, CharacterState> characterStates;
+	private HashMap<String, String> swordStates;
 
 	public Server() {
-		states = new HashMap<String, String>();
+		characterStates = new HashMap<String, CharacterState>();
+		swordStates = new HashMap<String, String>();
 
 		ServerSocket serverSocket = null;
 		int portNbr = 4444;
@@ -70,20 +72,25 @@ public class Server {
 		Server server = new Server();
 	}
 
-	public synchronized void updateCharacterState(String inetAddress,
-			String state) {
+	public synchronized void updateCharacterState(String inetAddress, String state) {
 		// System.out.println(inetAddress + " updated");
-		states.put(inetAddress, state);
+		characterStates.put(inetAddress, new CharacterState(state));
 
+	}
+	
+	public synchronized void updateSwordState(String inetAddress, String state) {
+//		System.out.println(state);
+		swordStates.put(inetAddress, state);
+//		for()
 	}
 
 	public synchronized String getStates() {
 		StringBuilder sb = new StringBuilder();
-		for (Entry<String, String> e : states.entrySet()) {
+		for (Entry<String, CharacterState> e : characterStates.entrySet()) {
 			sb.append(";");
 			sb.append(e.getKey());
 			sb.append("%");
-			sb.append(e.getValue().trim());
+			sb.append(e.getValue().toString().trim());
 		}
 		sb.append(":END");
 		// System.out.println(sb.toString());
@@ -91,7 +98,7 @@ public class Server {
 	}
 
 	public synchronized void disconnect(String string) {
-		states.remove(string);
+		characterStates.remove(string);
 	}
 
 }

@@ -100,6 +100,7 @@ public class Player extends Character {
 			break;
 		case RUNNING_LEFT:
 			animation.run();
+			state.currentImage= animation.getCurrentImageName();
 
 			if (state.xspeed > -5)
 				state.xspeed -= 1;

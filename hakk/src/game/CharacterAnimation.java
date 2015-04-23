@@ -12,6 +12,7 @@ public class CharacterAnimation {
 	private static final int NUM_RUNNING = 11;
 	private ArrayList<Image> running;
 	private int current;
+	private String baseName;
 
 	public CharacterAnimation(String baseName) {
 		running = new ArrayList<Image>();
@@ -30,6 +31,9 @@ public class CharacterAnimation {
 
 	public void run() {
 		current = (current + 1) % NUM_RUNNING;
+	}
+	public String getCurrentImageName(){
+		return baseName +String.format("runni__%03d.png", current);
 	}
 
 	public Image getImage() {
