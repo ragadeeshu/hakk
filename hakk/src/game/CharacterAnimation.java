@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
@@ -13,6 +14,14 @@ public class CharacterAnimation {
 	private ArrayList<Image> running;
 	private int current;
 	private String baseName;
+	private static HashMap<String, BufferedImage> resources;
+	
+	static{
+		resources= new HashMap<>();
+	}
+	public static BufferedImage getImage(String name){
+		return resources.get(name);
+	}
 
 	public CharacterAnimation(String baseName) {
 		running = new ArrayList<Image>();
@@ -20,7 +29,9 @@ public class CharacterAnimation {
 		for (int i = 0; i < NUM_RUNNING; i++) {
 //			System.out.println("sprites"+File.pathSeparator+baseName+"runni__"+String.format("%03d", i)+".png");
 			try {
-				img = ImageIO.read(new File("sprites/"+baseName+"runni__"+String.format("%03d", i)+".png"));
+				String name = "sprites/"+baseName+"runni__"+String.format("%03d", i)+".png";
+				img = ImageIO.read(new File(name));
+				resources.put(name, img);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

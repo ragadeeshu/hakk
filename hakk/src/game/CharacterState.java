@@ -1,5 +1,7 @@
 package game;
 
+import java.awt.image.BufferedImage;
+
 
 public class CharacterState {
 	public double x = 0;
@@ -38,6 +40,7 @@ public class CharacterState {
 
 	public boolean isHit(Sword s) {
 		if(Math.hypot(x-s.getX(), y-s.getY())<100){
+			BufferedImage image = CharacterAnimation.getImage(currentImage);
 			return true;
 		}
 		return false;
