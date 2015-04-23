@@ -5,6 +5,7 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
@@ -14,13 +15,24 @@ public class Sword {
 	private double y;
 	private BufferedImage image;
 	private String currentImage;
+	private static HashMap<String, BufferedImage> resources;
+	
+	static{
+		resources= new HashMap<>();
+	}
+	public static BufferedImage getImage(String name){
+		return resources.get(name);
+	}
+
 	
 	public Sword(double x, double y){
 		this.x = x;
 		this.y = y;
 		currentImage = "sword_attacking_left___000.png";
 		try {
-			image = ImageIO.read(new File("sprites/" + currentImage));
+			String name ="sprites/" + currentImage;
+			image = ImageIO.read(new File(name));
+			resources.put(name,image);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
