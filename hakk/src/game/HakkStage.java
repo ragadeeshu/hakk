@@ -13,16 +13,20 @@ import javafx.scene.shape.Rectangle;
 import javax.swing.JPanel;
 
 import networking.Client;
+import networking.Networking;
+import networking.Server;
 
 @SuppressWarnings("serial")
 public class HakkStage extends JPanel {
 	private HashMap<String, Character> characters;
 	private HashMap<String, Sword> swords;
+	private HashMap<String, String> playerNames;
 
 	public HakkStage() {
 		super();
 		characters = new HashMap<String, Character>();
 		swords = new HashMap<String, Sword>();
+		playerNames = new HashMap<String, String>();
 	}
 
 	@Override
@@ -52,6 +56,10 @@ public class HakkStage extends JPanel {
 	public synchronized void addSword(String address, Sword sword) {
 		swords.put(address, sword);
 	}
+	
+	public synchronized void addName(String address, String name) {
+		playerNames.put(address, name);
+	}
 
 	public synchronized void update(Client client) {
 		HashSet<String> keyset = new HashSet(characters.keySet());
@@ -64,8 +72,11 @@ public class HakkStage extends JPanel {
 
 			Character character = characters.get(splatEnt[0]);
 			if (character == null) {
-				character = new Opponent(this);
+//				client.send(Networking.REQUEST_NAME);
+//				String name = client.getUpdate().trim();
+				character = new Opponent(this, "Opponent");
 				characters.put(splatEnt[0], character);
+				playerNames.put(splatEnt[0], "Opponent");
 			}
 			if (!splatEnt[0].equals(client.getAddress())) {
 				character.setState(new CharacterState(splatEnt[1]));

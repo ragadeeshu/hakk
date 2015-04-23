@@ -6,8 +6,8 @@ import java.awt.RenderingHints;
 
 public class Opponent extends Character {
 
-	public Opponent(HakkStage stage) {
-		super();
+	public Opponent(HakkStage stage, String playerName) {
+		super(playerName);
 		state.action = Action.STOPPING;
 		animation = new CharacterAnimation("player2");
 

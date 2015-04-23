@@ -1,15 +1,17 @@
 package game;
 
-import java.awt.Color;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.geom.Rectangle2D;
 
 public abstract class Character {
 	protected CharacterState state;
 	protected CharacterAnimation animation;
+	private String playerName = "Default name";
 
-
-	public Character() {
+	public Character(String playerName) {
+		this.playerName = playerName;
 		state = new CharacterState();
 	}
 
@@ -20,6 +22,12 @@ public abstract class Character {
 				RenderingHints.VALUE_ANTIALIAS_ON);
 		int height = animation.getImage().getHeight(null);
 		g2d.drawImage(animation.getImage(), intx, inty-height, null);
+		
+		FontMetrics fm = g2d.getFontMetrics();
+	    Rectangle2D rect = fm.getStringBounds(playerName, g2d);
+	    g2d.drawString(playerName, (int) (intx + animation.getImage().getWidth(null)/2 - rect.getWidth()/2), inty-height-10);
+		
+//		g2d.drawString(playerName, intx, inty-height-10);
 	}
 
 	protected void doGravity() {

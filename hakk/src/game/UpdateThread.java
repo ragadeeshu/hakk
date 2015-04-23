@@ -11,11 +11,12 @@ public class UpdateThread extends Thread {
 	private HakkStage stage;
 	private Client client;
 
-	public UpdateThread(Client client, HakkStage stage) {
+	public UpdateThread(Client client, HakkStage stage, String playerName) {
 		this.client = client;
 		this.stage = stage;
-		stage.addCharacter(client.getAddress(), new Player(stage));
+		stage.addCharacter(client.getAddress(), new Player(stage, playerName));
 		stage.addSword(client.getAddress(), new Sword(400, 220));
+		stage.addName(client.getAddress(), playerName);
 	}
 
 	public void run() {

@@ -21,6 +21,6 @@ public class Launcher {
 		Client client = new Client(serverAddress, playerName);
 		HakkStage stage = new HakkStage();
 		new HakkThread(stage).start();
-		new UpdateThread(client, stage).start();
+		new UpdateThread(client, stage, playerName).start();
 	}
 }

@@ -11,8 +11,8 @@ public class Player extends Character {
 	private boolean tryingToRunLeft;
 	private boolean tryingToRunRight;
 
-	public Player(HakkStage stage) {
-		super();
+	public Player(HakkStage stage, String playerName) {
+		super(playerName);
 		animation = new CharacterAnimation("player");
 		state.action = Action.STOPPING;
 		KeyboardFocusManager.getCurrentKeyboardFocusManager()

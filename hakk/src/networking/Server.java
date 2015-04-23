@@ -16,10 +16,12 @@ import java.util.concurrent.Executors;
 public class Server {
 	private HashMap<String, CharacterState> characterStates;
 	private HashMap<String, Sword> swordStates;
+	private HashMap<String, String> playerNames;
 
 	public Server() {
 		characterStates = new HashMap<String, CharacterState>();
 		swordStates = new HashMap<String, Sword>();
+		playerNames = new HashMap<String, String>();
 
 		ServerSocket serverSocket = null;
 		int portNbr = 4444;
@@ -52,6 +54,8 @@ public class Server {
 					clientHandshake = Networking.getUpdate(inputStream);
 				}
 				String playerName = clientHandshake.split(";")[1];
+				playerNames.put(socket.getInetAddress()
+						.getHostName() + ":" + socket.getPort(), playerName);
 //				System.out.println("Name: " + playerName);
 				Networking.send(outputStream, Networking.SERVER_HANDSHAKE);
 				pool.submit(new RequestHandler(socket, this));
@@ -101,6 +105,10 @@ public class Server {
 		sb.append(":END");
 //		 System.out.println(sb.toString());
 		return sb.substring(1);
+	}
+	
+	public synchronized String getName(String address){
+		return playerNames.get(address);
 	}
 
 	public synchronized void disconnect(String string) {
