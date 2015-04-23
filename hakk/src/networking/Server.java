@@ -12,10 +12,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server {
-	private HashMap<String, String> states;
+	private HashMap<String, String> characterStates;
+	private HashMap<String, String> swordStates;
 
 	public Server() {
-		states = new HashMap<String, String>();
+		characterStates = new HashMap<String, String>();
+		swordStates = new HashMap<String, String>();
 
 		ServerSocket serverSocket = null;
 		int portNbr = 4444;
@@ -60,13 +62,18 @@ public class Server {
 	public synchronized void updateCharacterState(String inetAddress,
 			String state) {
 		// System.out.println(inetAddress + " updated");
-		states.put(inetAddress, state);
+		characterStates.put(inetAddress, state);
 
+	}
+	
+	public synchronized void updateSwordState(String inetAddress, String state) {
+		System.out.println(state);
+		swordStates.put(inetAddress, state);
 	}
 
 	public synchronized String getStates() {
 		StringBuilder sb = new StringBuilder();
-		for (Entry<String, String> e : states.entrySet()) {
+		for (Entry<String, String> e : characterStates.entrySet()) {
 			sb.append(";");
 			sb.append(e.getKey());
 			sb.append("%");
@@ -78,7 +85,7 @@ public class Server {
 	}
 
 	public synchronized void disconnect(String string) {
-		states.remove(string);
+		characterStates.remove(string);
 	}
 
 }

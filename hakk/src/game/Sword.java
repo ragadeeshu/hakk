@@ -13,14 +13,17 @@ public class Sword {
 	private double x;
 	private double y;
 	private BufferedImage image;
+	private String currentFile;
 	
-	public Sword(){
+	public Sword(double x, double y){
+		this.x = x;
+		this.y = y;
+		currentFile = "sword_attacking_left___000.png";
 		try {
-			image = ImageIO.read(new File("sprites/sword1.png"));
+			image = ImageIO.read(new File("sprites/" + currentFile));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 	}
 	public void move(double dy, double dx){
 		x += dx;
@@ -35,4 +38,14 @@ public class Sword {
 		g2d.drawImage(image, intx, inty, null);
 	}
 
+	public String toString(){
+		StringBuilder sb = new StringBuilder();
+		sb.append(x);
+		sb.append(":");
+		sb.append(y);
+		sb.append(":");
+		sb.append(currentFile);
+		return sb.toString();
+	}
+	
 }

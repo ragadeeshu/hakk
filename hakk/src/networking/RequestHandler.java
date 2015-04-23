@@ -40,9 +40,13 @@ public class RequestHandler implements Runnable {
 			try {
 				byte[] bytes = new byte[Networking.BUFFER_SIZE];
 				inputStream.read(bytes);
-				String state = new String(bytes);
+				String[] input = new String(bytes).split("&");
+				String characterState = input[0];
+				String swordState = input[1];
 				server.updateCharacterState(socket.getInetAddress()
-						.getHostName() + ":" + socket.getPort(), state);
+						.getHostName() + ":" + socket.getPort(), characterState);
+				server.updateSwordState(socket.getInetAddress()
+						.getHostName() + ":" + socket.getPort(), swordState);
 				outputStream.write(server.getStates().getBytes());
 				outputStream.flush();
 			} catch ( IOException e) {

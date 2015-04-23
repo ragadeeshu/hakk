@@ -26,7 +26,6 @@ public class Client {
 	}
 
 	private void connect(String serverAddress) {
-		System.out.println("haba");
 		try {
 			socket = new Socket(serverAddress, portNbr);
 			socket.setTcpNoDelay(true);

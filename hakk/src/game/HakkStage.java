@@ -2,8 +2,11 @@ package game;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
+
+import javafx.scene.shape.Rectangle;
 
 import javax.swing.JPanel;
 
@@ -12,10 +15,12 @@ import networking.Client;
 @SuppressWarnings("serial")
 public class HakkStage extends JPanel {
 	private HashMap<String, Character> characters;
+	private HashMap<String, Sword> swords;
 
 	public HakkStage() {
 		super();
 		characters = new HashMap<String, Character>();
+		swords = new HashMap<String, Sword>();
 	}
 
 	@Override
@@ -25,7 +30,11 @@ public class HakkStage extends JPanel {
 		for (Entry<String, Character> character : characters.entrySet()) {
 			character.getValue().draw(g2d);
 		}
-
+		for (Sword sword : swords.values()){
+			sword.draw(g2d);
+		}
+		int height = 293;
+	    g2d.fillRect(0, height, this.getWidth(), this.getHeight()-height);
 	}
 
 	public synchronized void doPhysics() {
@@ -34,29 +43,25 @@ public class HakkStage extends JPanel {
 		}
 	}
 
-	public synchronized void add(String address, Character character) {
+	public synchronized void addCharacter(String address, Character character) {
 		characters.put(address, character);
-
+	}
+	
+	public synchronized void addSword(String address, Sword sword) {
+		swords.put(address, sword);
 	}
 
 	public synchronized void update(Client client) {
-		client.send(characters.get(client.getAddress()).state.toString());
+		client.send(characters.get(client.getAddress()).state.toString()+"&"+swords.get(client.getAddress()).toString());
 		String gup = client.getUpdate();
-//		System.out.println("GUP: " + gup);
 		for (String ent : gup.split(";")) {
-//			System.out.println("ENT: " + ent);
 			String[] splatEnt = ent.split("%");
-
 			Character character = characters.get(splatEnt[0]);
 			if (character == null) {
 				character = new Opponent(this);
 				characters.put(splatEnt[0], character);
 			}
-			// System.out.println("updated character "+ent.getKey());
-//			System.out.println(splatEnt[0]);
-//			System.out.println(client.getAddress());
 			if (!splatEnt[0].equals(client.getAddress())) {
-//				System.out.println("Not ignoring");
 				character.setState(new CharacterState(splatEnt[1]));
 			}
 
