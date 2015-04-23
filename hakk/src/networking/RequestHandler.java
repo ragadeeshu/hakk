@@ -45,10 +45,13 @@ public class RequestHandler implements Runnable {
 				String swordState = input[1];
 				server.updateCharacterState(socket.getInetAddress()
 						.getHostName() + ":" + socket.getPort(), characterState);
+//				System.out.println("got charup");
 				server.updateSwordState(socket.getInetAddress()
 						.getHostName() + ":" + socket.getPort(), swordState);
+//				System.out.println("got srtuff");
 				outputStream.write(server.getStates().getBytes());
 				outputStream.flush();
+//				System.out.println("sent stuff");
 			} catch ( IOException e) {
 				connected = false;
 			}

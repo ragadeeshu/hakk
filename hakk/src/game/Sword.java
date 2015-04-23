@@ -13,17 +13,24 @@ public class Sword {
 	private double x;
 	private double y;
 	private BufferedImage image;
-	private String currentFile;
+	private String currentImage;
 	
 	public Sword(double x, double y){
 		this.x = x;
 		this.y = y;
-		currentFile = "sword_attacking_left___000.png";
+		currentImage = "sword_attacking_left___000.png";
 		try {
-			image = ImageIO.read(new File("sprites/" + currentFile));
+			image = ImageIO.read(new File("sprites/" + currentImage));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	public Sword(String state) {
+		String[] s = state.split(":");
+
+		this.x = Double.parseDouble(s[0]);
+		this.y = Double.parseDouble(s[1]);
+		this.currentImage=s[2];
 	}
 	public void move(double dy, double dx){
 		x += dx;
@@ -44,8 +51,14 @@ public class Sword {
 		sb.append(":");
 		sb.append(y);
 		sb.append(":");
-		sb.append(currentFile);
+		sb.append(currentImage);
 		return sb.toString();
+	}
+	public double getX() {
+		return x;
+	}
+	public double getY() {
+		return y;
 	}
 	
 }

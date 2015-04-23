@@ -1,11 +1,11 @@
 package networking;
 
 import game.CharacterState;
+import game.Sword;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
@@ -15,11 +15,11 @@ import java.util.concurrent.Executors;
 
 public class Server {
 	private HashMap<String, CharacterState> characterStates;
-	private HashMap<String, String> swordStates;
+	private HashMap<String, Sword> swordStates;
 
 	public Server() {
 		characterStates = new HashMap<String, CharacterState>();
-		swordStates = new HashMap<String, String>();
+		swordStates = new HashMap<String, Sword>();
 
 		ServerSocket serverSocket = null;
 		int portNbr = 4444;
@@ -73,15 +73,21 @@ public class Server {
 	}
 
 	public synchronized void updateCharacterState(String inetAddress, String state) {
-		// System.out.println(inetAddress + " updated");
+//		 System.out.println(inetAddress + " updated");
 		characterStates.put(inetAddress, new CharacterState(state));
 
 	}
 	
 	public synchronized void updateSwordState(String inetAddress, String state) {
 //		System.out.println(state);
-		swordStates.put(inetAddress, state);
-//		for()
+		Sword s = new Sword(state);
+//		System.out.println("made new blade");
+		swordStates.put(inetAddress, s);
+		for(CharacterState chState : characterStates.values()){
+			if(chState.isHit(s)){
+				System.out.println("du dog!");
+			}
+		}
 	}
 
 	public synchronized String getStates() {
@@ -93,7 +99,7 @@ public class Server {
 			sb.append(e.getValue().toString().trim());
 		}
 		sb.append(":END");
-		// System.out.println(sb.toString());
+//		 System.out.println(sb.toString());
 		return sb.substring(1);
 	}
 

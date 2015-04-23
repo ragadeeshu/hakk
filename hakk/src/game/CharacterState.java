@@ -36,4 +36,11 @@ public class CharacterState {
 		return sb.toString();
 	}
 
+	public boolean isHit(Sword s) {
+		if(Math.hypot(x-s.getX(), y-s.getY())<100){
+			return true;
+		}
+		return false;
+	}
+
 }
