@@ -44,9 +44,13 @@ public class Server {
 				InputStream inputStream = socket.getInputStream();
 				OutputStream outputStream = socket.getOutputStream();
 				String clientHandshake = Networking.getUpdate(inputStream);
-				while(!clientHandshake.trim().equals(Networking.CLIENT_HANDSHAKE))
+//				System.out.println("Handshake: " + clientHandshake);
+				while(!clientHandshake.trim().startsWith(Networking.CLIENT_HANDSHAKE)){
+					System.out.println("Waiting for handshake");
 					clientHandshake = Networking.getUpdate(inputStream);
-				System.out.println(Networking.getUpdate(inputStream));
+				}
+				String playerName = clientHandshake.split(";")[1];
+//				System.out.println("Name: " + playerName);
 				Networking.send(outputStream, Networking.SERVER_HANDSHAKE);
 				pool.submit(new RequestHandler(socket, this));
 			} catch (IOException e) {
