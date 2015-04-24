@@ -27,7 +27,6 @@ public class RequestHandler implements Runnable {
 		System.out.println("New connection from "
 				+ socket.getInetAddress().getHostName() + ":"
 				+ socket.getPort() + ". Local port: " + socket.getLocalPort());
-
 		try {
 			inputStream = socket.getInputStream();
 			outputStream = socket.getOutputStream();

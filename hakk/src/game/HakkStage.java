@@ -8,8 +8,6 @@ import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javafx.scene.shape.Rectangle;
-
 import javax.swing.JPanel;
 
 import networking.Client;
