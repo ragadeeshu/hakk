@@ -28,7 +28,7 @@ public class HakkStage extends JPanel {
 	}
 
 	@Override
-	public void paint(Graphics g) {
+	public synchronized void paint(Graphics g) {
 		super.paint(g);
 		Graphics2D g2d = (Graphics2D) g;
 		for (Entry<String, Character> character : characters.entrySet()) {
@@ -48,43 +48,83 @@ public class HakkStage extends JPanel {
 	}
 
 	public synchronized void addCharacter(String address, Character character) {
-		characters.put(address, character);
+		characters.put(address.trim(), character);
 	}
 
 	public synchronized void addSword(String address, Sword sword) {
 		swords.put(address, sword);
 	}
 
-	public synchronized void addName(String address, String name) {
+	public void addName(String address, String name) {
+		System.out.println("HURRDUURR");
 		playerNames.put(address, name);
+		Character character = characters.get(address);
+		if (character != null) {
+			characters.get(address).rename(name);
+		}
 	}
 
-	public synchronized void update(Client client) {
-		HashSet<String> keyset = new HashSet<String>(characters.keySet());
-		client.send(characters.get(client.getAddress()).state.toString() + "&"
-				+ swords.get(client.getAddress()).toString());
-		String gup = client.getUpdate();
-		for (String ent : gup.split(";")) {
-			String[] splatEnt = ent.split("%");
+	public void update(Client client) {
+		// HashSet<String> keyset = new HashSet<String>(characters.keySet());
+		HashSet<String> keyset = new HashSet<String>();
+		for (String key : characters.keySet()) {
+			keyset.add(key.trim());
+		}
 
-			keyset.remove(splatEnt[0]);
-//			System.out.println("splat" + splatEnt[0]);
+		client.send(characters.get(client.getAddress()).state.toString()
+				+ Networking.SEPARATOR_SWORD
+				+ swords.get(client.getAddress()).toString());
+		String clientUpdate = client.getUpdate();
+		// System.out.println("Update from server: " + clientUpdate);
+		String[] gup = clientUpdate.split(Networking.SEPARATOR_MESSAGE);
+		// System.out.println("Got from Server, main:" + gup[0]);
+		// if (gup.length > 1)
+		if (!gup[1].trim().equals(""))
+			readMessages(gup[1].trim());
+		// System.out.println("Message:" + gup[1]);
+		for (String ent : gup[0].split(Networking.SEPARATOR_PLAYER)) {
+			// System.out.println("got ent:" + ent);
+			String[] splatEnt = ent.split(Networking.SEPARATOR_STATE);
+
+			keyset.remove(splatEnt[0].trim());
+			// System.out.println("splat" + splatEnt[0]);
 
 			Character character = characters.get(splatEnt[0]);
 			if (character == null) {
 				// client.send(Networking.REQUEST_NAME);
 				// String name = client.getUpdate().trim();
-				character = new Opponent(this, "Opponent");
-				characters.put(splatEnt[0], character);
-				playerNames.put(splatEnt[0], "Opponent");
+				String name = playerNames.get(splatEnt[0]);
+				if (name == null)
+					name = "n00b";
+				character = new Opponent(this, name);
+				addCharacter(splatEnt[0], character);
+				// playerNames.put(splatEnt[0], "Opponent");
 			}
 			if (!splatEnt[0].equals(client.getAddress())) {
 				character.setState(new CharacterState(splatEnt[1]));
 			}
 		}
 		for (String key : keyset) {
-			System.out.println("Removing player " + key);
-			characters.remove(key);
+			if (removeCharacter(key)){
+				playerNames.remove(key);
+				System.out.println("Removing player " + key);
+			}
+		}
+	}
+
+	private synchronized boolean removeCharacter(String key) {
+		return characters.remove(key) != null;
+	}
+
+	private void readMessages(String string) {
+		System.out.println("." + string + ".");
+		for (String msg : string.split(Networking.SEPARATOR_PLAYER)) {
+			System.out.println(msg);
+			String[] splatMsg = msg.split(Networking.SEPARATOR_STATE);
+			if (splatMsg[0].equals(Networking.MESSAGE_NAME)) {
+				System.out.println("adress =" + splatMsg[1]);
+				addName(splatMsg[1].trim(), splatMsg[2]);
+			}
 		}
 	}
 }

@@ -21,12 +21,14 @@ public abstract class Character {
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
 		int height = animation.getImage().getHeight(null);
-		g2d.drawImage(animation.getImage(), intx, inty-height, null);
-		
+		g2d.drawImage(animation.getImage(), intx, inty - height, null);
+
 		FontMetrics fm = g2d.getFontMetrics();
-	    Rectangle2D rect = fm.getStringBounds(playerName, g2d);
-	    g2d.drawString(playerName, (int) (intx + animation.getImage().getWidth(null)/2 - rect.getWidth()/2), inty-height-10);
-//		g2d.drawString(playerName, intx, inty-height-10);
+		Rectangle2D rect = fm.getStringBounds(playerName, g2d);
+		g2d.drawString(playerName,
+				(int) (intx + animation.getImage().getWidth(null) / 2 - rect
+						.getWidth() / 2), inty - height - 10);
+		// g2d.drawString(playerName, intx, inty-height-10);
 	}
 
 	protected void doGravity() {
@@ -51,15 +53,19 @@ public abstract class Character {
 		doGravity();
 		doMovement();
 	}
-	
-	protected boolean hitLeftWall(){
+
+	protected boolean hitLeftWall() {
 		return state.x < 0;
 	}
-	
-	protected boolean hitRightWall(){
+
+	protected boolean hitRightWall() {
 		return state.x > 850;
 	}
 
 	protected abstract void doAction();
+
+	public void rename(String name) {
+		this.playerName = name;
+	}
 
 }

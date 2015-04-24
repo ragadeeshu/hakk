@@ -15,10 +15,12 @@ public class RequestHandler implements Runnable {
 	private Server server;
 	private InputStream inputStream = null;
 	private OutputStream outputStream = null;
+	private boolean newName;
 
 	public RequestHandler(Socket socket, Server server) {
 		this.socket = socket;
 		this.server = server;
+		newName = false;
 	}
 
 	@Override
@@ -44,22 +46,36 @@ public class RequestHandler implements Runnable {
 				String swordState = input[1];
 				server.updateCharacterState(socket.getInetAddress()
 						.getHostName() + ":" + socket.getPort(), characterState);
-//				System.out.println("got charup");
-				server.updateSwordState(socket.getInetAddress()
-						.getHostName() + ":" + socket.getPort(), swordState);
-//				System.out.println("got srtuff");
-				outputStream.write(server.getStates().getBytes());
+				// System.out.println("got charup");
+				server.updateSwordState(socket.getInetAddress().getHostName()
+						+ ":" + socket.getPort(), swordState);
+				// System.out.println("got srtuff");
+				String state;
+				synchronized (this) {
+					if (newName) {
+						System.out.println("gttomg ma,es");
+						state = server.getStates() + server.getNameMessage();
+						System.out.println("Server sending:" + state);
+						newName = false;
+					} else
+						state = server.getStates();
+				}
+				outputStream.write(state.trim().getBytes());
 				outputStream.flush();
-//				System.out.println("sent stuff");
-			} catch ( Exception e) {
+				// System.out.println("sent stuff");
+			} catch (Exception e) {
 				connected = false;
 			}
 		}
-		System.out.println("Client "
-				+ socket.getInetAddress().getHostName() + ":"
-				+ socket.getPort() + " disconnected");
+		System.out.println("Client " + socket.getInetAddress().getHostName()
+				+ ":" + socket.getPort() + " disconnected");
 		server.disconnect(socket.getInetAddress().getHostName() + ":"
 				+ socket.getPort());
+
+	}
+
+	public synchronized void flagNewName() {
+		newName = true;
 
 	}
 
