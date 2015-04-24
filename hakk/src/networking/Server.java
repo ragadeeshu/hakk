@@ -66,7 +66,6 @@ public class Server {
 					handlers.add(handler);
 					pool.submit(handler);
 					for (RequestHandler h : handlers) {
-						System.out.println("flagged handlers");
 						h.flagNewName();
 					}
 				}
@@ -112,7 +111,6 @@ public class Server {
 			sb.append(e.getValue().toString().trim());
 		}
 		sb.append(Networking.SEPARATOR_MESSAGE);
-		// sb.append(":END");
 		return sb.substring(1);
 	}
 
@@ -126,7 +124,6 @@ public class Server {
 	}
 
 	public synchronized String getNameMessage() {
-		System.out.println("getting name");
 		StringBuilder sb = new StringBuilder();
 		for (Entry<String, String> e : playerNames.entrySet()) {
 			sb.append(Networking.SEPARATOR_PLAYER);
@@ -136,8 +133,7 @@ public class Server {
 			sb.append(Networking.SEPARATOR_STATE);
 			sb.append(e.getValue().trim());
 		}
-		System.out.println("Gave message: " + sb.substring(1));
-		System.out.println(sb.substring(1));
+//		System.out.println("Gave message: " + sb.substring(1));
 		return sb.substring(1);
 	}
 

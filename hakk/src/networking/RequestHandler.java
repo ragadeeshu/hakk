@@ -2,12 +2,8 @@ package networking;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class RequestHandler implements Runnable {
 
@@ -46,23 +42,19 @@ public class RequestHandler implements Runnable {
 				String swordState = input[1];
 				server.updateCharacterState(socket.getInetAddress()
 						.getHostName() + ":" + socket.getPort(), characterState);
-				// System.out.println("got charup");
 				server.updateSwordState(socket.getInetAddress().getHostName()
 						+ ":" + socket.getPort(), swordState);
-				// System.out.println("got srtuff");
 				String state;
 				synchronized (this) {
 					if (newName) {
-						System.out.println("gttomg ma,es");
 						state = server.getStates() + server.getNameMessage();
-						System.out.println("Server sending:" + state);
+//						System.out.println("Server sending:" + state);
 						newName = false;
 					} else
 						state = server.getStates();
 				}
 				outputStream.write(state.trim().getBytes());
 				outputStream.flush();
-				// System.out.println("sent stuff");
 			} catch (Exception e) {
 				connected = false;
 			}
@@ -76,7 +68,5 @@ public class RequestHandler implements Runnable {
 
 	public synchronized void flagNewName() {
 		newName = true;
-
 	}
-
 }
