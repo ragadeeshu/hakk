@@ -34,11 +34,11 @@ public class HakkStage extends JPanel {
 		for (Entry<String, Character> character : characters.entrySet()) {
 			character.getValue().draw(g2d);
 		}
-		for (Sword sword : swords.values()){
+		for (Sword sword : swords.values()) {
 			sword.draw(g2d);
 		}
 		int height = 293;
-	    g2d.fillRect(0, height, this.getWidth(), this.getHeight()-height);
+		g2d.fillRect(0, height, this.getWidth(), this.getHeight() - height);
 	}
 
 	public synchronized void doPhysics() {
@@ -50,28 +50,30 @@ public class HakkStage extends JPanel {
 	public synchronized void addCharacter(String address, Character character) {
 		characters.put(address, character);
 	}
-	
+
 	public synchronized void addSword(String address, Sword sword) {
 		swords.put(address, sword);
 	}
-	
+
 	public synchronized void addName(String address, String name) {
 		playerNames.put(address, name);
 	}
 
 	public synchronized void update(Client client) {
-		HashSet<String> keyset = new HashSet(characters.keySet());
-		client.send(characters.get(client.getAddress()).state.toString()+"&"+swords.get(client.getAddress()).toString());
+		HashSet<String> keyset = new HashSet<String>(characters.keySet());
+		client.send(characters.get(client.getAddress()).state.toString() + "&"
+				+ swords.get(client.getAddress()).toString());
 		String gup = client.getUpdate();
 		for (String ent : gup.split(";")) {
 			String[] splatEnt = ent.split("%");
-			
+
 			keyset.remove(splatEnt[0]);
+//			System.out.println("splat" + splatEnt[0]);
 
 			Character character = characters.get(splatEnt[0]);
 			if (character == null) {
-//				client.send(Networking.REQUEST_NAME);
-//				String name = client.getUpdate().trim();
+				// client.send(Networking.REQUEST_NAME);
+				// String name = client.getUpdate().trim();
 				character = new Opponent(this, "Opponent");
 				characters.put(splatEnt[0], character);
 				playerNames.put(splatEnt[0], "Opponent");
@@ -80,7 +82,7 @@ public class HakkStage extends JPanel {
 				character.setState(new CharacterState(splatEnt[1]));
 			}
 		}
-		for(String key : keyset){
+		for (String key : keyset) {
 			System.out.println("Removing player " + key);
 			characters.remove(key);
 		}

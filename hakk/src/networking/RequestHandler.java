@@ -51,7 +51,7 @@ public class RequestHandler implements Runnable {
 				outputStream.write(server.getStates().getBytes());
 				outputStream.flush();
 //				System.out.println("sent stuff");
-			} catch ( IOException e) {
+			} catch ( Exception e) {
 				connected = false;
 			}
 		}
