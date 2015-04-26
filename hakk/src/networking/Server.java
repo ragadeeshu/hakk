@@ -25,6 +25,7 @@ public class Server {
 		swordStates = new HashMap<String, Sword>();
 		playerNames = new HashMap<String, String>();
 		handlers = new ArrayList<>();
+		BitMaskResources.init();
 
 		ServerSocket serverSocket = null;
 		int portNbr = 4444;
@@ -97,7 +98,7 @@ public class Server {
 		swordStates.put(inetAddress, s);
 		for (CharacterState chState : characterStates.values()) {
 			if (chState.isHit(s)) {
-				// System.out.println("du dog!");
+				System.out.println("du dog!");
 			}
 		}
 	}
@@ -133,7 +134,7 @@ public class Server {
 			sb.append(Networking.SEPARATOR_STATE);
 			sb.append(e.getValue().trim());
 		}
-//		System.out.println("Gave message: " + sb.substring(1));
+		// System.out.println("Gave message: " + sb.substring(1));
 		return sb.substring(1);
 	}
 

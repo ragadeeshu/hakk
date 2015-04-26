@@ -12,9 +12,8 @@ public class Player extends Character {
 	private boolean tryingToRunRight;
 
 	public Player(HakkStage stage, String playerName) {
-		super(playerName);
-		animation = new CharacterAnimation("player");
-		state.action = Action.STOPPING;
+		super(playerName, "player");
+
 		KeyboardFocusManager.getCurrentKeyboardFocusManager()
 				.addKeyEventDispatcher(new KeyEventDispatcher() {
 					@Override
@@ -74,7 +73,7 @@ public class Player extends Character {
 
 	private void runLeft() {
 		tryingToRunLeft = true;
-		if (state.action != Action.IN_AIR){
+		if (state.action != Action.IN_AIR) {
 			state.action = Action.RUNNING_LEFT;
 		}
 	}
@@ -100,12 +99,12 @@ public class Player extends Character {
 
 			break;
 		case RUNNING_LEFT:
-			if(hitLeftWall()){
+			if (hitLeftWall()) {
 				state.action = Action.STOPPING;
 				break;
 			}
 			animation.run();
-			state.currentImage= animation.getCurrentImageName();
+			state.currentImage = animation.getCurrentImageName();
 			if (state.xspeed > -5)
 				state.xspeed -= 1;
 			else
@@ -113,7 +112,7 @@ public class Player extends Character {
 
 			break;
 		case RUNNING_RIGHT:
-			if(hitRightWall()){
+			if (hitRightWall()) {
 				state.action = Action.STOPPING;
 				break;
 			}
@@ -132,7 +131,9 @@ public class Player extends Character {
 			break;
 		case IN_AIR:
 			if (state.y > 299.99)
-				if (hitLeftWall() || hitRightWall() || tryingToRunLeft && tryingToRunRight || !(tryingToRunLeft || tryingToRunRight)) {
+				if (hitLeftWall() || hitRightWall() || tryingToRunLeft
+						&& tryingToRunRight
+						|| !(tryingToRunLeft || tryingToRunRight)) {
 					state.action = Action.STOPPING;
 				} else if (tryingToRunLeft)
 					state.action = Action.RUNNING_LEFT;

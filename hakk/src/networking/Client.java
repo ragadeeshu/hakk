@@ -35,12 +35,12 @@ public class Client {
 			System.out.println("Client socket established");
 			outputStream = socket.getOutputStream();
 			inputStream = socket.getInputStream();
-			send(Networking.CLIENT_HANDSHAKE+";"+playerName);
-//			System.out.println("Player name: "+playerName);
-//			send(playerName);
+			send(Networking.CLIENT_HANDSHAKE + ";" + playerName);
+			// System.out.println("Player name: "+playerName);
+			// send(playerName);
 			String reply = getUpdate();
-//			System.out.println("Reply: "+reply);
-			if(!reply.trim().equals(Networking.SERVER_HANDSHAKE))
+			// System.out.println("Reply: "+reply);
+			if (!reply.trim().equals(Networking.SERVER_HANDSHAKE))
 				System.exit(1);
 		} catch (IOException e) {
 			System.out.println(e);
@@ -59,10 +59,10 @@ public class Client {
 	}
 
 	public String getAddress() {
-//		System.out.println("sak: " + socket.getInetAddress().getHostName()
-//				+ ":"
-//				+ ((InetSocketAddress) socket.getLocalSocketAddress())
-//						.getPort());
+		// System.out.println("sak: " + socket.getInetAddress().getHostName()
+		// + ":"
+		// + ((InetSocketAddress) socket.getLocalSocketAddress())
+		// .getPort());
 		return socket.getInetAddress().getHostName()
 				+ ":"
 				+ ((InetSocketAddress) socket.getLocalSocketAddress())
@@ -74,7 +74,8 @@ public class Client {
 			outputStream.write(string.getBytes());
 			outputStream.flush();
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Disconnected from server");
+			System.exit(1);
 		}
 	}
 
@@ -84,7 +85,8 @@ public class Client {
 			inputStream.read(bytes);
 			return new String(bytes);
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Disconnected from server");
+			System.exit(1);
 		}
 		return null;
 	}

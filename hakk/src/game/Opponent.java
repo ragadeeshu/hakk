@@ -7,9 +7,9 @@ import java.awt.RenderingHints;
 public class Opponent extends Character {
 
 	public Opponent(HakkStage stage, String playerName) {
-		super(playerName);
-		state.action = Action.STOPPING;
-		animation = new CharacterAnimation("player2");
+		super(playerName, "player2");
+		// Action.STOPPING;
+		// animation = new CharacterAnimation("player2");
 
 	}
 
@@ -24,7 +24,6 @@ public class Opponent extends Character {
 		case RUNNING_LEFT:
 			animation.run();
 
-
 			if (state.xspeed > -5)
 				state.xspeed -= 1;
 			else
@@ -33,7 +32,6 @@ public class Opponent extends Character {
 			break;
 		case RUNNING_RIGHT:
 			animation.run();
-
 
 			if (state.xspeed < 5)
 				state.xspeed += 1;

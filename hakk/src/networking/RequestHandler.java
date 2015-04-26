@@ -37,9 +37,10 @@ public class RequestHandler implements Runnable {
 			try {
 				byte[] bytes = new byte[Networking.BUFFER_SIZE];
 				inputStream.read(bytes);
-				String[] input = new String(bytes).split("&");
+				String[] input = new String(bytes)
+						.split(Networking.SEPARATOR_SWORD);
 				String characterState = input[0];
-				String swordState = input[1];
+				String swordState = input[1].trim();
 				server.updateCharacterState(socket.getInetAddress()
 						.getHostName() + ":" + socket.getPort(), characterState);
 				server.updateSwordState(socket.getInetAddress().getHostName()
@@ -48,15 +49,18 @@ public class RequestHandler implements Runnable {
 				synchronized (this) {
 					if (newName) {
 						state = server.getStates() + server.getNameMessage();
-//						System.out.println("Server sending:" + state);
+						// System.out.println("Server sending:" + state);
 						newName = false;
 					} else
 						state = server.getStates();
 				}
 				outputStream.write(state.trim().getBytes());
 				outputStream.flush();
-			} catch (Exception e) {
+			} catch (IOException e) {
+
 				connected = false;
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		System.out.println("Client " + socket.getInetAddress().getHostName()

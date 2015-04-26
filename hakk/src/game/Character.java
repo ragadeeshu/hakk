@@ -10,9 +10,11 @@ public abstract class Character {
 	protected CharacterAnimation animation;
 	private String playerName = "Default name";
 
-	public Character(String playerName) {
+	public Character(String playerName, String baseImageName) {
 		this.playerName = playerName;
-		state = new CharacterState();
+		this.animation = new CharacterAnimation(baseImageName);
+		state = new CharacterState(Action.STOPPING,
+				animation.getCurrentImageName());
 	}
 
 	public void draw(Graphics2D g2d) {
@@ -20,6 +22,7 @@ public abstract class Character {
 		int inty = (int) Math.round(state.y);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
+		state.currentImage = animation.getCurrentImageName();
 		int height = animation.getImage().getHeight(null);
 		g2d.drawImage(animation.getImage(), intx, inty - height, null);
 
