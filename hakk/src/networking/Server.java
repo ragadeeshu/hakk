@@ -112,7 +112,6 @@ public class Server {
 				for (RequestHandler handler : handlers) {
 					handler.putDeath(inetAddress, chState.x, chState.y);
 					chState.reSpawn();
-
 				}
 			}
 		}
