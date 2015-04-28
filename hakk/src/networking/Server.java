@@ -109,7 +109,11 @@ public class Server {
 		swordStates.put(inetAddress, s);
 		for (CharacterState chState : characterStates.values()) {
 			if (chState.isHit(s)) {
-				System.out.println("du dog!");
+				for (RequestHandler handler : handlers) {
+					handler.putDeath(inetAddress, chState.x, chState.y);
+					chState.reSpawn();
+
+				}
 			}
 		}
 	}

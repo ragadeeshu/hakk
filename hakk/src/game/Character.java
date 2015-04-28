@@ -22,14 +22,13 @@ public abstract class Character {
 		int inty = (int) Math.round(state.y);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
-		state.currentImage = animation.getCurrentImageName();
-		int height = animation.getImage().getHeight(null);
-		g2d.drawImage(animation.getImage(), intx, inty - height, null);
+		int height = animation.getImage(state.currentImage).getHeight(null);
+		g2d.drawImage(animation.getImage(state.currentImage), intx, inty - height, null);
 
 		FontMetrics fm = g2d.getFontMetrics();
 		Rectangle2D rect = fm.getStringBounds(playerName, g2d);
 		g2d.drawString(playerName,
-				(int) (intx + animation.getImage().getWidth(null) / 2 - rect
+				(int) (intx + animation.getImage(state.currentImage).getWidth(null) / 2 - rect
 						.getWidth() / 2), inty - height - 10);
 		// g2d.drawString(playerName, intx, inty-height-10);
 	}

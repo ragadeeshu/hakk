@@ -22,6 +22,8 @@ public abstract class Networking {
 	public static final String MESSAGE_NEWPLAYER = "MSG_NEWP";
 	public static final String MESSAGE_ANIMATION = "MSG_ANIM";
 	public static final String MESSAGE_DISCONNECT = "MSG_DISC";
+	public static final String MESSAGE_DEATH = "MSG_DIED";
+
 
 	public static void send(OutputStream outputStream, String string) {
 		try {
