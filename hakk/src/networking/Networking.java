@@ -6,7 +6,7 @@ import java.io.OutputStream;
 
 public abstract class Networking {
 	// ƒ „ … † ‡ Š Œ œ •
-	public static final String SEPARATOR_PLAYER = "…";
+	public static final String SEPARATOR_PLAYER = "¶";
 	public static final String SEPARATOR_ATTRIBUTE = "„";
 	public static final String SEPARATOR_STATE = "ƒ";
 	public static final String SEPARATOR_SWORD = "†";
