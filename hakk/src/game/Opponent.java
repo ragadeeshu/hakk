@@ -46,7 +46,7 @@ public class Opponent extends Character {
 
 			break;
 		case IN_AIR:
-			if (state.y > 299.99)
+			if (state.y > HakkStage.GROUNDLEVEL)
 				state.action = Action.STOPPING;
 			break;
 		default:
