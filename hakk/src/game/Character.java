@@ -1,5 +1,7 @@
 package game;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -25,8 +27,12 @@ public abstract class Character {
 		int height = animation.getImage(state.currentImage).getHeight(null);
 		g2d.drawImage(animation.getImage(state.currentImage), intx, inty - height, null);
 
+		g2d.setColor(Color.GREEN);
+		g2d.setFont(new Font("default", Font.BOLD, 16));
+		
 		FontMetrics fm = g2d.getFontMetrics();
 		Rectangle2D rect = fm.getStringBounds(playerName, g2d);
+		
 		g2d.drawString(playerName,
 				(int) (intx + animation.getImage(state.currentImage).getWidth(null) / 2 - rect
 						.getWidth() / 2), inty - height - 10);
