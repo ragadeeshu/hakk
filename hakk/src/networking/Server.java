@@ -22,7 +22,7 @@ public class Server {
 	private HashMap<String, Sword> swordStates;
 	private HashMap<String, String> playerNames;
 	private HashMap<String, String> playerAnimations;
-	private ArrayList<String> disconnects; //måste rensas efter att alla meddelats
+	private ArrayList<String> disconnects;
 
 	public Server() {
 		characterStates = new HashMap<String, CharacterState>();
@@ -65,20 +65,21 @@ public class Server {
 						System.out.println("Waiting for handshake");
 						clientHandshake = Networking.getUpdate(inputStream);
 					}
+					String clientIdentity = socket.getInetAddress()
+							.getHostName() + ":" + socket.getPort();
 					String playerName = clientHandshake
 							.split(Networking.SEPARATOR_ATTRIBUTE)[1];
-					playerNames.put(socket.getInetAddress().getHostName() + ":"
-							+ socket.getPort(), playerName);
+					playerNames.put(clientIdentity, playerName);
 					Random rng = new Random();
 					playerAnimations
-							.put(socket.getInetAddress().getHostName() + ":"
-									+ socket.getPort(),
+							.put(clientIdentity,
 									CharacterAnimation.BASENAMES[rng
 											.nextInt(CharacterAnimation.BASENAMES.length)]);
 					Networking.send(outputStream, Networking.SERVER_HANDSHAKE);
 					RequestHandler handler = new RequestHandler(socket, this);
 					handlers.add(handler);
 					pool.submit(handler);
+					disconnects.remove(clientIdentity);
 					for (RequestHandler h : handlers) {
 						h.flagNewConnect();
 					}
