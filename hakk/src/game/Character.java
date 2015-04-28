@@ -41,8 +41,8 @@ public abstract class Character {
 	protected void doMovement() {
 		state.x += state.xspeed;
 		state.y += state.yspeed;
-		if (state.y >= HakkStage.GROUNDLEVEL+CharacterAnimation.GROUD_OFFSET) {
-			state.y = HakkStage.GROUNDLEVEL+CharacterAnimation.GROUD_OFFSET;
+		if (state.y >= HakkStage.GROUNDLEVEL+CharacterAnimation.GROUND_OFFSET) {
+			state.y = HakkStage.GROUNDLEVEL+CharacterAnimation.GROUND_OFFSET;
 			state.yspeed = 0;
 		}
 	}
