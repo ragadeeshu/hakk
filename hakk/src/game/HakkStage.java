@@ -25,7 +25,7 @@ public class HakkStage extends JPanel {
 		swords = new HashMap<String, Sword>();
 		playerNames = new HashMap<String, String>();
 		pb = new ParticleBatcher();
-		pb.doDeath(100, 100);
+//		pb.doDeath(100, 100);
 	}
 
 	@Override
