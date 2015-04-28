@@ -35,7 +35,7 @@ public class Client {
 			System.out.println("Client socket established");
 			outputStream = socket.getOutputStream();
 			inputStream = socket.getInputStream();
-			send(Networking.CLIENT_HANDSHAKE + ";" + playerName);
+			send(Networking.CLIENT_HANDSHAKE + Networking.SEPARATOR_ATTRIBUTE + playerName);
 			// System.out.println("Player name: "+playerName);
 			// send(playerName);
 			String reply = getUpdate();

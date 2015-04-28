@@ -82,24 +82,30 @@ public class HakkStage extends JPanel {
 		for (String ent : gup[0].split(Networking.SEPARATOR_PLAYER)) {
 			String[] splatEnt = ent.split(Networking.SEPARATOR_STATE);
 			keyset.remove(splatEnt[0].trim());
-			Character character = characters.get(splatEnt[0]);
-			if (character == null) {
-				String name = playerNames.get(splatEnt[0]);
-				if (name == null)
-					name = "n00b";
-				character = new Opponent(this, name);
-				addCharacter(splatEnt[0], character);
-			}
+			Character character = getCharacter(splatEnt[0]);
+
 			if (!splatEnt[0].equals(client.getAddress())) {
 				character.setState(new CharacterState(splatEnt[1]));
 			}
 		}
-		for (String key : keyset) {
-			if (removeCharacter(key)) {
-				playerNames.remove(key);
-				System.out.println("Removing player " + key);
-			}
+//		for (String key : keyset) {
+//			if (removeCharacter(key)) {
+//				playerNames.remove(key);
+//				System.out.println("Removing player " + key);
+//			}
+//		}
+	}
+
+	private synchronized Character getCharacter(String identification) {
+		Character character = characters.get(identification);
+		if (character == null) {
+			String name = playerNames.get(identification);
+			if (name == null)
+				name = "n00b";
+			character = new Opponent(this, name);
+			addCharacter(identification, character);
 		}
+		return character;
 	}
 
 	private synchronized boolean removeCharacter(String key) {
@@ -109,8 +115,10 @@ public class HakkStage extends JPanel {
 	private void readMessages(String string) {
 		for (String msg : string.split(Networking.SEPARATOR_PLAYER)) {
 			String[] splatMsg = msg.split(Networking.SEPARATOR_STATE);
-			if (splatMsg[0].equals(Networking.MESSAGE_NAME)) {
+			if (splatMsg[0].equals(Networking.MESSAGE_NEWPLAYER)) {
 				addName(splatMsg[1].trim(), splatMsg[2]);
+				getCharacter(splatMsg[1]).animation = new CharacterAnimation(
+						splatMsg[3]);
 			}
 		}
 	}

@@ -4,6 +4,7 @@ import java.awt.Rectangle;
 
 import networking.BitMask;
 import networking.BitMaskResources;
+import networking.Networking;
 
 public class CharacterState {
 	public double x = 0;
@@ -15,7 +16,7 @@ public class CharacterState {
 
 	public CharacterState(String state) {
 		// System.out.println("State: " + state);
-		String[] s = state.split(":");
+		String[] s = state.split(Networking.SEPARATOR_ATTRIBUTE);
 
 		this.x = Double.parseDouble(s[0]);
 		this.y = Double.parseDouble(s[1]);
@@ -32,11 +33,11 @@ public class CharacterState {
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(x + ":");
-		sb.append(y + ":");
-		sb.append(xspeed + ":");
-		sb.append(yspeed + ":");
-		sb.append(action.ordinal() + ":");
+		sb.append(x + Networking.SEPARATOR_ATTRIBUTE);
+		sb.append(y + Networking.SEPARATOR_ATTRIBUTE);
+		sb.append(xspeed + Networking.SEPARATOR_ATTRIBUTE);
+		sb.append(yspeed + Networking.SEPARATOR_ATTRIBUTE);
+		sb.append(action.ordinal() + Networking.SEPARATOR_ATTRIBUTE);
 		sb.append(currentImage);
 		return sb.toString();
 	}

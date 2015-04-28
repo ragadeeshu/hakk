@@ -5,18 +5,19 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public abstract class Networking {
-	public static final String SEPARATOR_PLAYER = ";";
-	public static final String SEPARATOR_ATTRIBUTE = ":";
-	public static final String SEPARATOR_STATE = "%";
-	public static final String SEPARATOR_SWORD = "&";
-	public static final String SEPARATOR_MESSAGE = "@";
+	public static final String SEPARATOR_PLAYER = "ƒ";
+	public static final String SEPARATOR_ATTRIBUTE = "„";
+	public static final String SEPARATOR_STATE = "…";
+	public static final String SEPARATOR_SWORD = "†";
+	public static final String SEPARATOR_MESSAGE = "‡";
 
 	public static final int BUFFER_SIZE = 2048;
 
 	public static final String CLIENT_HANDSHAKE = "C_CONNECT";
 	public static final String SERVER_HANDSHAKE = "S_CONNECT";
-	public static final String REQUEST_NAME = "REQ_NAME@";
-	public static final String MESSAGE_NAME = "MSG_NAME";
+	public static final String MESSAGE_NEWPLAYER = "MSG_NEWP";
+	public static final String MESSAGE_ANIMATION = "MSG_ANIM";
+	public static final String MESSAGE_DISCONNECT = "MSG_DISC";
 
 	public static void send(OutputStream outputStream, String string) {
 		try {

@@ -10,7 +10,7 @@ import java.util.HashMap;
 import javax.imageio.ImageIO;
 
 public class CharacterAnimation {
-	public static final int GROUD_OFFSET = 7;
+	public static final int GROUND_OFFSET = 7;
 	public static final int NUM_RUNNING = 11;
 	public static String[] BASENAMES = { "player", "player2", "player3",
 			"player4" };
