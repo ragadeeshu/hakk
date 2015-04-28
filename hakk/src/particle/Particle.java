@@ -46,7 +46,7 @@ public class Particle {
 		locy += vely;
 		if (locy >= HakkStage.GROUNDLEVEL) {
 			locy = HakkStage.GROUNDLEVEL;
-			vely *= -0.5;
+			vely *= -0.9;
 		}
 
 		return false;

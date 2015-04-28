@@ -18,7 +18,8 @@ import particle.ParticleBatcher;
 
 @SuppressWarnings("serial")
 public class HakkStage extends JPanel {
-	public static final int GROUNDLEVEL = 293;
+	public static final int GROUNDLEVEL = 300;
+	public static final int WIDTH = 900;
 
 	private String currentImage;
 	private String identification;
