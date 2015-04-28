@@ -1,15 +1,14 @@
 package game;
 
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 
 import javax.imageio.ImageIO;
-import javax.swing.text.DefaultEditorKit.CutAction;
+
+import networking.Networking;
 
 public class Sword {
 	private Character wielder;
@@ -31,7 +30,7 @@ public class Sword {
 	}
 
 	public Sword(String state) {
-		String[] s = state.split(":");
+		String[] s = state.split(Networking.SEPARATOR_ATTRIBUTE);
 
 		this.x = Double.parseDouble(s[0]);
 		this.y = Double.parseDouble(s[1]);
@@ -55,9 +54,9 @@ public class Sword {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(x);
-		sb.append(":");
+		sb.append(Networking.SEPARATOR_ATTRIBUTE);
 		sb.append(y);
-		sb.append(":");
+		sb.append(Networking.SEPARATOR_ATTRIBUTE);
 		sb.append(currentImage);
 		return sb.toString();
 	}

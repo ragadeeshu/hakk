@@ -1,5 +1,6 @@
 package networking;
 
+import game.CharacterAnimation;
 import game.CharacterState;
 import game.Sword;
 
@@ -11,6 +12,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -19,12 +21,14 @@ public class Server {
 	private HashMap<String, CharacterState> characterStates;
 	private HashMap<String, Sword> swordStates;
 	private HashMap<String, String> playerNames;
+	private HashMap<String, String> playerAnimations;
 
 	public Server() {
 		characterStates = new HashMap<String, CharacterState>();
 		swordStates = new HashMap<String, Sword>();
 		playerNames = new HashMap<String, String>();
 		handlers = new ArrayList<>();
+		playerAnimations = new HashMap<String, String>();
 		BitMaskResources.init();
 
 		ServerSocket serverSocket = null;
@@ -59,15 +63,22 @@ public class Server {
 						System.out.println("Waiting for handshake");
 						clientHandshake = Networking.getUpdate(inputStream);
 					}
-					String playerName = clientHandshake.split(";")[1];
+					String playerName = clientHandshake
+							.split(Networking.SEPARATOR_ATTRIBUTE)[1];
 					playerNames.put(socket.getInetAddress().getHostName() + ":"
 							+ socket.getPort(), playerName);
+					Random rng = new Random();
+					playerAnimations
+							.put(socket.getInetAddress().getHostName() + ":"
+									+ socket.getPort(),
+									CharacterAnimation.BASENAMES[rng
+											.nextInt(CharacterAnimation.BASENAMES.length)]);
 					Networking.send(outputStream, Networking.SERVER_HANDSHAKE);
 					RequestHandler handler = new RequestHandler(socket, this);
 					handlers.add(handler);
 					pool.submit(handler);
 					for (RequestHandler h : handlers) {
-						h.flagNewName();
+						h.flagNewConnect();
 					}
 				}
 			} catch (IOException e) {
@@ -120,6 +131,9 @@ public class Server {
 	}
 
 	public synchronized void disconnect(String string) {
+		for (RequestHandler h : handlers) {
+			h.flagNewDisconnect();
+		}
 		characterStates.remove(string);
 		playerNames.remove(string);
 	}
@@ -128,14 +142,32 @@ public class Server {
 		StringBuilder sb = new StringBuilder();
 		for (Entry<String, String> e : playerNames.entrySet()) {
 			sb.append(Networking.SEPARATOR_PLAYER);
-			sb.append(Networking.MESSAGE_NAME);
+			sb.append(Networking.MESSAGE_NEWPLAYER);
 			sb.append(Networking.SEPARATOR_STATE);
 			sb.append(e.getKey());
 			sb.append(Networking.SEPARATOR_STATE);
 			sb.append(e.getValue().trim());
+			sb.append(Networking.SEPARATOR_STATE);
+			sb.append(playerAnimations.get(e.getKey()).trim());
 		}
 		// System.out.println("Gave message: " + sb.substring(1));
 		return sb.substring(1);
+	}
+
+	public Object getDisconnectMessage() {
+//		StringBuilder sb = new StringBuilder();
+//		for (Entry<String, String> e : disconnects.entrySet()) {
+//			sb.append(Networking.SEPARATOR_PLAYER);
+//			sb.append(Networking.MESSAGE_NEWPLAYER);
+//			sb.append(Networking.SEPARATOR_STATE);
+//			sb.append(e.getKey());
+//			sb.append(Networking.SEPARATOR_STATE);
+//			sb.append(e.getValue().trim());
+//			sb.append(Networking.SEPARATOR_STATE);
+//			sb.append(playerAnimations.get(e.getKey()).trim());
+//		}
+		// System.out.println("Gave message: " + sb.substring(1));
+		return "";
 	}
 
 }

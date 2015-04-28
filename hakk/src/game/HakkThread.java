@@ -20,6 +20,7 @@ public class HakkThread extends Thread {
 		frame.setSize(900, 500);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setResizable(false);
 		new Timer().schedule(new TimerTask() {
 
 			public void run() {

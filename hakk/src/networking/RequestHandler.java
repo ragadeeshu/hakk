@@ -11,20 +11,22 @@ public class RequestHandler implements Runnable {
 	private Server server;
 	private InputStream inputStream = null;
 	private OutputStream outputStream = null;
-	private boolean newName;
-
+	private boolean newConnect;
+	private boolean newDisconnect;
+	private String hostIdentifier;
 	public RequestHandler(Socket socket, Server server) {
 		this.socket = socket;
 		this.server = server;
-		newName = false;
+		newConnect = false;
+		newDisconnect = false;
+		hostIdentifier = socket.getInetAddress().getHostName() + ":"
+				+ socket.getPort();
 	}
 
 	@Override
 	public void run() {
 
-		System.out.println("New connection from "
-				+ socket.getInetAddress().getHostName() + ":"
-				+ socket.getPort() + ". Local port: " + socket.getLocalPort());
+		System.out.println("New connection from " + hostIdentifier);
 		try {
 			inputStream = socket.getInputStream();
 			outputStream = socket.getOutputStream();
@@ -41,20 +43,21 @@ public class RequestHandler implements Runnable {
 						.split(Networking.SEPARATOR_SWORD);
 				String characterState = input[0];
 				String swordState = input[1].trim();
-				server.updateCharacterState(socket.getInetAddress()
-						.getHostName() + ":" + socket.getPort(), characterState);
-				server.updateSwordState(socket.getInetAddress().getHostName()
-						+ ":" + socket.getPort(), swordState);
-				String state;
+				server.updateCharacterState(hostIdentifier, characterState);
+				server.updateSwordState(hostIdentifier, swordState);
+				StringBuilder state = new StringBuilder();
 				synchronized (this) {
-					if (newName) {
-						state = server.getStates() + server.getNameMessage();
-						// System.out.println("Server sending:" + state);
-						newName = false;
-					} else
-						state = server.getStates();
+					state.append(server.getStates());
+					if (newConnect) {
+						state.append(server.getNameMessage());
+						newConnect = false;
+					}
+					if (newDisconnect) {
+						state.append(server.getDisconnectMessage());
+						newDisconnect = false;
+					}
 				}
-				outputStream.write(state.trim().getBytes());
+				outputStream.write(state.toString().trim().getBytes());
 				outputStream.flush();
 			} catch (IOException | ArrayIndexOutOfBoundsException e) {
 
@@ -63,14 +66,17 @@ public class RequestHandler implements Runnable {
 				e.printStackTrace();
 			}
 		}
-		System.out.println("Client " + socket.getInetAddress().getHostName()
-				+ ":" + socket.getPort() + " disconnected");
+		System.out.println("Client " + hostIdentifier + " disconnected");
 		server.disconnect(socket.getInetAddress().getHostName() + ":"
 				+ socket.getPort());
 
 	}
 
-	public synchronized void flagNewName() {
-		newName = true;
+	public synchronized void flagNewConnect() {
+		newConnect = true;
+	}
+	
+	public synchronized void flagNewDisconnect() {
+		newDisconnect = true;
 	}
 }
