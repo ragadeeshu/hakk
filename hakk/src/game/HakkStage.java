@@ -153,7 +153,9 @@ public class HakkStage extends JPanel {
 				}else if(typeAndData[0].equals(Networking.MESSAGE_DEATH)){
 					if(attributes[0].equals(identification))
 						characters.get(identification).state.reSpawn();
-					pb.doDeath(Double.parseDouble(attributes[1]), Double.parseDouble(attributes[2]));
+					double x = Double.parseDouble(attributes[1])+CharacterAnimation.getImage(characters.get(identification).animation.getCurrentImageName()).getWidth(null)/2;
+					double y = Double.parseDouble(attributes[2])-CharacterAnimation.getImage(characters.get(identification).animation.getCurrentImageName()).getHeight(null)/2;
+					pb.doDeath(x, y);
 
 				}else if (typeAndData[0].equals(Networking.MESSAGE_DISCONNECT)) {
 					disconnect = true;
