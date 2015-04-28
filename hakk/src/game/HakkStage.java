@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
@@ -27,6 +28,7 @@ public class HakkStage extends JPanel {
 	private HashMap<String, Character> characters;
 	private HashMap<String, Sword> swords;
 	private HashMap<String, String> playerNames;
+	private ArrayList<Platform> platforms;
 	private ParticleBatcher pb;
 
 	public HakkStage() {
@@ -36,7 +38,6 @@ public class HakkStage extends JPanel {
 		playerNames = new HashMap<String, String>();
 		pb = new ParticleBatcher();
 		currentImage = "background.png";
-		
 		try {
 			String name = "sprites/" + currentImage;
 			background = ImageIO.read(new File(name));
@@ -44,6 +45,9 @@ public class HakkStage extends JPanel {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		platforms = new ArrayList<Platform>();
+		platforms.add(new Platform(200, GROUNDLEVEL-160));
+		platforms.add(new Platform(500, GROUNDLEVEL-200));
 	}
 
 	@Override
@@ -57,10 +61,11 @@ public class HakkStage extends JPanel {
 		for (Sword sword : swords.values()) {
 			sword.draw(g2d);
 		}
+		for (Platform platform : platforms){
+			platform.draw(g2d);
+		}
 		pb.draw(g);
 		g2d.drawImage(ground, 0, GROUNDLEVEL, null);
-		
-		
 		g2d.dispose();
 	}
 
