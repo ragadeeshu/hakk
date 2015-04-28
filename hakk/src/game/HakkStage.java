@@ -126,13 +126,16 @@ public class HakkStage extends JPanel {
 		return characters.remove(key) != null;
 	}
 
-	private void readMessages(String string) {
-		for (String msg : string.split(Networking.SEPARATOR_PLAYER)) {
+	private void readMessages(String messages) {
+		System.out.println("readMessages: " + messages);
+		for (String msg : messages.split(Networking.SEPARATOR_PLAYER)) {
 			String[] splatMsg = msg.split(Networking.SEPARATOR_STATE);
 			if (splatMsg[0].equals(Networking.MESSAGE_NEWPLAYER)) {
 				addName(splatMsg[1].trim(), splatMsg[2]);
 				getCharacter(splatMsg[1]).animation = new CharacterAnimation(
 						splatMsg[3]);
+			} else if(splatMsg[0].equals(Networking.MESSAGE_DISCONNECT)) {
+				removeCharacter(splatMsg[1].trim());
 			}
 		}
 	}
