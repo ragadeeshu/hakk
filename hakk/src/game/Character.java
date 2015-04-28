@@ -4,6 +4,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 
 public abstract class Character {
 	protected CharacterState state;
@@ -50,7 +51,7 @@ public abstract class Character {
 		state = value;
 	}
 
-	public void doPhysics() {
+	public void doPhysics(ArrayList<Platform> platforms) {
 		doAction();
 		doGravity();
 		doMovement();

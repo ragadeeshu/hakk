@@ -88,7 +88,7 @@ public class HakkStage extends JPanel {
 		flyingPlane.move();
 		flyingBird.move();
 		for (Entry<String, Character> character : characters.entrySet()) {
-			character.getValue().doPhysics();
+			character.getValue().doPhysics(platforms);
 		}
 		pb.update();
 	}
