@@ -61,4 +61,13 @@ public class CharacterState {
 		}
 		return false;
 	}
+
+	public void reSpawn() {
+		x = 0;
+		y = 0;
+		xspeed = 0;
+		yspeed = 0;
+		action = Action.STOPPING;
+
+	}
 }
