@@ -64,8 +64,9 @@ public class Server {
 						clientHandshake = Networking.getUpdate(inputStream);
 					}
 					System.out.println("ch " + clientHandshake);
-					System.out.println("chs " + clientHandshake
-							.split(Networking.SEPARATOR_ATTRIBUTE)[1]);
+					System.out.println("chs "
+							+ clientHandshake
+									.split(Networking.SEPARATOR_ATTRIBUTE)[1]);
 					String clientIdentity = socket.getInetAddress()
 							.getHostName() + ":" + socket.getPort();
 					String playerName = clientHandshake
@@ -114,8 +115,8 @@ public class Server {
 			if (chState.isHit(s)) {
 				for (RequestHandler handler : handlers) {
 					handler.putDeath(inetAddress, chState.x, chState.y);
-					chState.reSpawn();
 				}
+				chState.reSpawn();
 			}
 		}
 	}
@@ -148,16 +149,17 @@ public class Server {
 		StringBuilder sb = new StringBuilder();
 		sb.append(Networking.MESSAGE_NEWPLAYER);
 		sb.append(Networking.SEPARATOR_STATE);
-		
+
 		for (Entry<String, String> e : playerNames.entrySet()) {
-			sb.append(e.getKey()); //ip
+			sb.append(e.getKey()); // ip
 			sb.append(Networking.SEPARATOR_ATTRIBUTE);
-			sb.append(e.getValue().trim()); //name
+			sb.append(e.getValue().trim()); // name
 			sb.append(Networking.SEPARATOR_ATTRIBUTE);
-			sb.append(playerAnimations.get(e.getKey()).trim()); //anim
+			sb.append(playerAnimations.get(e.getKey()).trim()); // anim
 			sb.append(Networking.SEPARATOR_PLAYER);
 		}
-		System.out.println("getNameMessage: " + sb.substring(0, sb.lastIndexOf(Networking.SEPARATOR_PLAYER)));
+		System.out.println("getNameMessage: "
+				+ sb.substring(0, sb.lastIndexOf(Networking.SEPARATOR_PLAYER)));
 		return sb.substring(0, sb.lastIndexOf(Networking.SEPARATOR_PLAYER));
 	}
 
@@ -170,7 +172,8 @@ public class Server {
 			sb.append(ip);
 			sb.append(Networking.SEPARATOR_PLAYER);
 		}
-		System.out.println("getDisconnectMessage: " + sb.substring(0, sb.lastIndexOf(Networking.SEPARATOR_PLAYER)));
+		System.out.println("getDisconnectMessage: "
+				+ sb.substring(0, sb.lastIndexOf(Networking.SEPARATOR_PLAYER)));
 		return sb.substring(0, sb.lastIndexOf(Networking.SEPARATOR_PLAYER));
 	}
 
