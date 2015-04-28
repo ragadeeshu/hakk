@@ -16,7 +16,7 @@ public class ParticleBatcher {
 		rand = new Random();
 	}
 
-	public void doDeath(double x, double y) {
+	public synchronized void doDeath(double x, double y) {
 		Color c = Color.RED;
 		for (int i = 0; i < 100; i++) {
 
@@ -27,7 +27,7 @@ public class ParticleBatcher {
 		}
 	}
 
-	public void update() {
+	public synchronized void update() {
 		Iterator<Particle> iter = particles.iterator();
 		while (iter.hasNext()) {
 			if (iter.next().update())
@@ -36,7 +36,7 @@ public class ParticleBatcher {
 
 	}
 
-	public void draw(Graphics g) {
+	public synchronized void draw(Graphics g) {
 		for (Particle particle : particles) {
 			particle.draw(g);
 		}
