@@ -35,7 +35,7 @@ public abstract class Character {
 		g2d.drawImage(animation.getImage(state.currentImage), intx, inty
 				- height, null);
 
-		g2d.setFont(new Font("Names", Font.BOLD, 14));
+		g2d.setFont(new Font("Names", Font.BOLD, 12));
 
 		FontMetrics fm = g2d.getFontMetrics();
 		Rectangle2D rect = fm.getStringBounds(playerName, g2d);
@@ -44,10 +44,10 @@ public abstract class Character {
 				.getWidth() / 2);
 		int nameCoordY = inty - height - 10;
 
-		g2d.setPaint(nameColour);
-		g2d.fill(new Rectangle2D.Double(nameCoordX, nameCoordY-12, 100, 14));
+		g2d.setPaint(new Color(0.0f, 0.0f, 0.0f, 0.6f));
+		g2d.fill(new Rectangle2D.Double(nameCoordX-1, nameCoordY-12, 90, 16)); //fixa hårdkodade koordinater
 
-		g2d.setColor(Color.GREEN);
+		g2d.setColor(nameColour);
 		g2d.drawString(playerName, nameCoordX, nameCoordY);
 	}
 

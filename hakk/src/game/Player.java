@@ -13,6 +13,7 @@ public class Player extends Character {
 
 	public Player(HakkStage stage, String playerName) {
 		super(playerName, "player");
+		nameColour = Color.GREEN;
 
 		KeyboardFocusManager.getCurrentKeyboardFocusManager()
 				.addKeyEventDispatcher(new KeyEventDispatcher() {
