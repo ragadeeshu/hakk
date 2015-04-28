@@ -6,12 +6,12 @@ import java.io.OutputStream;
 
 public abstract class Networking {
 	// ƒ „ … † ‡ Š Œ œ •
-	public static final String SEPARATOR_PLAYER = "…";
-	public static final String SEPARATOR_ATTRIBUTE = "„";
-	public static final String SEPARATOR_STATE = "ƒ";
-	public static final String SEPARATOR_SWORD = "†";
-	public static final String SEPARATOR_MESSAGES = "Œ";
-	public static final String SEPARATOR_MESSAGE = "œ";
+	public static final String SEPARATOR_PLAYER = "�";
+	public static final String SEPARATOR_ATTRIBUTE = "�";
+	public static final String SEPARATOR_STATE = "�";
+	public static final String SEPARATOR_SWORD = "�";
+	public static final String SEPARATOR_MESSAGES = "�";
+	public static final String SEPARATOR_MESSAGE = "�";
 
 
 	
