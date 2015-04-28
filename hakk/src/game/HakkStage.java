@@ -22,6 +22,7 @@ public class HakkStage extends JPanel {
 
 	private String currentImage;
 	private BufferedImage background;
+	private BufferedImage ground;
 	private HashMap<String, Character> characters;
 	private HashMap<String, Sword> swords;
 	private HashMap<String, String> playerNames;
@@ -34,9 +35,11 @@ public class HakkStage extends JPanel {
 		playerNames = new HashMap<String, String>();
 		pb = new ParticleBatcher();
 		currentImage = "background.png";
+		
 		try {
 			String name = "sprites/" + currentImage;
 			background = ImageIO.read(new File(name));
+			ground = ImageIO.read(new File("sprites/ground.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -54,8 +57,7 @@ public class HakkStage extends JPanel {
 			sword.draw(g2d);
 		}
 		pb.draw(g);
-		g2d.fillRect(0, GROUNDLEVEL, this.getWidth(), this.getHeight()
-				- GROUNDLEVEL);
+		g2d.drawImage(ground, 0, GROUNDLEVEL, null);
 		g2d.dispose();
 	}
 
