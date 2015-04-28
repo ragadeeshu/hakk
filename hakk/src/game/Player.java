@@ -131,13 +131,17 @@ public class Player extends Character {
 
 			break;
 		case IN_AIR:
-			if (state.y > 299.99)
-				if (hitLeftWall() || hitRightWall() || tryingToRunLeft && tryingToRunRight || !(tryingToRunLeft || tryingToRunRight)) {
+			if(hitLeftWall() || hitRightWall()){
+				state.action = Action.STOPPING;
+			} else if (state.y > 299.99){
+				if (tryingToRunLeft && tryingToRunRight || !(tryingToRunLeft || tryingToRunRight)) {
 					state.action = Action.STOPPING;
-				} else if (tryingToRunLeft)
+				} else if (tryingToRunLeft){
 					state.action = Action.RUNNING_LEFT;
-				else
+				} else {
 					state.action = Action.RUNNING_RIGHT;
+				}
+			}
 			break;
 		default:
 			break;

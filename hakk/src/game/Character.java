@@ -57,7 +57,7 @@ public abstract class Character {
 	}
 	
 	protected boolean hitRightWall(){
-		return state.x > 850;
+		return state.x > 840;
 	}
 
 	protected abstract void doAction();
