@@ -1,10 +1,8 @@
 package game;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
-import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 
 public class Player extends Character {

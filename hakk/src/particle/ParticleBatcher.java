@@ -2,7 +2,6 @@ package particle;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Random;

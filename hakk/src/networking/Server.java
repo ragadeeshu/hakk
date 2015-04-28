@@ -63,10 +63,6 @@ public class Server {
 						System.out.println("Waiting for handshake");
 						clientHandshake = Networking.getUpdate(inputStream);
 					}
-					System.out.println("ch " + clientHandshake);
-					System.out.println("chs "
-							+ clientHandshake
-									.split(Networking.SEPARATOR_ATTRIBUTE)[1]);
 					String clientIdentity = socket.getInetAddress()
 							.getHostName() + ":" + socket.getPort();
 					String playerName = clientHandshake

@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
 import networking.Networking;
 
 public class Sword {
-	private Character wielder;
+//	private Character wielder;
 	private double x;
 	private double y;
 	private BufferedImage image;

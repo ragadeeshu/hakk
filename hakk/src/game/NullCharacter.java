@@ -1,7 +1,5 @@
 package game;
 
-import java.awt.Graphics2D;
-
 //public class NullCharacter extends Character {
 //
 //	public NullCharacter(String playerName) {

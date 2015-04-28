@@ -1,15 +1,10 @@
 package game;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.Shape;
-import java.awt.Stroke;
-import java.awt.font.FontRenderContext;
-import java.awt.font.TextLayout;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
@@ -31,8 +26,8 @@ public abstract class Character {
 		int inty = (int) Math.round(state.y);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
-		int height = animation.getImage(state.currentImage).getHeight(null);
-		g2d.drawImage(animation.getImage(state.currentImage), intx, inty
+		int height = CharacterAnimation.getImage(state.currentImage).getHeight(null);
+		g2d.drawImage(CharacterAnimation.getImage(state.currentImage), intx, inty
 				- height, null);
 
 		g2d.setFont(new Font("Names", Font.BOLD, 12));
@@ -40,12 +35,12 @@ public abstract class Character {
 		FontMetrics fm = g2d.getFontMetrics();
 		Rectangle2D rect = fm.getStringBounds(playerName, g2d);
 		int nameCoordX = (int) (intx
-				+ animation.getImage(state.currentImage).getWidth(null) / 2 - rect
+				+ CharacterAnimation.getImage(state.currentImage).getWidth(null) / 2 - rect
 				.getWidth() / 2);
 		int nameCoordY = inty - height - 10;
 
 		g2d.setPaint(new Color(0.0f, 0.0f, 0.0f, 0.6f));
-		g2d.fill(new Rectangle2D.Double(nameCoordX-1, nameCoordY-12, 90, 16)); //fixa hårdkodade koordinater
+		g2d.fill(new Rectangle2D.Double(nameCoordX-3, nameCoordY-rect.getHeight()+2, rect.getWidth()+6, rect.getHeight()+2));
 
 		g2d.setColor(nameColour);
 		g2d.drawString(playerName, nameCoordX, nameCoordY);
