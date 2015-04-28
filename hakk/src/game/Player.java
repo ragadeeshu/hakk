@@ -104,7 +104,7 @@ public class Player extends Character {
 				break;
 			}
 			animation.run();
-			state.currentImage = animation.getCurrentImageName();
+			
 			if (state.xspeed > -5)
 				state.xspeed -= 1;
 			else
@@ -144,6 +144,7 @@ public class Player extends Character {
 			break;
 
 		}
+		state.currentImage = animation.getCurrentImageName();
 
 	}
 }
