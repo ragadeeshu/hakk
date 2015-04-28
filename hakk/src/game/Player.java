@@ -130,15 +130,17 @@ public class Player extends Character {
 
 			break;
 		case IN_AIR:
-			if (state.y > 299.99)
-				if (hitLeftWall() || hitRightWall() || tryingToRunLeft
-						&& tryingToRunRight
-						|| !(tryingToRunLeft || tryingToRunRight)) {
+			if (state.y >= HakkStage.GROUNDLEVEL){
+				if (tryingToRunLeft && tryingToRunRight || !(tryingToRunLeft || tryingToRunRight)) {
 					state.action = Action.STOPPING;
-				} else if (tryingToRunLeft)
+				} else if (tryingToRunLeft){
 					state.action = Action.RUNNING_LEFT;
-				else
+				} else {
 					state.action = Action.RUNNING_RIGHT;
+				}
+			} else if(hitLeftWall() || hitRightWall()){
+				state.xspeed = 0;
+			}
 			break;
 		default:
 			break;

@@ -22,13 +22,15 @@ public class Server {
 	private HashMap<String, Sword> swordStates;
 	private HashMap<String, String> playerNames;
 	private HashMap<String, String> playerAnimations;
+	private ArrayList<String> disconnects;
 
 	public Server() {
 		characterStates = new HashMap<String, CharacterState>();
 		swordStates = new HashMap<String, Sword>();
 		playerNames = new HashMap<String, String>();
-		handlers = new ArrayList<>();
 		playerAnimations = new HashMap<String, String>();
+		handlers = new ArrayList<>();
+		disconnects = new ArrayList<>();
 		BitMaskResources.init();
 
 		ServerSocket serverSocket = null;
@@ -63,20 +65,21 @@ public class Server {
 						System.out.println("Waiting for handshake");
 						clientHandshake = Networking.getUpdate(inputStream);
 					}
+					String clientIdentity = socket.getInetAddress()
+							.getHostName() + ":" + socket.getPort();
 					String playerName = clientHandshake
 							.split(Networking.SEPARATOR_ATTRIBUTE)[1];
-					playerNames.put(socket.getInetAddress().getHostName() + ":"
-							+ socket.getPort(), playerName);
+					playerNames.put(clientIdentity, playerName);
 					Random rng = new Random();
 					playerAnimations
-							.put(socket.getInetAddress().getHostName() + ":"
-									+ socket.getPort(),
+							.put(clientIdentity,
 									CharacterAnimation.BASENAMES[rng
 											.nextInt(CharacterAnimation.BASENAMES.length)]);
 					Networking.send(outputStream, Networking.SERVER_HANDSHAKE);
 					RequestHandler handler = new RequestHandler(socket, this);
 					handlers.add(handler);
 					pool.submit(handler);
+					disconnects.remove(clientIdentity);
 					for (RequestHandler h : handlers) {
 						h.flagNewConnect();
 					}
@@ -131,6 +134,7 @@ public class Server {
 	}
 
 	public synchronized void disconnect(String string) {
+		disconnects.add(string);
 		for (RequestHandler h : handlers) {
 			h.flagNewDisconnect();
 		}
@@ -150,13 +154,20 @@ public class Server {
 			sb.append(Networking.SEPARATOR_STATE);
 			sb.append(playerAnimations.get(e.getKey()).trim());
 		}
-		// System.out.println("Gave message: " + sb.substring(1));
+		System.out.println("getNameMessage: " + sb.substring(1));
 		return sb.substring(1);
 	}
 
-	public Object getDisconnectMessage() {
-		// TODO Auto-generated method stub
-		return null;
+	public synchronized String getDisconnectMessage() {
+		StringBuilder sb = new StringBuilder();
+		for (String ip : disconnects) {
+			sb.append(Networking.SEPARATOR_PLAYER);
+			sb.append(Networking.MESSAGE_DISCONNECT);
+			sb.append(Networking.SEPARATOR_STATE);
+			sb.append(ip);
+		}
+		System.out.println("getDisconnectMessage: " + sb.substring(1));
+		return sb.substring(1);
 	}
 
 }
