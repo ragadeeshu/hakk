@@ -2,10 +2,14 @@ package game;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import networking.Client;
@@ -16,6 +20,8 @@ import particle.ParticleBatcher;
 public class HakkStage extends JPanel {
 	public static final int GROUNDLEVEL = 293;
 
+	private String currentImage;
+	private BufferedImage background;
 	private HashMap<String, Character> characters;
 	private HashMap<String, Sword> swords;
 	private HashMap<String, String> playerNames;
@@ -27,12 +33,20 @@ public class HakkStage extends JPanel {
 		swords = new HashMap<String, Sword>();
 		playerNames = new HashMap<String, String>();
 		pb = new ParticleBatcher();
+		currentImage = "background.png";
+		try {
+			String name = "sprites/" + currentImage;
+			background = ImageIO.read(new File(name));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public synchronized void paint(Graphics g) {
 		super.paint(g);
 		Graphics2D g2d = (Graphics2D) g;
+		g2d.drawImage(background, 0, 0, null);
 		for (Entry<String, Character> character : characters.entrySet()) {
 			character.getValue().draw(g2d);
 		}
