@@ -14,6 +14,8 @@ import particle.ParticleBatcher;
 
 @SuppressWarnings("serial")
 public class HakkStage extends JPanel {
+	public static final int GROUNDLEVEL = 293;
+
 	private HashMap<String, Character> characters;
 	private HashMap<String, Sword> swords;
 	private HashMap<String, String> playerNames;
@@ -25,7 +27,6 @@ public class HakkStage extends JPanel {
 		swords = new HashMap<String, Sword>();
 		playerNames = new HashMap<String, String>();
 		pb = new ParticleBatcher();
-//		pb.doDeath(100, 100);
 	}
 
 	@Override
@@ -39,8 +40,8 @@ public class HakkStage extends JPanel {
 			sword.draw(g2d);
 		}
 		pb.draw(g);
-		int height = 293;
-		g2d.fillRect(0, height, this.getWidth(), this.getHeight() - height);
+		g2d.fillRect(0, GROUNDLEVEL, this.getWidth(), this.getHeight()
+				- GROUNDLEVEL);
 		g2d.dispose();
 	}
 

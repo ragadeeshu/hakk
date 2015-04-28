@@ -1,5 +1,7 @@
 package particle;
 
+import game.HakkStage;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -30,9 +32,6 @@ public class Particle {
 	}
 
 	public boolean update() {
-		vely += acc;
-		locx += velx;
-		locy += vely;
 		size += growth;
 		life--;
 
@@ -42,6 +41,13 @@ public class Particle {
 		if (size <= 0)
 
 			return true;
+		vely += acc;
+		locx += velx;
+		locy += vely;
+		if (locy >= HakkStage.GROUNDLEVEL) {
+			locy = HakkStage.GROUNDLEVEL;
+			vely *= -0.5;
+		}
 
 		return false;
 	}

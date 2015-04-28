@@ -56,7 +56,7 @@ public class RequestHandler implements Runnable {
 				}
 				outputStream.write(state.trim().getBytes());
 				outputStream.flush();
-			} catch (IOException e) {
+			} catch (IOException | ArrayIndexOutOfBoundsException e) {
 
 				connected = false;
 			} catch (Exception e) {

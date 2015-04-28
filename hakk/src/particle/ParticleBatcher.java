@@ -18,7 +18,7 @@ public class ParticleBatcher {
 
 	public void doDeath(double x, double y) {
 		Color c = Color.RED;
-		for (int i = 0; i < 400; i++) {
+		for (int i = 0; i < 100; i++) {
 
 			particles.add(new Particle(x, y, rand.nextInt(11) - 5, rand
 					.nextInt(19) - 9, .5, rand.nextInt(20), rand.nextDouble()
