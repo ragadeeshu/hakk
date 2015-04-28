@@ -22,7 +22,6 @@ public class Server {
 	private HashMap<String, Sword> swordStates;
 	private HashMap<String, String> playerNames;
 	private HashMap<String, String> playerAnimations;
-	private ArrayList<String> disconnects;
 
 	public Server() {
 		characterStates = new HashMap<String, CharacterState>();
@@ -30,7 +29,6 @@ public class Server {
 		playerNames = new HashMap<String, String>();
 		playerAnimations = new HashMap<String, String>();
 		handlers = new ArrayList<>();
-		disconnects = new ArrayList<>();
 		BitMaskResources.init();
 
 		ServerSocket serverSocket = null;
@@ -79,7 +77,6 @@ public class Server {
 					RequestHandler handler = new RequestHandler(socket, this);
 					handlers.add(handler);
 					pool.submit(handler);
-					disconnects.remove(clientIdentity);
 					for (RequestHandler h : handlers) {
 						h.flagNewConnect();
 					}
@@ -112,7 +109,11 @@ public class Server {
 		swordStates.put(inetAddress, s);
 		for (CharacterState chState : characterStates.values()) {
 			if (chState.isHit(s)) {
-				System.out.println("du dog!");
+				for (RequestHandler handler : handlers) {
+					handler.putDeath(inetAddress, chState.x, chState.y);
+					chState.reSpawn();
+
+				}
 			}
 		}
 	}
@@ -125,7 +126,7 @@ public class Server {
 			sb.append(Networking.SEPARATOR_STATE);
 			sb.append(e.getValue().toString().trim());
 		}
-		sb.append(Networking.SEPARATOR_MESSAGE);
+		sb.append(Networking.SEPARATOR_MESSAGES);
 		return sb.substring(1);
 	}
 
@@ -134,40 +135,41 @@ public class Server {
 	}
 
 	public synchronized void disconnect(String string) {
-		disconnects.add(string);
+		characterStates.remove(string);
+		playerNames.remove(string);
 		for (RequestHandler h : handlers) {
 			h.flagNewDisconnect();
 		}
-		characterStates.remove(string);
-		playerNames.remove(string);
 	}
 
 	public synchronized String getNameMessage() {
 		StringBuilder sb = new StringBuilder();
+		sb.append(Networking.MESSAGE_NEWPLAYER);
+		sb.append(Networking.SEPARATOR_STATE);
+		
 		for (Entry<String, String> e : playerNames.entrySet()) {
+			sb.append(e.getKey()); //ip
+			sb.append(Networking.SEPARATOR_ATTRIBUTE);
+			sb.append(e.getValue().trim()); //name
+			sb.append(Networking.SEPARATOR_ATTRIBUTE);
+			sb.append(playerAnimations.get(e.getKey()).trim()); //anim
 			sb.append(Networking.SEPARATOR_PLAYER);
-			sb.append(Networking.MESSAGE_NEWPLAYER);
-			sb.append(Networking.SEPARATOR_STATE);
-			sb.append(e.getKey());
-			sb.append(Networking.SEPARATOR_STATE);
-			sb.append(e.getValue().trim());
-			sb.append(Networking.SEPARATOR_STATE);
-			sb.append(playerAnimations.get(e.getKey()).trim());
 		}
-		System.out.println("getNameMessage: " + sb.substring(1));
-		return sb.substring(1);
+		System.out.println("getNameMessage: " + sb.substring(0, sb.lastIndexOf(Networking.SEPARATOR_PLAYER)));
+		return sb.substring(0, sb.lastIndexOf(Networking.SEPARATOR_PLAYER));
 	}
 
 	public synchronized String getDisconnectMessage() {
 		StringBuilder sb = new StringBuilder();
-		for (String ip : disconnects) {
-			sb.append(Networking.SEPARATOR_PLAYER);
-			sb.append(Networking.MESSAGE_DISCONNECT);
-			sb.append(Networking.SEPARATOR_STATE);
+		sb.append(Networking.MESSAGE_DISCONNECT);
+		sb.append(Networking.SEPARATOR_STATE);
+
+		for (String ip : playerNames.keySet()) {
 			sb.append(ip);
+			sb.append(Networking.SEPARATOR_PLAYER);
 		}
-		System.out.println("getDisconnectMessage: " + sb.substring(1));
-		return sb.substring(1);
+		System.out.println("getDisconnectMessage: " + sb.substring(0, sb.lastIndexOf(Networking.SEPARATOR_PLAYER)));
+		return sb.substring(0, sb.lastIndexOf(Networking.SEPARATOR_PLAYER));
 	}
 
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.LinkedList;
 
 public class RequestHandler implements Runnable {
 
@@ -14,6 +15,8 @@ public class RequestHandler implements Runnable {
 	private boolean newConnect;
 	private boolean newDisconnect;
 	private String hostIdentifier;
+	private LinkedList<Death> deaths;
+
 	public RequestHandler(Socket socket, Server server) {
 		this.socket = socket;
 		this.server = server;
@@ -21,6 +24,7 @@ public class RequestHandler implements Runnable {
 		newDisconnect = false;
 		hostIdentifier = socket.getInetAddress().getHostName() + ":"
 				+ socket.getPort();
+		deaths = new LinkedList<>();
 	}
 
 	@Override
@@ -75,8 +79,12 @@ public class RequestHandler implements Runnable {
 	public synchronized void flagNewConnect() {
 		newConnect = true;
 	}
-	
+
 	public synchronized void flagNewDisconnect() {
 		newDisconnect = true;
+	}
+
+	public synchronized void putDeath(String inetAddress, double x, double y) {
+		deaths.push(new Death(inetAddress, x, y));
 	}
 }

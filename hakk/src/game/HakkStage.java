@@ -85,31 +85,31 @@ public class HakkStage extends JPanel {
 	}
 
 	public void update(Client client) {
-		HashSet<String> keyset = new HashSet<String>(characters.keySet());
+		// HashSet<String> keyset = new HashSet<String>(characters.keySet());
 
 		client.send(characters.get(client.getAddress()).state.toString()
 				+ Networking.SEPARATOR_SWORD
 				+ swords.get(client.getAddress()).toString());
 		String clientUpdate = client.getUpdate();
 		// System.out.println("Update from server: " + clientUpdate);
-		String[] gup = clientUpdate.split(Networking.SEPARATOR_MESSAGE);
+		String[] gup = clientUpdate.split(Networking.SEPARATOR_MESSAGES);
 		if (!gup[1].trim().equals(""))
 			readMessages(gup[1].trim());
 		for (String ent : gup[0].split(Networking.SEPARATOR_PLAYER)) {
 			String[] splatEnt = ent.split(Networking.SEPARATOR_STATE);
-			keyset.remove(splatEnt[0].trim());
+			// keyset.remove(splatEnt[0].trim());
 			Character character = getCharacter(splatEnt[0]);
 
 			if (!splatEnt[0].equals(client.getAddress())) {
 				character.setState(new CharacterState(splatEnt[1]));
 			}
 		}
-//		for (String key : keyset) {
-//			if (removeCharacter(key)) {
-//				playerNames.remove(key);
-//				System.out.println("Removing player " + key);
-//			}
-//		}
+		// for (String key : keyset) {
+		// if (removeCharacter(key)) {
+		// playerNames.remove(key);
+		// System.out.println("Removing player " + key);
+		// }
+		// }
 	}
 
 	private synchronized Character getCharacter(String identification) {
@@ -129,16 +129,33 @@ public class HakkStage extends JPanel {
 	}
 
 	private void readMessages(String messages) {
+		boolean disconnect = false;
 		System.out.println("readMessages: " + messages);
-		for (String msg : messages.split(Networking.SEPARATOR_PLAYER)) {
-			String[] splatMsg = msg.split(Networking.SEPARATOR_STATE);
-			if (splatMsg[0].equals(Networking.MESSAGE_NEWPLAYER)) {
-				addName(splatMsg[1].trim(), splatMsg[2]);
-				getCharacter(splatMsg[1]).animation = new CharacterAnimation(
-						splatMsg[3]);
-			} else if(splatMsg[0].equals(Networking.MESSAGE_DISCONNECT)) {
-				removeCharacter(splatMsg[1].trim());
+		for (String msg : messages.split(Networking.SEPARATOR_MESSAGE)) {
+			String[] typeAndData = msg.split(Networking.SEPARATOR_STATE);
+
+			HashSet<String> keyset = new HashSet<String>(characters.keySet());
+
+			for (String player : typeAndData[1]
+					.split(Networking.SEPARATOR_PLAYER)) {
+
+				String[] attributes = player
+						.split(Networking.SEPARATOR_ATTRIBUTE);
+
+				if (typeAndData[0].equals(Networking.MESSAGE_NEWPLAYER)) {
+					addName(attributes[0].trim(), attributes[1]);
+					getCharacter(attributes[0].trim()).animation = new CharacterAnimation(
+							attributes[2]);
+				}
+
+				else if (typeAndData[0].equals(Networking.MESSAGE_DISCONNECT)) {
+					disconnect = true;
+					keyset.remove(attributes[0].trim());
+				}
 			}
+			if (disconnect)
+				for (String key : keyset)
+					removeCharacter(key);
 		}
 	}
 }

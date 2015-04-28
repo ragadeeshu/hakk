@@ -5,12 +5,16 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public abstract class Networking {
-	public static final String SEPARATOR_PLAYER = "ƒ";
+	// ƒ „ … † ‡ Š Œ œ •
+	public static final String SEPARATOR_PLAYER = "…";
 	public static final String SEPARATOR_ATTRIBUTE = "„";
-	public static final String SEPARATOR_STATE = "…";
+	public static final String SEPARATOR_STATE = "ƒ";
 	public static final String SEPARATOR_SWORD = "†";
-	public static final String SEPARATOR_MESSAGE = "‡";
+	public static final String SEPARATOR_MESSAGES = "Œ";
+	public static final String SEPARATOR_MESSAGE = "œ";
 
+
+	
 	public static final int BUFFER_SIZE = 2048;
 
 	public static final String CLIENT_HANDSHAKE = "C_CONNECT";
@@ -18,6 +22,8 @@ public abstract class Networking {
 	public static final String MESSAGE_NEWPLAYER = "MSG_NEWP";
 	public static final String MESSAGE_ANIMATION = "MSG_ANIM";
 	public static final String MESSAGE_DISCONNECT = "MSG_DISC";
+	public static final String MESSAGE_DEATH = "MSG_DIED";
+
 
 	public static void send(OutputStream outputStream, String string) {
 		try {
