@@ -22,13 +22,15 @@ public class Server {
 	private HashMap<String, Sword> swordStates;
 	private HashMap<String, String> playerNames;
 	private HashMap<String, String> playerAnimations;
+	private ArrayList<String> disconnects; //måste rensas efter att alla meddelats
 
 	public Server() {
 		characterStates = new HashMap<String, CharacterState>();
 		swordStates = new HashMap<String, Sword>();
 		playerNames = new HashMap<String, String>();
-		handlers = new ArrayList<>();
 		playerAnimations = new HashMap<String, String>();
+		handlers = new ArrayList<>();
+		disconnects = new ArrayList<>();
 		BitMaskResources.init();
 
 		ServerSocket serverSocket = null;
@@ -131,6 +133,7 @@ public class Server {
 	}
 
 	public synchronized void disconnect(String string) {
+		disconnects.add(string);
 		for (RequestHandler h : handlers) {
 			h.flagNewDisconnect();
 		}
@@ -150,24 +153,20 @@ public class Server {
 			sb.append(Networking.SEPARATOR_STATE);
 			sb.append(playerAnimations.get(e.getKey()).trim());
 		}
-		// System.out.println("Gave message: " + sb.substring(1));
+		System.out.println("getNameMessage: " + sb.substring(1));
 		return sb.substring(1);
 	}
 
 	public Object getDisconnectMessage() {
-//		StringBuilder sb = new StringBuilder();
-//		for (Entry<String, String> e : disconnects.entrySet()) {
-//			sb.append(Networking.SEPARATOR_PLAYER);
-//			sb.append(Networking.MESSAGE_NEWPLAYER);
-//			sb.append(Networking.SEPARATOR_STATE);
-//			sb.append(e.getKey());
-//			sb.append(Networking.SEPARATOR_STATE);
-//			sb.append(e.getValue().trim());
-//			sb.append(Networking.SEPARATOR_STATE);
-//			sb.append(playerAnimations.get(e.getKey()).trim());
-//		}
-		// System.out.println("Gave message: " + sb.substring(1));
-		return "";
+		StringBuilder sb = new StringBuilder();
+		for (String ip : disconnects) {
+			sb.append(Networking.SEPARATOR_PLAYER);
+			sb.append(Networking.MESSAGE_DISCONNECT);
+			sb.append(Networking.SEPARATOR_STATE);
+			sb.append(ip);
+		}
+		System.out.println("getDisconnectMessage: " + sb.substring(1));
+		return sb.substring(1);
 	}
 
 }
