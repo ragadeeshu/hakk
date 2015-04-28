@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -58,6 +59,17 @@ public class HakkStage extends JPanel {
 		}
 		pb.draw(g);
 		g2d.drawImage(ground, 0, GROUNDLEVEL, null);
+		
+		 /*Random r = new Random();
+
+	        for (int i = 0; i < 2000; i++) {
+
+	            int x = Math.abs(r.nextInt()) % getWidth();
+	            int y = Math.abs(r.nextInt()) % getHeight();
+	            g2d.drawLine(x, y, x, y);
+	        }*/
+		
+		
 		g2d.dispose();
 	}
 
