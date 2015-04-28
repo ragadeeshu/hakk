@@ -15,8 +15,8 @@ public class UpdateThread extends Thread {
 		this.client = client;
 		this.stage = stage;
 		stage.addCharacter(client.getAddress(), new Player(stage, playerName));
-		stage.addSword(client.getAddress(), new Sword(400, 220));
-		stage.addName(client.getAddress(), playerName);
+		stage.addSword(client.getAddress(), new Sword(400, 300));
+		// stage.addName(client.getAddress(), playerName);
 	}
 
 	public void run() {

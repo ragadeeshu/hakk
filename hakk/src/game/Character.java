@@ -10,9 +10,11 @@ public abstract class Character {
 	protected CharacterAnimation animation;
 	private String playerName = "Default name";
 
-	public Character(String playerName) {
+	public Character(String playerName, String baseImageName) {
 		this.playerName = playerName;
-		state = new CharacterState();
+		this.animation = new CharacterAnimation(baseImageName);
+		state = new CharacterState(Action.STOPPING,
+				animation.getCurrentImageName());
 	}
 
 	public void draw(Graphics2D g2d) {
@@ -20,13 +22,16 @@ public abstract class Character {
 		int inty = (int) Math.round(state.y);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
+		state.currentImage = animation.getCurrentImageName();
 		int height = animation.getImage().getHeight(null);
-		g2d.drawImage(animation.getImage(), intx, inty-height, null);
-		
+		g2d.drawImage(animation.getImage(), intx, inty - height, null);
+
 		FontMetrics fm = g2d.getFontMetrics();
-	    Rectangle2D rect = fm.getStringBounds(playerName, g2d);
-	    g2d.drawString(playerName, (int) (intx + animation.getImage().getWidth(null)/2 - rect.getWidth()/2), inty-height-10);
-//		g2d.drawString(playerName, intx, inty-height-10);
+		Rectangle2D rect = fm.getStringBounds(playerName, g2d);
+		g2d.drawString(playerName,
+				(int) (intx + animation.getImage().getWidth(null) / 2 - rect
+						.getWidth() / 2), inty - height - 10);
+		// g2d.drawString(playerName, intx, inty-height-10);
 	}
 
 	protected void doGravity() {
@@ -36,8 +41,8 @@ public abstract class Character {
 	protected void doMovement() {
 		state.x += state.xspeed;
 		state.y += state.yspeed;
-		if (state.y >= 300) {
-			state.y = 300;
+		if (state.y >= HakkStage.GROUNDLEVEL+CharacterAnimation.GROUD_OFFSET) {
+			state.y = HakkStage.GROUNDLEVEL+CharacterAnimation.GROUD_OFFSET;
 			state.yspeed = 0;
 		}
 	}
@@ -51,8 +56,8 @@ public abstract class Character {
 		doGravity();
 		doMovement();
 	}
-	
-	protected boolean hitLeftWall(){
+
+	protected boolean hitLeftWall() {
 		return state.x < 0;
 	}
 	
@@ -61,5 +66,9 @@ public abstract class Character {
 	}
 
 	protected abstract void doAction();
+
+	public void rename(String name) {
+		this.playerName = name;
+	}
 
 }
