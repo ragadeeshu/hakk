@@ -60,6 +60,15 @@ public class RequestHandler implements Runnable {
 						state.append(server.getDisconnectMessage());
 						newDisconnect = false;
 					}
+					if (!deaths.isEmpty()) {
+						state.append(Networking.MESSAGE_DEATH);
+						state.append(Networking.SEPARATOR_STATE);
+						state.append(deaths.poll().message());
+						while (!deaths.isEmpty()) {
+							state.append(Networking.SEPARATOR_PLAYER);
+							state.append(deaths.poll().message());
+						}
+					}
 				}
 				outputStream.write(state.toString().trim().getBytes());
 				outputStream.flush();
