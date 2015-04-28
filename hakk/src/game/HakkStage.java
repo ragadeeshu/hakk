@@ -10,18 +10,22 @@ import javax.swing.JPanel;
 
 import networking.Client;
 import networking.Networking;
+import particle.ParticleBatcher;
 
 @SuppressWarnings("serial")
 public class HakkStage extends JPanel {
 	private HashMap<String, Character> characters;
 	private HashMap<String, Sword> swords;
 	private HashMap<String, String> playerNames;
+	private ParticleBatcher pb;
 
 	public HakkStage() {
 		super();
 		characters = new HashMap<String, Character>();
 		swords = new HashMap<String, Sword>();
 		playerNames = new HashMap<String, String>();
+		pb = new ParticleBatcher();
+		pb.doDeath(100, 100);
 	}
 
 	@Override
@@ -34,14 +38,17 @@ public class HakkStage extends JPanel {
 		for (Sword sword : swords.values()) {
 			sword.draw(g2d);
 		}
+		pb.draw(g);
 		int height = 293;
 		g2d.fillRect(0, height, this.getWidth(), this.getHeight() - height);
+		g2d.dispose();
 	}
 
 	public synchronized void doPhysics() {
 		for (Entry<String, Character> character : characters.entrySet()) {
 			character.getValue().doPhysics();
 		}
+		pb.update();
 	}
 
 	public synchronized void addCharacter(String address, Character character) {
