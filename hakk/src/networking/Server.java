@@ -155,8 +155,19 @@ public class Server {
 	}
 
 	public Object getDisconnectMessage() {
-		// TODO Auto-generated method stub
-		return null;
+//		StringBuilder sb = new StringBuilder();
+//		for (Entry<String, String> e : disconnects.entrySet()) {
+//			sb.append(Networking.SEPARATOR_PLAYER);
+//			sb.append(Networking.MESSAGE_NEWPLAYER);
+//			sb.append(Networking.SEPARATOR_STATE);
+//			sb.append(e.getKey());
+//			sb.append(Networking.SEPARATOR_STATE);
+//			sb.append(e.getValue().trim());
+//			sb.append(Networking.SEPARATOR_STATE);
+//			sb.append(playerAnimations.get(e.getKey()).trim());
+//		}
+		// System.out.println("Gave message: " + sb.substring(1));
+		return "";
 	}
 
 }
