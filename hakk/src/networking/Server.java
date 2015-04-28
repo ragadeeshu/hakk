@@ -157,7 +157,7 @@ public class Server {
 		return sb.substring(1);
 	}
 
-	public Object getDisconnectMessage() {
+	public synchronized String getDisconnectMessage() {
 		StringBuilder sb = new StringBuilder();
 		for (String ip : disconnects) {
 			sb.append(Networking.SEPARATOR_PLAYER);
