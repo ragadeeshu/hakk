@@ -56,7 +56,7 @@ public class CharacterAnimation {
 		return baseName + String.format("runni__%03d.png", current);
 	}
 
-	public Image getImage(String imgName) {
+	public static Image getImage(String imgName) {
 		if (IMAGES.get(imgName) == null) {
 			System.out.println(imgName);
 			System.out.println(IMAGES.keySet());

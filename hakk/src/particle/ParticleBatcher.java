@@ -20,9 +20,7 @@ public class ParticleBatcher {
 		Color c = Color.RED;
 		for (int i = 0; i < 100; i++) {
 
-			particles.add(new Particle(x, y, rand.nextInt(11) - 5, rand
-					.nextInt(19) - 9, .5, rand.nextInt(20), rand.nextDouble()
-					* -0.2 - 0.1, 150 + rand.nextInt(150), c));
+			particles.add(new Particle(x, y, rand.nextInt(11) - 5, rand.nextInt(19) - 9, .5, rand.nextInt(20), rand.nextDouble()* -0.2 - 0.3, 50 + rand.nextInt(50), c));
 
 		}
 	}
