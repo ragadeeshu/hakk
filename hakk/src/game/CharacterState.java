@@ -7,8 +7,9 @@ import networking.BitMaskResources;
 import networking.Networking;
 
 public class CharacterState {
-	public double x = 0;
-	public double y = 0;
+	public double x = Math.random() * 900;
+	public double y = -200;
+
 	public double xspeed = 0;
 	public double yspeed = 0;
 	public Action action;
@@ -63,8 +64,8 @@ public class CharacterState {
 	}
 
 	public void reSpawn() {
-		x = 0;
-		y = 0;
+		x = Math.random() * 900;
+		y = -200;
 		xspeed = 0;
 		yspeed = 0;
 		action = Action.STOPPING;

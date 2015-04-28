@@ -11,6 +11,7 @@ import java.awt.Stroke;
 import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 
 public abstract class Character {
 	protected CharacterState state;
@@ -67,7 +68,7 @@ public abstract class Character {
 		state = value;
 	}
 
-	public void doPhysics() {
+	public void doPhysics(ArrayList<Platform> platforms) {
 		doAction();
 		doGravity();
 		doMovement();
