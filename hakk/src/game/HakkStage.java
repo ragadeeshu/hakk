@@ -21,6 +21,7 @@ public class HakkStage extends JPanel {
 	public static final int GROUNDLEVEL = 293;
 
 	private String currentImage;
+	private String identification;
 	private BufferedImage background;
 	private BufferedImage ground;
 	private HashMap<String, Character> characters;
@@ -85,6 +86,7 @@ public class HakkStage extends JPanel {
 	}
 
 	public void update(Client client) {
+		identification = client.getAddress();
 		// HashSet<String> keyset = new HashSet<String>(characters.keySet());
 
 		client.send(characters.get(client.getAddress()).state.toString()
@@ -146,9 +148,12 @@ public class HakkStage extends JPanel {
 					addName(attributes[0].trim(), attributes[1]);
 					getCharacter(attributes[0].trim()).animation = new CharacterAnimation(
 							attributes[2]);
-				}
+				}else if(typeAndData[0].equals(Networking.MESSAGE_DEATH)){
+					if(attributes[0].equals(identification))
+						characters.get(identification).state.reSpawn();
+					pb.doDeath(Double.parseDouble(attributes[1]), Double.parseDouble(attributes[2]));
 
-				else if (typeAndData[0].equals(Networking.MESSAGE_DISCONNECT)) {
+				}else if (typeAndData[0].equals(Networking.MESSAGE_DISCONNECT)) {
 					disconnect = true;
 					keyset.remove(attributes[0].trim());
 				}
