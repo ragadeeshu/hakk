@@ -10,7 +10,7 @@ import java.util.HashMap;
 import javax.imageio.ImageIO;
 
 public class CharacterAnimation {
-	public static final int GROUND_OFFSET = 7;
+	public static final int GROUND_OFFSET = 6;
 	public static final int NUM_RUNNING = 11;
 	public static String[] BASENAMES = { "player", "player2", "player3",
 			"player4" };
@@ -56,7 +56,7 @@ public class CharacterAnimation {
 		return baseName + String.format("runni__%03d.png", current);
 	}
 
-	public Image getImage(String imgName) {
+	public static Image getImage(String imgName) {
 		if (IMAGES.get(imgName) == null) {
 			System.out.println(imgName);
 			System.out.println(IMAGES.keySet());
