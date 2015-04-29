@@ -15,11 +15,12 @@ public class Particle {
 	private double acc;
 	private double size;
 	private double growth;
+	private double bounce;
 	private int life;
 	private Color color;
 
 	public Particle(double x, double y, double dx, double dy, double acc,
-			double size, double growth, int life, Color c) {
+			double size, double growth, double bounce, int life, Color c) {
 		this.locx = x;
 		this.locy = y;
 		this.velx = dx;
@@ -28,6 +29,7 @@ public class Particle {
 		this.life = life;
 		this.size = size;
 		this.growth = growth;
+		this.bounce = bounce;
 		this.color = c;
 	}
 
@@ -46,17 +48,17 @@ public class Particle {
 		locy += vely;
 		if (locy >= HakkStage.GROUNDLEVEL) {
 			locy = HakkStage.GROUNDLEVEL;
-			vely *= -0.9;
+			vely *= -bounce;
 		}
 
 		return false;
 	}
 
-	public void draw(Graphics g) {
+	public void draw(Graphics g, int offset) {
 		Graphics2D g2d = (Graphics2D) g.create();
 
 		g2d.setColor(color);
-		g2d.fillOval((int) (locx - (size / 2)), (int) (locy - (size / 2)),
+		g2d.fillOval((int) (locx - (size / 2)) - offset, (int) (locy - (size / 2)),
 				(int) size, (int) size);
 
 		g2d.dispose();

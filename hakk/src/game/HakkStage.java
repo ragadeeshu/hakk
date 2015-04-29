@@ -19,6 +19,10 @@ import networking.Client;
 import networking.Networking;
 import particle.ParticleBatcher;
 
+import sun.audio.*;
+import java.io.*;
+
+
 @SuppressWarnings("serial")
 public class HakkStage extends JPanel {
 	public static final int GROUNDLEVEL = 500;
@@ -35,6 +39,8 @@ public class HakkStage extends JPanel {
 	private FlyingPlane flyingPlane;
 	private FlyingBird flyingBird;
 	private Character player;
+	
+	
 
 	public HakkStage() {
 		super();
@@ -49,6 +55,7 @@ public class HakkStage extends JPanel {
 
 		flyingPlane = new FlyingPlane(-50, -500);
 		flyingBird = new FlyingBird(920, -300);
+
 	}
 
 	@Override
@@ -69,10 +76,28 @@ public class HakkStage extends JPanel {
 		for (Platform platform : platforms) {
 			platform.draw(g2d);
 		}
-		pb.draw(g);
+		pb.draw(g, offset);
 		level.drawForeground(g2d);
 		
 		g2d.dispose();
+	}
+	
+	public synchronized void doMusic() {
+		
+		AudioPlayer BP = AudioPlayer.player;
+		AudioStream BGM;
+		AudioData MD;
+		ContinuousAudioDataStream loop = null;
+		try {
+			BGM = new AudioStream(new FileInputStream("bgm/bgm.wav"));
+			AudioPlayer.player.start(BGM);
+//			MD = BGM.getData();
+//			loop = new ContinuousAudioDataStream(MD);
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+		
+//		BP.start(loop);
 	}
 
 	public synchronized void doPhysics() {
@@ -81,8 +106,9 @@ public class HakkStage extends JPanel {
 		for (Entry<String, Character> character : characters.entrySet()) {
 			character.getValue().doPhysics(platforms);
 		}
-		pb.update();
 		level.computeOffset(player.charState.x, player.charState.y);
+		pb.update();
+		pb.doRain(level.getXOffset());
 	}
 
 	public synchronized void addCharacter(String address, Character character) {

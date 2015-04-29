@@ -19,6 +19,7 @@ public class HakkThread extends Thread {
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
+		stage.doMusic();
 		new Timer().schedule(new TimerTask() {
 
 			public void run() {
