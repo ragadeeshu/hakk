@@ -93,9 +93,9 @@ public class HakkStage extends JPanel {
 		characters.put(address.trim(), character);
 	}
 
-//	public synchronized void addSword(String address, SwordState sword) {
-//		swords.put(address, sword);
-//	}
+	// public synchronized void addSword(String address, SwordState sword) {
+	// swords.put(address, sword);
+	// }
 
 	public void addName(String address, String name) {
 		playerNames.put(address, name);
@@ -111,26 +111,34 @@ public class HakkStage extends JPanel {
 		client.send(player.charState.toString() + Networking.SEPARATOR_SWORD
 				+ player.getSwordState().toString());
 		String clientUpdate = client.getUpdate();
-//		 System.out.println("Update from server: " + clientUpdate);
-		String[] statesAndMsgs = clientUpdate.split(Networking.SEPARATOR_MESSAGES);
+		// System.out.println("Update from server: " + clientUpdate);
+		String[] statesAndMsgs = clientUpdate
+				.split(Networking.SEPARATOR_MESSAGES);
 		if (!statesAndMsgs[1].trim().equals(""))
 			readMessages(statesAndMsgs[1].trim());
-		
-		String[] chStsAndSwSts = statesAndMsgs[0].split(Networking.SEPARATOR_SWORD);
-		
-		for (String ipState : chStsAndSwSts[0].split(Networking.SEPARATOR_PLAYER)) {
+
+		String[] chStsAndSwSts = statesAndMsgs[0]
+				.split(Networking.SEPARATOR_SWORD);
+
+		for (String ipState : chStsAndSwSts[0]
+				.split(Networking.SEPARATOR_PLAYER)) {
 			String[] ipAndState = ipState.split(Networking.SEPARATOR_STATE);
 			Character character = getCharacter(ipAndState[0]);
 			if (!ipAndState[0].equals(client.getAddress())) {
 				character.setState(new CharacterState(ipAndState[1]));
 			}
 		}
-		
-		for (String ipState : chStsAndSwSts[1].split(Networking.SEPARATOR_PLAYER)) {
+
+		for (String ipState : chStsAndSwSts[1]
+				.split(Networking.SEPARATOR_PLAYER)) {
 			String[] ipAndState = ipState.split(Networking.SEPARATOR_STATE);
-			Character character = getCharacter(ipAndState[0]);
-			if (!ipAndState[0].equals(client.getAddress())) {
-				character.swordState = new SwordState(ipAndState[1]);
+			// Character character = getCharacter(ipAndState[0]);
+
+			Character character = characters.get(ipAndState[0]);
+			if (character != null) {
+				if (!ipAndState[0].equals(client.getAddress())) {
+					character.swordState = new SwordState(ipAndState[1]);
+				}
 			}
 		}
 	}
