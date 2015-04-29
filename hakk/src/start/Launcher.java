@@ -27,6 +27,7 @@ public class Launcher {
 //		String playerName = scan.nextLine();
 		String playerName = "Player " + new SimpleDateFormat("mm:ss").format(new Date());
 		
+		scan.close();
 		Client client = new Client(serverAddress, playerName);
 		HakkStage stage = new HakkStage();
 		new HakkThread(stage).start();

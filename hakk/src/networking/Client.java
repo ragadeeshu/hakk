@@ -1,21 +1,13 @@
 package networking;
 
-import game.CharacterState;
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
-//import java.io.ObjectInputStream;
-//import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.HashMap;
 
 public class Client {
 	private String playerName = "Default Name";
-	private String address = "";
 	private int portNbr = 4444;
 	private Socket socket = null;
 	private InputStream inputStream = null;
@@ -36,13 +28,11 @@ public class Client {
 			outputStream = socket.getOutputStream();
 			inputStream = socket.getInputStream();
 			send(Networking.CLIENT_HANDSHAKE + Networking.SEPARATOR_ATTRIBUTE + playerName);
-			// System.out.println("Player name: "+playerName);
-			// send(playerName);
 			String reply = getUpdate();
-			// System.out.println("Reply: "+reply);
 			if (!reply.trim().equals(Networking.SERVER_HANDSHAKE))
 				System.exit(1);
 		} catch (IOException e) {
+			disconnect();
 			System.out.println(e);
 			System.exit(1);
 		}
@@ -59,10 +49,6 @@ public class Client {
 	}
 
 	public String getAddress() {
-		// System.out.println("sak: " + socket.getInetAddress().getHostName()
-		// + ":"
-		// + ((InetSocketAddress) socket.getLocalSocketAddress())
-		// .getPort());
 		return socket.getInetAddress().getHostName()
 				+ ":"
 				+ ((InetSocketAddress) socket.getLocalSocketAddress())

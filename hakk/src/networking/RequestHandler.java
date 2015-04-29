@@ -52,6 +52,7 @@ public class RequestHandler implements Runnable {
 				StringBuilder state = new StringBuilder();
 				synchronized (this) {
 					state.append(server.getStates());
+					state.append(Networking.SEPARATOR_MESSAGES);
 					if (newConnect) {
 						state.append(server.getNameMessage());
 						newConnect = false;

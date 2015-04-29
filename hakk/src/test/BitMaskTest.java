@@ -1,7 +1,7 @@
 package test;
 
-import static org.junit.Assert.*;
-import game.CharacterAnimation;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
