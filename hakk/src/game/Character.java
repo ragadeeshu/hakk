@@ -28,7 +28,7 @@ public abstract class Character {
 		swordAnimation = new SwordAnimation(SwordAnimation.BASENAMES[0]);
 	}
 
-	public void draw(Graphics2D g2d) {
+	public void draw(Graphics2D g2d, int offset) {
 		int intx = (int) Math.round(charState.x);
 		int inty = (int) Math.round(charState.y);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -36,14 +36,14 @@ public abstract class Character {
 		int height = CharacterAnimation.getImage(charState.currentImage)
 				.getHeight(null);
 		g2d.drawImage(CharacterAnimation.getImage(charState.currentImage),
-				intx, inty - height, null);
+				intx-offset, inty - height, null);
 
 		g2d.setFont(new Font("Names", Font.BOLD, 12));
 		FontMetrics fm = g2d.getFontMetrics();
 		Rectangle2D rect = fm.getStringBounds(playerName, g2d);
 		int nameCoordX = (int) (intx
 				+ CharacterAnimation.getImage(charState.currentImage).getWidth(
-						null) / 2 - rect.getWidth() / 2);
+						null) / 2 - rect.getWidth() / 2) - offset;
 		int nameCoordY = inty - height - 10;
 
 		g2d.setPaint(new Color(0.0f, 0.0f, 0.0f, 0.6f));
@@ -58,12 +58,12 @@ public abstract class Character {
 		inty = (int) Math.round(swordState.getY());
 		height = SwordAnimation.getImage(swordState.currentImage()).getHeight(
 				null);
-		g2d.drawImage(SwordAnimation.getImage(swordState.currentImage()), intx,
+		g2d.drawImage(SwordAnimation.getImage(swordState.currentImage()), intx-offset,
 				inty - height, null);
 	}
 
 	protected void doGravity() {
-		charState.yspeed -= -.5;
+		charState.yspeed -= -.8;
 	}
 
 	protected void doMovement() {
@@ -88,13 +88,13 @@ public abstract class Character {
 		doMovement();
 	}
 
-	protected boolean hitLeftWall() {
-		return charState.x < 0;
-	}
-
-	protected boolean hitRightWall() {
-		return charState.x > 846;
-	}
+//	protected boolean hitLeftWall() {
+//		return charState.x < 0;
+//	}
+//
+//	protected boolean hitRightWall() {
+//		return charState.x > 846;
+//	}
 
 	protected abstract void doAction();
 

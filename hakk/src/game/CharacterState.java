@@ -7,7 +7,7 @@ import networking.BitMaskResources;
 import networking.Networking;
 
 public class CharacterState {
-	public double x = Math.random() * 900;
+	public double x = Math.random() * HakkStage.WIDTH+4500;
 	public double y = -200;
 
 	public double xspeed = 0;
@@ -64,7 +64,7 @@ public class CharacterState {
 	}
 
 	public void reSpawn() {
-		x = Math.random() * 900;
+		x = Math.random() * HakkStage.WIDTH+4500;
 		y = -200;
 		xspeed = 0;
 		yspeed = 0;

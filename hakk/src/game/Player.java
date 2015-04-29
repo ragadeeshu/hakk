@@ -104,33 +104,33 @@ public class Player extends Character {
 		switch (charState.action) {
 		case JUMPING:
 
-			charState.yspeed -= 10;
+			charState.yspeed -= 15;
 			charState.action = Action.IN_AIR;
 
 			break;
 		case RUNNING_LEFT:
-			if (hitLeftWall()) {
-				charState.action = Action.STOPPING;
-				break;
-			}
+//			if (hitLeftWall()) {
+//				charState.action = Action.STOPPING;
+//				break;
+//			}
 			charAnimation.run();
 			
-			if (charState.xspeed > -5)
+			if (charState.xspeed > -7)
 				charState.xspeed -= 1;
 			else
-				charState.xspeed = -5;
+				charState.xspeed = -7;
 
 			break;
 		case RUNNING_RIGHT:
-			if (hitRightWall()) {
-				charState.action = Action.STOPPING;
-				break;
-			}
+//			if (hitRightWall()) {
+//				charState.action = Action.STOPPING;
+//				break;
+//			}
 			charAnimation.run();
-			if (charState.xspeed < 5)
+			if (charState.xspeed < 7)
 				charState.xspeed += 1;
 			else
-				charState.xspeed = 5;
+				charState.xspeed = 7;
 
 			break;
 		case STOPPING:
@@ -148,9 +148,10 @@ public class Player extends Character {
 				} else {
 					charState.action = Action.RUNNING_RIGHT;
 				}
-			} else if(hitLeftWall() || hitRightWall()){
-				charState.xspeed = 0;
-			}
+			} 
+//			else if(hitLeftWall() || hitRightWall()){
+//				charState.xspeed = 0;
+//			}
 			break;
 		default:
 			break;
