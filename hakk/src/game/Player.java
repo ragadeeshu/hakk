@@ -50,102 +50,102 @@ public class Player extends Character {
 
 	private void stopLeft() {
 		tryingToRunLeft = false;
-		if (state.action != Action.IN_AIR) {
+		if (charState.action != Action.IN_AIR) {
 			if (!tryingToRunRight) {
-				state.action = Action.STOPPING;
+				charState.action = Action.STOPPING;
 			} else
-				state.action = Action.RUNNING_RIGHT;
+				charState.action = Action.RUNNING_RIGHT;
 		}
 
 	}
 
 	private void stopRight() {
 		tryingToRunRight = false;
-		if (state.action != Action.IN_AIR) {
+		if (charState.action != Action.IN_AIR) {
 			if (!tryingToRunLeft) {
-				state.action = Action.STOPPING;
+				charState.action = Action.STOPPING;
 			} else
-				state.action = Action.RUNNING_LEFT;
+				charState.action = Action.RUNNING_LEFT;
 		}
 
 	}
 
 	private void runLeft() {
 		tryingToRunLeft = true;
-		if (state.action != Action.IN_AIR) {
-			state.action = Action.RUNNING_LEFT;
+		if (charState.action != Action.IN_AIR) {
+			charState.action = Action.RUNNING_LEFT;
 		}
 	}
 
 	protected void runRight() {
 		tryingToRunRight = true;
-		if (state.action != Action.IN_AIR)
-			state.action = Action.RUNNING_RIGHT;
+		if (charState.action != Action.IN_AIR)
+			charState.action = Action.RUNNING_RIGHT;
 	}
 
 	protected void jump() {
-		if (state.action != Action.IN_AIR)
-			state.action = Action.JUMPING;
+		if (charState.action != Action.IN_AIR)
+			charState.action = Action.JUMPING;
 
 	}
 
 	protected void doAction() {
-		switch (state.action) {
+		switch (charState.action) {
 		case JUMPING:
 
-			state.yspeed -= 10;
-			state.action = Action.IN_AIR;
+			charState.yspeed -= 10;
+			charState.action = Action.IN_AIR;
 
 			break;
 		case RUNNING_LEFT:
 			if (hitLeftWall()) {
-				state.action = Action.STOPPING;
+				charState.action = Action.STOPPING;
 				break;
 			}
-			animation.run();
+			charAnimation.run();
 			
-			if (state.xspeed > -5)
-				state.xspeed -= 1;
+			if (charState.xspeed > -5)
+				charState.xspeed -= 1;
 			else
-				state.xspeed = -5;
+				charState.xspeed = -5;
 
 			break;
 		case RUNNING_RIGHT:
 			if (hitRightWall()) {
-				state.action = Action.STOPPING;
+				charState.action = Action.STOPPING;
 				break;
 			}
-			animation.run();
-			if (state.xspeed < 5)
-				state.xspeed += 1;
+			charAnimation.run();
+			if (charState.xspeed < 5)
+				charState.xspeed += 1;
 			else
-				state.xspeed = 5;
+				charState.xspeed = 5;
 
 			break;
 		case STOPPING:
-			if (state.xspeed != 0) {
-				state.xspeed += state.xspeed * -0.7;
+			if (charState.xspeed != 0) {
+				charState.xspeed += charState.xspeed * -0.7;
 			}
 
 			break;
 		case IN_AIR:
-			if (state.y >= HakkStage.GROUNDLEVEL){
+			if (charState.y >= HakkStage.GROUNDLEVEL){
 				if (tryingToRunLeft && tryingToRunRight || !(tryingToRunLeft || tryingToRunRight)) {
-					state.action = Action.STOPPING;
+					charState.action = Action.STOPPING;
 				} else if (tryingToRunLeft){
-					state.action = Action.RUNNING_LEFT;
+					charState.action = Action.RUNNING_LEFT;
 				} else {
-					state.action = Action.RUNNING_RIGHT;
+					charState.action = Action.RUNNING_RIGHT;
 				}
 			} else if(hitLeftWall() || hitRightWall()){
-				state.xspeed = 0;
+				charState.xspeed = 0;
 			}
 			break;
 		default:
 			break;
 
 		}
-		state.currentImage = animation.getCurrentImageName();
+		charState.currentImage = charAnimation.getCurrentImageName();
 
 	}
 }

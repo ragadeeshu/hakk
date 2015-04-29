@@ -1,8 +1,8 @@
 package networking;
 
-import game.CharacterAnimation;
 import game.CharacterState;
-import game.Sword;
+import game.SwordState;
+import graphics.CharacterAnimation;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,15 +17,18 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server {
+	private static final double HIGHHEAVEN = -202;
+	private static final double HEAVEN = -200;
+
 	private ArrayList<RequestHandler> handlers;
 	private HashMap<String, CharacterState> characterStates;
-	private HashMap<String, Sword> swordStates;
+	private HashMap<String, SwordState> swordStates;
 	private HashMap<String, String> playerNames;
 	private HashMap<String, String> playerAnimations;
 
 	public Server() {
 		characterStates = new HashMap<String, CharacterState>();
-		swordStates = new HashMap<String, Sword>();
+		swordStates = new HashMap<String, SwordState>();
 		playerNames = new HashMap<String, String>();
 		playerAnimations = new HashMap<String, String>();
 		handlers = new ArrayList<>();
@@ -100,19 +103,23 @@ public class Server {
 
 	public synchronized void updateCharacterState(String inetAddress,
 			String state) {
-		characterStates.put(inetAddress, new CharacterState(state));
+		CharacterState oldState = characterStates.get(inetAddress);
+		if (oldState == null || ++oldState.y > HEAVEN)
+			characterStates.put(inetAddress, new CharacterState(state));
 
 	}
 
 	public synchronized void updateSwordState(String inetAddress, String state) {
-		Sword s = new Sword(state);
+		SwordState s = new SwordState(state);
 		swordStates.put(inetAddress, s);
-		for (CharacterState chState : characterStates.values()) {
-			if (chState.isHit(s)) {
+		for (Entry<String, CharacterState> chState : characterStates.entrySet()) {
+			if (!chState.getKey().equals(inetAddress)
+					&& chState.getValue().isHit(s)) {
 				for (RequestHandler handler : handlers) {
-					handler.putDeath(inetAddress, chState.x, chState.y);
+					handler.putDeath(chState.getKey(), chState.getValue().x,
+							chState.getValue().y);
 				}
-				chState.y=-100;
+				chState.getValue().y = HIGHHEAVEN;
 			}
 		}
 	}

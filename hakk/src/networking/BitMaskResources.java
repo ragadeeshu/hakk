@@ -1,6 +1,6 @@
 package networking;
 
-import game.CharacterAnimation;
+import graphics.CharacterAnimation;
 
 import java.awt.image.BufferedImage;
 import java.io.File;

@@ -1,5 +1,9 @@
 package game;
 
+import graphics.CharacterAnimation;
+import graphics.FlyingBird;
+import graphics.FlyingPlane;
+
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -27,18 +31,16 @@ public class HakkStage extends JPanel {
 	private BufferedImage background;
 	private BufferedImage ground;
 	private HashMap<String, Character> characters;
-	private HashMap<String, Sword> swords;
 	private HashMap<String, String> playerNames;
 	private ArrayList<Platform> platforms;
 	private ParticleBatcher pb;
-	
+
 	private FlyingPlane flyingPlane;
 	private FlyingBird flyingBird;
 
 	public HakkStage() {
 		super();
 		characters = new HashMap<String, Character>();
-		swords = new HashMap<String, Sword>();
 		playerNames = new HashMap<String, String>();
 		pb = new ParticleBatcher();
 		currentImage = "background.png";
@@ -50,9 +52,9 @@ public class HakkStage extends JPanel {
 			e.printStackTrace();
 		}
 		platforms = new ArrayList<Platform>();
-		platforms.add(new Platform(200, GROUNDLEVEL-160));
-		platforms.add(new Platform(500, GROUNDLEVEL-200));
-		
+		platforms.add(new Platform(200, GROUNDLEVEL - 160));
+		platforms.add(new Platform(500, GROUNDLEVEL - 200));
+
 		flyingPlane = new FlyingPlane(-50, -500);
 		flyingBird = new FlyingBird(920, -300);
 	}
@@ -67,10 +69,10 @@ public class HakkStage extends JPanel {
 		for (Entry<String, Character> character : characters.entrySet()) {
 			character.getValue().draw(g2d);
 		}
-		for (Sword sword : swords.values()) {
-			sword.draw(g2d);
-		}
-		for (Platform platform : platforms){
+		// for (SwordState sword : swords.values()) {
+		// sword.draw(g2d);
+		// }
+		for (Platform platform : platforms) {
 			platform.draw(g2d);
 		}
 		pb.draw(g);
@@ -91,9 +93,9 @@ public class HakkStage extends JPanel {
 		characters.put(address.trim(), character);
 	}
 
-	public synchronized void addSword(String address, Sword sword) {
-		swords.put(address, sword);
-	}
+//	public synchronized void addSword(String address, SwordState sword) {
+//		swords.put(address, sword);
+//	}
 
 	public void addName(String address, String name) {
 		playerNames.put(address, name);
@@ -105,11 +107,9 @@ public class HakkStage extends JPanel {
 
 	public void update(Client client) {
 		identification = client.getAddress();
-		// HashSet<String> keyset = new HashSet<String>(characters.keySet());
-
-		client.send(characters.get(client.getAddress()).state.toString()
-				+ Networking.SEPARATOR_SWORD
-				+ swords.get(client.getAddress()).toString());
+		Character player = characters.get(identification);
+		client.send(player.charState.toString() + Networking.SEPARATOR_SWORD
+				+ player.getSwordState().toString());
 		String clientUpdate = client.getUpdate();
 		// System.out.println("Update from server: " + clientUpdate);
 		String[] gup = clientUpdate.split(Networking.SEPARATOR_MESSAGES);
@@ -117,19 +117,12 @@ public class HakkStage extends JPanel {
 			readMessages(gup[1].trim());
 		for (String ent : gup[0].split(Networking.SEPARATOR_PLAYER)) {
 			String[] splatEnt = ent.split(Networking.SEPARATOR_STATE);
-			// keyset.remove(splatEnt[0].trim());
 			Character character = getCharacter(splatEnt[0]);
 
 			if (!splatEnt[0].equals(client.getAddress())) {
 				character.setState(new CharacterState(splatEnt[1]));
 			}
 		}
-		// for (String key : keyset) {
-		// if (removeCharacter(key)) {
-		// playerNames.remove(key);
-		// System.out.println("Removing player " + key);
-		// }
-		// }
 	}
 
 	private synchronized Character getCharacter(String identification) {
@@ -164,16 +157,26 @@ public class HakkStage extends JPanel {
 
 				if (typeAndData[0].equals(Networking.MESSAGE_NEWPLAYER)) {
 					addName(attributes[0].trim(), attributes[1]);
-					getCharacter(attributes[0].trim()).animation = new CharacterAnimation(
+					getCharacter(attributes[0].trim()).charAnimation = new CharacterAnimation(
 							attributes[2]);
-				}else if(typeAndData[0].equals(Networking.MESSAGE_DEATH)){
-					if(attributes[0].equals(identification))
-						characters.get(identification).state.reSpawn();
-					double x = Double.parseDouble(attributes[1])+CharacterAnimation.getImage(characters.get(identification).animation.getCurrentImageName()).getWidth(null)/2;
-					double y = Double.parseDouble(attributes[2])-CharacterAnimation.getImage(characters.get(identification).animation.getCurrentImageName()).getHeight(null)/2;
+				} else if (typeAndData[0].equals(Networking.MESSAGE_DEATH)) {
+					if (attributes[0].equals(identification))
+						characters.get(identification).charState.reSpawn();
+					double x = Double.parseDouble(attributes[1])
+							+ CharacterAnimation
+									.getImage(
+											characters.get(identification).charAnimation
+													.getCurrentImageName())
+									.getWidth(null) / 2;
+					double y = Double.parseDouble(attributes[2])
+							- CharacterAnimation
+									.getImage(
+											characters.get(identification).charAnimation
+													.getCurrentImageName())
+									.getHeight(null) / 2;
 					pb.doDeath(x, y);
 
-				}else if (typeAndData[0].equals(Networking.MESSAGE_DISCONNECT)) {
+				} else if (typeAndData[0].equals(Networking.MESSAGE_DISCONNECT)) {
 					disconnect = true;
 					keyset.remove(attributes[0].trim());
 				}

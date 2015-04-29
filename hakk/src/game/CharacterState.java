@@ -43,10 +43,10 @@ public class CharacterState {
 		return sb.toString();
 	}
 
-	public boolean isHit(Sword s) {
+	public boolean isHit(SwordState s) {
 
 		BitMask characterMask = BitMaskResources.getBitmask(currentImage);
-		BitMask swordMask = BitMaskResources.getBitmask(s.getImage());
+		BitMask swordMask = BitMaskResources.getBitmask(s.currentImage());
 
 		int intx = (int) Math.round(x);
 		int inty = (int) Math.round(y) - characterMask.getHeight();
