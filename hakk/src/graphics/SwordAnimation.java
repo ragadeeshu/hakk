@@ -44,7 +44,7 @@ public class SwordAnimation {
 		current = 0;
 	}
 
-	public void run() {
+	public void swing() {
 		current = (current + 1) % NUM_ATTACK;
 	}
 

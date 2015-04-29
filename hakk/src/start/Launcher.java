@@ -2,6 +2,7 @@ package start;
 
 import game.HakkStage;
 import game.HakkThread;
+import game.Player;
 import game.UpdateThread;
 
 import java.text.SimpleDateFormat;
@@ -30,6 +31,7 @@ public class Launcher {
 		scan.close();
 		Client client = new Client(serverAddress, playerName);
 		HakkStage stage = new HakkStage();
+		stage.addPlayerCharacter(client.getAddress(), new Player(stage, playerName));
 		new HakkThread(stage).start();
 		new UpdateThread(client, stage, playerName).start();
 	}

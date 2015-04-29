@@ -7,9 +7,6 @@ public class Opponent extends Character {
 	public Opponent(HakkStage stage, String playerName) {
 		super(playerName, "player2");
 		nameColour = Color.RED;
-		// Action.STOPPING;
-		// animation = new CharacterAnimation("player2");
-
 	}
 
 	protected void doAction() {
@@ -23,19 +20,19 @@ public class Opponent extends Character {
 		case RUNNING_LEFT:
 			charAnimation.run();
 
-			if (charState.xspeed > -5)
+			if (charState.xspeed > -7)
 				charState.xspeed -= 1;
 			else
-				charState.xspeed = -5;
+				charState.xspeed = -7;
 
 			break;
 		case RUNNING_RIGHT:
 			charAnimation.run();
 
-			if (charState.xspeed < 5)
+			if (charState.xspeed < 7)
 				charState.xspeed += 1;
 			else
-				charState.xspeed = 5;
+				charState.xspeed = 7;
 
 			break;
 		case STOPPING:

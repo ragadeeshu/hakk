@@ -29,6 +29,13 @@ public class Player extends Character {
 							case KeyEvent.VK_RIGHT:
 								runRight();
 								break;
+							case KeyEvent.VK_Z:
+							case KeyEvent.VK_X:
+							case KeyEvent.VK_C:
+							case KeyEvent.VK_V:
+							case KeyEvent.VK_NUMPAD0:
+								swing();
+								break;
 							}
 						}
 						if (e.getID() == KeyEvent.KEY_RELEASED) {
@@ -86,7 +93,11 @@ public class Player extends Character {
 	protected void jump() {
 		if (charState.action != Action.IN_AIR)
 			charState.action = Action.JUMPING;
-
+	}
+	
+	private void swing() {
+		swordState.action = Action.SWINGING;
+		swordAnimation.swing();
 	}
 
 	protected void doAction() {
@@ -104,10 +115,10 @@ public class Player extends Character {
 //			}
 			charAnimation.run();
 			
-			if (charState.xspeed > -5)
+			if (charState.xspeed > -7)
 				charState.xspeed -= 1;
 			else
-				charState.xspeed = -5;
+				charState.xspeed = -7;
 
 			break;
 		case RUNNING_RIGHT:
@@ -116,10 +127,10 @@ public class Player extends Character {
 //				break;
 //			}
 			charAnimation.run();
-			if (charState.xspeed < 5)
+			if (charState.xspeed < 7)
 				charState.xspeed += 1;
 			else
-				charState.xspeed = 5;
+				charState.xspeed = 7;
 
 			break;
 		case STOPPING:
@@ -147,6 +158,6 @@ public class Player extends Character {
 
 		}
 		charState.currentImage = charAnimation.getCurrentImageName();
-
+		swordState.currentImage = swordAnimation.getCurrentImageName();
 	}
 }

@@ -132,8 +132,14 @@ public class Server {
 			sb.append(Networking.SEPARATOR_STATE);
 			sb.append(e.getValue().toString().trim());
 		}
-		sb.append(Networking.SEPARATOR_MESSAGES);
-		return sb.substring(1);
+		sb.append(Networking.SEPARATOR_SWORD);
+		for (Entry<String, SwordState> e : swordStates.entrySet()) {
+			sb.append(e.getKey());
+			sb.append(Networking.SEPARATOR_STATE);
+			sb.append(e.getValue().toString().trim());
+			sb.append(Networking.SEPARATOR_PLAYER);
+		}
+		return sb.substring(1, sb.lastIndexOf(Networking.SEPARATOR_PLAYER));
 	}
 
 	public synchronized String getName(String address) {
