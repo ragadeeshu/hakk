@@ -6,7 +6,8 @@ public class SwordState {
 //	private Character wielder;
 	private double x;
 	private double y;
-	private String currentImage;
+	public String currentImage;
+	public Action action = Action.STOPPING;
 
 	public SwordState(double x, double y) {
 		this.x = x;

@@ -1,6 +1,7 @@
 package networking;
 
 import graphics.CharacterAnimation;
+import graphics.SwordAnimation;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -29,14 +30,19 @@ public abstract class BitMaskResources {
 				}
 			}
 		}
-		String currentImage = "sword_attacking_left___000.png";
-		try {
-			String name = "sprites/" + currentImage;
-			BufferedImage image = ImageIO.read(new File(name));
-			bitmasks.put(currentImage, new BitMask(image));
-		} catch (IOException e) {
-			e.printStackTrace();
+		
+		for (int i = 0; i < SwordAnimation.BASENAMES.length; i++) {
+			for (int j = 0; j < SwordAnimation.NUM_ATTACK; j++) {
+				try {
+					String name = "sprites/" + SwordAnimation.BASENAMES[i] + String.format("%03d", j) + ".png";
+					BufferedImage image = ImageIO.read(new File(name));
+					bitmasks.put(SwordAnimation.BASENAMES[i] + String.format("%03d", j) + ".png", new BitMask(image));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
+		
 	}
 
 	public static void init() {

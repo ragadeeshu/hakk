@@ -29,6 +29,9 @@ public class Player extends Character {
 							case KeyEvent.VK_RIGHT:
 								runRight();
 								break;
+							case KeyEvent.VK_NUMPAD0:
+								swing();
+								break;
 							}
 						}
 						if (e.getID() == KeyEvent.KEY_RELEASED) {
@@ -86,7 +89,11 @@ public class Player extends Character {
 	protected void jump() {
 		if (charState.action != Action.IN_AIR)
 			charState.action = Action.JUMPING;
-
+	}
+	
+	private void swing() {
+		swordState.action = Action.SWINGING;
+		swordAnimation.swing();
 	}
 
 	protected void doAction() {
@@ -146,6 +153,6 @@ public class Player extends Character {
 
 		}
 		charState.currentImage = charAnimation.getCurrentImageName();
-
+		swordState.currentImage = swordAnimation.getCurrentImageName();
 	}
 }

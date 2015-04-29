@@ -25,6 +25,7 @@ public abstract class Character {
 		charState = new CharacterState(Action.STOPPING,
 				charAnimation.getCurrentImageName());
 		swordState = new SwordState(charState.x, charState.y);
+		swordAnimation = new SwordAnimation(SwordAnimation.BASENAMES[0]);
 	}
 
 	public void draw(Graphics2D g2d) {
