@@ -3,6 +3,8 @@ package game;
 import graphics.CharacterAnimation;
 import graphics.FlyingBird;
 import graphics.FlyingPlane;
+import graphics.Level;
+import graphics.LevelOne;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -23,34 +25,28 @@ import particle.ParticleBatcher;
 
 @SuppressWarnings("serial")
 public class HakkStage extends JPanel {
-	public static final int GROUNDLEVEL = 300;
-	public static final int WIDTH = 900;
+	public static final int GROUNDLEVEL = 500;
+	public static final int WIDTH = 1200;
+	public static final int HEIGHT = 600;
 
-	private String currentImage;
 	private String identification;
-	private BufferedImage background;
-	private BufferedImage ground;
 	private HashMap<String, Character> characters;
 	private HashMap<String, String> playerNames;
+	private Level level;
 	private ArrayList<Platform> platforms;
 	private ParticleBatcher pb;
 
 	private FlyingPlane flyingPlane;
 	private FlyingBird flyingBird;
+	private Character player;
 
 	public HakkStage() {
 		super();
+		level= new LevelOne();
 		characters = new HashMap<String, Character>();
 		playerNames = new HashMap<String, String>();
 		pb = new ParticleBatcher();
-		currentImage = "background.png";
-		try {
-			String name = "sprites/" + currentImage;
-			background = ImageIO.read(new File(name));
-			ground = ImageIO.read(new File("sprites/ground.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	
 		platforms = new ArrayList<Platform>();
 		platforms.add(new Platform(200, GROUNDLEVEL - 160));
 		platforms.add(new Platform(500, GROUNDLEVEL - 200));
@@ -63,11 +59,13 @@ public class HakkStage extends JPanel {
 	public synchronized void paint(Graphics g) {
 		super.paint(g);
 		Graphics2D g2d = (Graphics2D) g;
-		g2d.drawImage(background, 0, 0, null);
+		level.drawBackground(g2d);
 		flyingPlane.drawPlane(g2d);
 		flyingBird.drawBird(g2d);
+		level.drawGround(g2d);
+		int offset = level.getXOffset();
 		for (Entry<String, Character> character : characters.entrySet()) {
-			character.getValue().draw(g2d);
+			character.getValue().draw(g2d, offset);
 		}
 		// for (SwordState sword : swords.values()) {
 		// sword.draw(g2d);
@@ -76,7 +74,8 @@ public class HakkStage extends JPanel {
 			platform.draw(g2d);
 		}
 		pb.draw(g);
-		g2d.drawImage(ground, 0, GROUNDLEVEL, null);
+		level.drawForeground(g2d);
+		
 		g2d.dispose();
 	}
 
@@ -87,10 +86,17 @@ public class HakkStage extends JPanel {
 			character.getValue().doPhysics(platforms);
 		}
 		pb.update();
+		level.computeOffset(player.charState.x, player.charState.y);
 	}
 
 	public synchronized void addCharacter(String address, Character character) {
 		characters.put(address.trim(), character);
+	}
+	public synchronized void addPlayerCharacter(String address, Player player) {
+		identification =address.trim();
+		this.player = player;
+		characters.put(address.trim(), player);
+		
 	}
 
 //	public synchronized void addSword(String address, SwordState sword) {
@@ -106,8 +112,6 @@ public class HakkStage extends JPanel {
 	}
 
 	public void update(Client client) {
-		identification = client.getAddress();
-		Character player = characters.get(identification);
 		client.send(player.charState.toString() + Networking.SEPARATOR_SWORD
 				+ player.getSwordState().toString());
 		String clientUpdate = client.getUpdate();
@@ -186,4 +190,5 @@ public class HakkStage extends JPanel {
 					removeCharacter(key);
 		}
 	}
+
 }
