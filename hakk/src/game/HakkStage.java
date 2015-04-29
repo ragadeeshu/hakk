@@ -22,6 +22,8 @@ import particle.ParticleBatcher;
 import sun.audio.*;
 import java.io.*;
 
+import javazoom.jl.player.advanced.*;
+
 
 @SuppressWarnings("serial")
 public class HakkStage extends JPanel {
@@ -40,7 +42,7 @@ public class HakkStage extends JPanel {
 	private FlyingBird flyingBird;
 	private Character player;
 	
-	
+	private MusicPlayer musicPlayer;
 
 	public HakkStage() {
 		super();
@@ -84,20 +86,24 @@ public class HakkStage extends JPanel {
 	
 	public synchronized void doMusic() {
 		
-		AudioPlayer BP = AudioPlayer.player;
-		AudioStream BGM;
-		AudioData MD;
-		ContinuousAudioDataStream loop = null;
-		try {
-			BGM = new AudioStream(new FileInputStream("bgm/bgm.wav"));
-			AudioPlayer.player.start(BGM);
-//			MD = BGM.getData();
-//			loop = new ContinuousAudioDataStream(MD);
-		} catch(IOException e) {
-			e.printStackTrace();
-		}
+		musicPlayer = new MusicPlayer("bgm/music.mp3", true);
+        musicPlayer.start();
 		
-//		BP.start(loop);
+		
+//		AudioPlayer BP = AudioPlayer.player;
+//		AudioStream BGM;
+//		AudioData MD;
+//		ContinuousAudioDataStream loop = null;
+//		try {
+//			BGM = new AudioStream(new FileInputStream("bgm/bgm.wav"));
+//			AudioPlayer.player.start(BGM);
+////			MD = BGM.getData();
+////			loop = new ContinuousAudioDataStream(MD);
+//		} catch(IOException e) {
+//			e.printStackTrace();
+//		}
+//		
+////		BP.start(loop);
 	}
 
 	public synchronized void doPhysics() {
