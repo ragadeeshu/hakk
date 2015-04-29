@@ -29,6 +29,10 @@ public class Player extends Character {
 							case KeyEvent.VK_RIGHT:
 								runRight();
 								break;
+							case KeyEvent.VK_Z:
+							case KeyEvent.VK_X:
+							case KeyEvent.VK_C:
+							case KeyEvent.VK_V:
 							case KeyEvent.VK_NUMPAD0:
 								swing();
 								break;

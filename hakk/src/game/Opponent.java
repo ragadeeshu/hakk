@@ -7,9 +7,6 @@ public class Opponent extends Character {
 	public Opponent(HakkStage stage, String playerName) {
 		super(playerName, "player2");
 		nameColour = Color.RED;
-		// Action.STOPPING;
-		// animation = new CharacterAnimation("player2");
-
 	}
 
 	protected void doAction() {
