@@ -19,12 +19,6 @@ import networking.Client;
 import networking.Networking;
 import particle.ParticleBatcher;
 
-import sun.audio.*;
-import java.io.*;
-
-import javazoom.jl.player.advanced.*;
-
-
 @SuppressWarnings("serial")
 public class HakkStage extends JPanel {
 	public static final int GROUNDLEVEL = 500;
@@ -41,16 +35,14 @@ public class HakkStage extends JPanel {
 	private FlyingPlane flyingPlane;
 	private FlyingBird flyingBird;
 	private Character player;
-	
-	private MusicPlayer musicPlayer;
 
 	public HakkStage() {
 		super();
-		level= new LevelOne();
+		level = new LevelOne();
 		characters = new HashMap<String, Character>();
 		playerNames = new HashMap<String, String>();
 		pb = new ParticleBatcher();
-	
+
 		platforms = new ArrayList<Platform>();
 		platforms.add(new Platform(200, GROUNDLEVEL - 160));
 		platforms.add(new Platform(500, GROUNDLEVEL - 200));
@@ -80,30 +72,8 @@ public class HakkStage extends JPanel {
 		}
 		pb.draw(g, offset);
 		level.drawForeground(g2d);
-		
+
 		g2d.dispose();
-	}
-	
-	public synchronized void doMusic() {
-		
-		musicPlayer = new MusicPlayer("bgm/music.mp3", true);
-        musicPlayer.start();
-		
-		
-//		AudioPlayer BP = AudioPlayer.player;
-//		AudioStream BGM;
-//		AudioData MD;
-//		ContinuousAudioDataStream loop = null;
-//		try {
-//			BGM = new AudioStream(new FileInputStream("bgm/bgm.wav"));
-//			AudioPlayer.player.start(BGM);
-////			MD = BGM.getData();
-////			loop = new ContinuousAudioDataStream(MD);
-//		} catch(IOException e) {
-//			e.printStackTrace();
-//		}
-//		
-////		BP.start(loop);
 	}
 
 	public synchronized void doPhysics() {
@@ -120,12 +90,14 @@ public class HakkStage extends JPanel {
 	public synchronized void addCharacter(String address, Character character) {
 		characters.put(address.trim(), character);
 	}
-	public synchronized void addPlayerCharacter(String address, Player playerCharacter) {
-		identification =address.trim();
+
+	public synchronized void addPlayerCharacter(String address,
+			Player playerCharacter) {
+		identification = address.trim();
 		this.player = playerCharacter;
 		System.out.println(player.toString());
 		characters.put(address.trim(), playerCharacter);
-		
+
 	}
 
 	// public synchronized void addSword(String address, SwordState sword) {

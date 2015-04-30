@@ -5,19 +5,20 @@ import game.HakkStage;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.Random;
 
 public class Particle {
 
-	private double locx;
-	private double locy;
-	private double velx;
-	private double vely;
-	private double acc;
-	private double size;
+	protected double locx;
+	protected double locy;
+	protected double velx;
+	protected double vely;
+	protected double acc;
+	protected double size;
 	private double growth;
 	private double bounce;
 	private int life;
-	private Color color;
+	protected Color color;
 
 	public Particle(double x, double y, double dx, double dy, double acc,
 			double size, double growth, double bounce, int life, Color c) {
@@ -33,7 +34,7 @@ public class Particle {
 		this.color = c;
 	}
 
-	public boolean update() {
+	public boolean update(ParticleBatcher particleBatcher) {
 		size += growth;
 		life--;
 
@@ -58,8 +59,8 @@ public class Particle {
 		Graphics2D g2d = (Graphics2D) g.create();
 
 		g2d.setColor(color);
-		g2d.fillOval((int) (locx - (size / 2)) - offset, (int) (locy - (size / 2)),
-				(int) size, (int) size);
+		g2d.fillOval((int) (locx - (size / 2)) - offset,
+				(int) (locy - (size / 2)), (int) size, (int) size);
 
 		g2d.dispose();
 	}

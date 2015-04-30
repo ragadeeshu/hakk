@@ -40,6 +40,7 @@ public abstract class Level {
 		} else if (offSetX > ground.getWidth()) {
 			offSetX -= ground.getWidth();
 		}
+//		System.out.println(offSetX);
 
 	}
 

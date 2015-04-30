@@ -97,9 +97,6 @@ public class Server {
 
 	}
 
-	public static void main(String[] args) {
-		Server server = new Server();
-	}
 
 	public synchronized void updateCharacterState(String inetAddress,
 			String state) {
