@@ -24,6 +24,7 @@ public class HakkStage extends JPanel {
 	public static final int GROUNDLEVEL = 500;
 	public static final int WIDTH = 1200;
 	public static final int HEIGHT = 600;
+	public static final int LEVEL_WIDTH = 8100;
 
 	private String identification;
 	private HashMap<String, Character> characters;

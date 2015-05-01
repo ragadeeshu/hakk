@@ -35,15 +35,16 @@ public abstract class Character {
 				RenderingHints.VALUE_ANTIALIAS_ON);
 		int height = CharacterAnimation.getImage(charState.currentImage)
 				.getHeight(null);
-		g2d.drawImage(CharacterAnimation.getImage(charState.currentImage),
-				intx-offset, inty - height, null);
+		g2d.drawImage(CharacterAnimation.getImage(charState.currentImage), intx
+				- offset, inty - height, null);
 
 		g2d.setFont(new Font("Names", Font.BOLD, 12));
 		FontMetrics fm = g2d.getFontMetrics();
 		Rectangle2D rect = fm.getStringBounds(playerName, g2d);
 		int nameCoordX = (int) (intx
 				+ CharacterAnimation.getImage(charState.currentImage).getWidth(
-						null) / 2 - rect.getWidth() / 2) - offset;
+						null) / 2 - rect.getWidth() / 2)
+				- offset;
 		int nameCoordY = inty - height - 10;
 
 		g2d.setPaint(new Color(0.0f, 0.0f, 0.0f, 0.6f));
@@ -58,8 +59,8 @@ public abstract class Character {
 		inty = (int) Math.round(swordState.getY());
 		height = SwordAnimation.getImage(swordState.currentImage()).getHeight(
 				null);
-		g2d.drawImage(SwordAnimation.getImage(swordState.currentImage()), intx-offset,
-				inty - height, null);
+		g2d.drawImage(SwordAnimation.getImage(swordState.currentImage()), intx
+				- offset, inty - height, null);
 	}
 
 	protected void doGravity() {
@@ -68,7 +69,12 @@ public abstract class Character {
 
 	protected void doMovement() {
 		charState.x += charState.xspeed;
+		if (charState.x < 0)
+			charState.x += HakkStage.LEVEL_WIDTH;
+		else if (charState.x > HakkStage.LEVEL_WIDTH)
+			charState.x -= HakkStage.LEVEL_WIDTH;
 		charState.y += charState.yspeed;
+		System.out.println(charState.x);
 		if (charState.y >= HakkStage.GROUNDLEVEL
 				+ CharacterAnimation.GROUND_OFFSET) {
 			charState.y = HakkStage.GROUNDLEVEL
@@ -88,13 +94,13 @@ public abstract class Character {
 		doMovement();
 	}
 
-//	protected boolean hitLeftWall() {
-//		return charState.x < 0;
-//	}
-//
-//	protected boolean hitRightWall() {
-//		return charState.x > 846;
-//	}
+	// protected boolean hitLeftWall() {
+	// return charState.x < 0;
+	// }
+	//
+	// protected boolean hitRightWall() {
+	// return charState.x > 846;
+	// }
 
 	protected abstract void doAction();
 

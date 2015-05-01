@@ -9,6 +9,7 @@ public abstract class Level {
 	protected int offSetX;
 	protected int offSetY;
 	protected int stageWidth;
+	public static final int SCROLL_WINDOW = 200;
 
 	protected BufferedImage background;
 	protected BufferedImage ground;
@@ -21,26 +22,24 @@ public abstract class Level {
 	public abstract void drawForeground(Graphics2D g2d);
 
 	public void computeOffset(double x, double y) {
-		if (x < 0) {
-			x += stageWidth;
+		if (offSetX < 0 && x > HakkStage.LEVEL_WIDTH / 2) {
+			offSetX += HakkStage.LEVEL_WIDTH;
+		} else if (offSetX > HakkStage.LEVEL_WIDTH - HakkStage.WIDTH
+				&& x < HakkStage.LEVEL_WIDTH / 2) {
+			offSetX -= HakkStage.LEVEL_WIDTH;
 		}
 		int window = (int) (x - offSetX - HakkStage.WIDTH / 2);
 
-		if (Math.abs(window) > 200) {
+		if (Math.abs(window) > SCROLL_WINDOW) {
 			if (window < 0) {
-				offSetX += window + 200;
+				offSetX += window + SCROLL_WINDOW;
 			} else {
-				offSetX += window - 200;
+				offSetX += window - SCROLL_WINDOW;
 
 			}
 
 		}
-		if (offSetX < 0) {
-			offSetX += ground.getWidth();
-		} else if (offSetX > ground.getWidth()) {
-			offSetX -= ground.getWidth();
-		}
-//		System.out.println(offSetX);
+
 
 	}
 
