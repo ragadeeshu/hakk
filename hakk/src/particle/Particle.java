@@ -55,19 +55,19 @@ public class Particle {
 		return false;
 	}
 
-	public void draw(Graphics2D g2d, int offset) {
+	public void draw(Graphics2D g2d, int xOffset, int yOffset) {
 		g2d.setColor(color);
-		g2d.fillOval((int) (locx - (size / 2)) - offset,
-				(int) (locy - (size / 2)), (int) size, (int) size);
+		g2d.fillOval((int) (locx - (size / 2)) - xOffset,
+				(int) (locy - (size / 2)) + yOffset, (int) size, (int) size);
 		if (locx < HakkStage.WIDTH) {
-			g2d.fillOval((int) (locx - (size / 2)) - offset
-					+ HakkStage.LEVEL_WIDTH, (int) (locy - (size / 2)),
-					(int) size, (int) size);
+			g2d.fillOval((int) (locx - (size / 2)) - xOffset
+					+ HakkStage.LEVEL_WIDTH, (int) (locy - (size / 2))
+					+ yOffset, (int) size, (int) size);
 
 		} else if (locx > HakkStage.LEVEL_WIDTH - HakkStage.WIDTH) {
-			g2d.fillOval((int) (locx - (size / 2)) - offset
-					- HakkStage.LEVEL_WIDTH, (int) (locy - (size / 2)),
-					(int) size, (int) size);
+			g2d.fillOval((int) (locx - (size / 2)) - xOffset
+					- HakkStage.LEVEL_WIDTH, (int) (locy - (size / 2))
+					+ yOffset, (int) size, (int) size);
 		}
 
 	}

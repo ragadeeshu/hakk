@@ -40,11 +40,18 @@ public abstract class Level {
 
 		}
 
-
+		offSetY = (int) (Math
+				.min(((-y + CharacterAnimation.GROUND_OFFSET + HakkStage.GROUNDLEVEL)
+						/ (HakkStage.LEVEL_HEIGHT - HakkStage.HEIGHT + HakkStage.GROUNDLEVEL) * (HakkStage.LEVEL_HEIGHT - HakkStage.HEIGHT)),
+						300) * 2 / 3);
 	}
 
 	public int getXOffset() {
 		return offSetX;
+	}
+
+	public int getYOffset() {
+		return offSetY;
 	}
 
 }

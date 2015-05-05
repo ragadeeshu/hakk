@@ -24,7 +24,8 @@ public class ParticleBatcher {
 				.nextInt((int) (HakkStage.WIDTH * 1.8))
 				- HakkStage.WIDTH
 				* 0.4
-				+ offset, -100, HakkStage.GROUNDLEVEL + rand.nextInt(81) - 40));
+				+ offset, HakkStage.HEIGHT - HakkStage.LEVEL_HEIGHT,
+				HakkStage.GROUNDLEVEL + rand.nextInt(81) - 40));
 
 	}
 
@@ -50,9 +51,9 @@ public class ParticleBatcher {
 
 	}
 
-	public synchronized void draw(Graphics2D g, int offset) {
+	public synchronized void draw(Graphics2D g, int xOffset, int yOffset) {
 		for (Particle particle : particles) {
-			particle.draw(g, offset);
+			particle.draw(g, xOffset, yOffset);
 		}
 	}
 

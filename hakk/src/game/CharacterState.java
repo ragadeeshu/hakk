@@ -9,11 +9,11 @@ import networking.BitMaskResources;
 import networking.Networking;
 
 public class CharacterState {
-	public double x = Math.random() * HakkStage.WIDTH + 4500;
-	public double y = -200;
+	public double x;
+	public double y;
 
-	public double xspeed = 0;
-	public double yspeed = 0;
+	public double xspeed;
+	public double yspeed;
 	public Action action;
 	public String currentImage;
 
@@ -30,6 +30,8 @@ public class CharacterState {
 	}
 
 	public CharacterState(Action action, String currentImage) {
+		x = Math.random() * HakkStage.LEVEL_WIDTH;
+		y = HakkStage.HEIGHT - HakkStage.LEVEL_HEIGHT -200;
 		this.action = action;
 		this.currentImage = currentImage;
 	}
@@ -77,8 +79,8 @@ public class CharacterState {
 	}
 
 	public void reSpawn() {
-		x = Math.random() * HakkStage.WIDTH + 4500;
-		y = -200;
+		x = Math.random() * HakkStage.LEVEL_WIDTH;
+		y = HakkStage.HEIGHT - HakkStage.LEVEL_HEIGHT-200;
 		xspeed = 0;
 		yspeed = 0;
 		action = Action.STOPPING;

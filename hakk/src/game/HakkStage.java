@@ -27,6 +27,7 @@ public class HakkStage extends JPanel {
 	public static final int WIDTH = 1200;
 	public static final int HEIGHT = 600;
 	public static final int LEVEL_WIDTH = 8100;
+	public static final int LEVEL_HEIGHT = 900;
 
 	private static final Font NAME_FONT = new Font("Names", Font.BOLD, 12);
 
@@ -79,15 +80,16 @@ public class HakkStage extends JPanel {
 				flyingPlane.drawPlane(graphics);
 				flyingBird.drawBird(graphics);
 				level.drawGround(graphics);
-				int offset = level.getXOffset();
+				int xOffset = level.getXOffset();
+				int yOffset = level.getYOffset();
 				for (Entry<String, Character> character : characters.entrySet()) {
-					character.getValue().draw(graphics, offset);
+					character.getValue().draw(graphics, xOffset, yOffset);
 				}
 
 				for (Platform platform : platforms) {
 					platform.draw(graphics);
 				}
-				pb.draw(graphics, offset);
+				pb.draw(graphics, xOffset, yOffset);
 				level.drawForeground(graphics);
 
 				graphics.dispose();

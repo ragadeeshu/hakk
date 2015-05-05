@@ -17,8 +17,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server {
-	private static final double HIGHHEAVEN = -202;
-	private static final double HEAVEN = -200;
+	private static final double HIGHHEAVEN = -902;
+	private static final double HEAVEN = -900;
 
 	private ArrayList<RequestHandler> handlers;
 	private HashMap<String, CharacterState> characterStates;
@@ -96,7 +96,6 @@ public class Server {
 		}
 
 	}
-
 
 	public synchronized void updateCharacterState(String inetAddress,
 			String state) {
