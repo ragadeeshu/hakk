@@ -13,7 +13,7 @@ public class Opponent extends Character {
 		switch (charState.action) {
 		case JUMPING:
 
-			charState.yspeed -= 10;
+			charState.yspeed -= 17;
 			charState.action = Action.IN_AIR;
 
 			break;

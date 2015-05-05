@@ -12,7 +12,7 @@ public class RainParticle extends Particle {
 	private double ground;
 
 	public RainParticle(double x, double y, double ground) {
-		super(x, y, 0, 1, .3, 2, 0, 0.1, 100, c);
+		super(x, y, 0, 10, .2, 2, 0, 0.1, 100, c);
 		this.ground = ground;
 	}
 
@@ -29,13 +29,22 @@ public class RainParticle extends Particle {
 		return false;
 	}
 
-	public void draw(Graphics g, int offset) {
-		Graphics2D g2d = (Graphics2D) g.create();
+	@Override
+	public void draw(Graphics2D g2d, int offset) {
 
 		g2d.setColor(color);
 		g2d.fillOval((int) (locx - (size / 2)) - offset,
-				(int) (locy - (size / 2)), (int) size, (int) size * 3);
+				(int) (locy - (size / 2)), (int) size, (int) size * 4);
+		if (locx < HakkStage.WIDTH) {
+			g2d.fillOval((int) (locx - (size / 2)) - offset
+					+ HakkStage.LEVEL_WIDTH, (int) (locy - (size / 2)),
+					(int) size, (int) size * 4);
 
-		g2d.dispose();
+		} else if (locx > HakkStage.LEVEL_WIDTH - HakkStage.WIDTH) {
+			g2d.fillOval((int) (locx - (size / 2)) - offset
+					- HakkStage.LEVEL_WIDTH, (int) (locy - (size / 2)),
+					(int) size, (int) size * 4);
+		}
+
 	}
 }

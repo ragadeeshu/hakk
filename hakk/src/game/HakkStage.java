@@ -6,8 +6,10 @@ import graphics.FlyingPlane;
 import graphics.Level;
 import graphics.LevelOne;
 
-import java.awt.Graphics;
+import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,10 +23,12 @@ import particle.ParticleBatcher;
 
 @SuppressWarnings("serial")
 public class HakkStage extends JPanel {
-	public static final int GROUNDLEVEL = 500;
+	public static final int GROUNDLEVEL = 510;
 	public static final int WIDTH = 1200;
 	public static final int HEIGHT = 600;
 	public static final int LEVEL_WIDTH = 8100;
+
+	private static final Font NAME_FONT = new Font("Names", Font.BOLD, 12);
 
 	private String identification;
 	private HashMap<String, Character> characters;
@@ -53,28 +57,46 @@ public class HakkStage extends JPanel {
 
 	}
 
-	@Override
-	public synchronized void paint(Graphics g) {
-		super.paint(g);
-		Graphics2D g2d = (Graphics2D) g;
-		level.drawBackground(g2d);
-		flyingPlane.drawPlane(g2d);
-		flyingBird.drawBird(g2d);
-		level.drawGround(g2d);
-		int offset = level.getXOffset();
-		for (Entry<String, Character> character : characters.entrySet()) {
-			character.getValue().draw(g2d, offset);
-		}
-		// for (SwordState sword : swords.values()) {
-		// sword.draw(g2d);
-		// }
-		for (Platform platform : platforms) {
-			platform.draw(g2d);
-		}
-		pb.draw(g, offset);
-		level.drawForeground(g2d);
+	public synchronized void draw(BufferStrategy strategy) {
 
-		g2d.dispose();
+		do {
+			// The following loop ensures that the contents of the drawing
+			// buffer
+			// are consistent in case the underlying surface was recreated
+			do {
+				// Get a new graphics context every time through the loop
+				// to make sure the strategy is validated
+				Graphics2D graphics = (Graphics2D) strategy.getDrawGraphics();
+				graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+						RenderingHints.VALUE_ANTIALIAS_ON);
+				graphics.setFont(NAME_FONT);
+
+				// Render to graphics
+				// ...
+
+				// Dispose the graphics
+				level.drawBackground(graphics);
+				flyingPlane.drawPlane(graphics);
+				flyingBird.drawBird(graphics);
+				level.drawGround(graphics);
+				int offset = level.getXOffset();
+				for (Entry<String, Character> character : characters.entrySet()) {
+					character.getValue().draw(graphics, offset);
+				}
+
+				for (Platform platform : platforms) {
+					platform.draw(graphics);
+				}
+				pb.draw(graphics, offset);
+				level.drawForeground(graphics);
+
+				graphics.dispose();
+
+			} while (strategy.contentsRestored());
+
+			strategy.show();
+
+		} while (strategy.contentsLost());
 	}
 
 	public synchronized void doPhysics() {

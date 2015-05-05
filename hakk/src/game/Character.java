@@ -31,14 +31,11 @@ public abstract class Character {
 	public void draw(Graphics2D g2d, int offset) {
 		int intx = (int) Math.round(charState.x);
 		int inty = (int) Math.round(charState.y);
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
 		int height = CharacterAnimation.getImage(charState.currentImage)
 				.getHeight(null);
 		g2d.drawImage(CharacterAnimation.getImage(charState.currentImage), intx
 				- offset, inty - height, null);
 
-		g2d.setFont(new Font("Names", Font.BOLD, 12));
 		FontMetrics fm = g2d.getFontMetrics();
 		Rectangle2D rect = fm.getStringBounds(playerName, g2d);
 		int nameCoordX = (int) (intx
@@ -54,6 +51,30 @@ public abstract class Character {
 
 		g2d.setColor(nameColour);
 		g2d.drawString(playerName, nameCoordX, nameCoordY);
+		if (intx < HakkStage.WIDTH) {
+			g2d.drawImage(CharacterAnimation.getImage(charState.currentImage),
+					intx - offset + HakkStage.LEVEL_WIDTH, inty - height, null);
+			g2d.setPaint(new Color(0.0f, 0.0f, 0.0f, 0.6f));
+			g2d.fill(new Rectangle2D.Double(nameCoordX - 3
+					+ HakkStage.LEVEL_WIDTH, nameCoordY - rect.getHeight() + 2,
+					rect.getWidth() + 6, rect.getHeight() + 2));
+
+			g2d.setColor(nameColour);
+			g2d.drawString(playerName, nameCoordX + HakkStage.LEVEL_WIDTH,
+					nameCoordY);
+		} else if (intx > HakkStage.LEVEL_WIDTH - HakkStage.WIDTH) {
+			g2d.drawImage(CharacterAnimation.getImage(charState.currentImage),
+					intx - offset - HakkStage.LEVEL_WIDTH, inty - height, null);
+			g2d.setPaint(new Color(0.0f, 0.0f, 0.0f, 0.6f));
+			g2d.fill(new Rectangle2D.Double(nameCoordX - 3
+					- HakkStage.LEVEL_WIDTH, nameCoordY - rect.getHeight() + 2,
+					rect.getWidth() + 6, rect.getHeight() + 2));
+
+			g2d.setColor(nameColour);
+			g2d.drawString(playerName, nameCoordX - HakkStage.LEVEL_WIDTH,
+					nameCoordY);
+
+		}
 
 		intx = (int) Math.round(swordState.getX());
 		inty = (int) Math.round(swordState.getY());
@@ -61,6 +82,13 @@ public abstract class Character {
 				null);
 		g2d.drawImage(SwordAnimation.getImage(swordState.currentImage()), intx
 				- offset, inty - height, null);
+		if (intx < HakkStage.WIDTH) {
+			g2d.drawImage(SwordAnimation.getImage(swordState.currentImage()),
+					intx - offset + HakkStage.LEVEL_WIDTH, inty - height, null);
+		} else if (intx > HakkStage.LEVEL_WIDTH - HakkStage.WIDTH) {
+			g2d.drawImage(SwordAnimation.getImage(swordState.currentImage()),
+					intx - offset - HakkStage.LEVEL_WIDTH, inty - height, null);
+		}
 	}
 
 	protected void doGravity() {
@@ -93,14 +121,6 @@ public abstract class Character {
 		doGravity();
 		doMovement();
 	}
-
-	// protected boolean hitLeftWall() {
-	// return charState.x < 0;
-	// }
-	//
-	// protected boolean hitRightWall() {
-	// return charState.x > 846;
-	// }
 
 	protected abstract void doAction();
 

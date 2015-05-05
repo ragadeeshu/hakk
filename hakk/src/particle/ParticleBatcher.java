@@ -3,8 +3,7 @@ package particle;
 import game.HakkStage;
 
 import java.awt.Color;
-import java.awt.Container;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
@@ -51,7 +50,7 @@ public class ParticleBatcher {
 
 	}
 
-	public synchronized void draw(Graphics g, int offset) {
+	public synchronized void draw(Graphics2D g, int offset) {
 		for (Particle particle : particles) {
 			particle.draw(g, offset);
 		}

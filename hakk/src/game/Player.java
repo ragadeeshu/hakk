@@ -94,7 +94,7 @@ public class Player extends Character {
 		if (charState.action != Action.IN_AIR)
 			charState.action = Action.JUMPING;
 	}
-	
+
 	private void swing() {
 		swordState.action = Action.SWINGING;
 		swordAnimation.swing();
@@ -104,17 +104,14 @@ public class Player extends Character {
 		switch (charState.action) {
 		case JUMPING:
 
-			charState.yspeed -= 15;
+			charState.yspeed -= 17;
 			charState.action = Action.IN_AIR;
 
 			break;
 		case RUNNING_LEFT:
-//			if (hitLeftWall()) {
-//				charState.action = Action.STOPPING;
-//				break;
-//			}
+
 			charAnimation.run();
-			
+
 			if (charState.xspeed > -7)
 				charState.xspeed -= 1;
 			else
@@ -122,10 +119,7 @@ public class Player extends Character {
 
 			break;
 		case RUNNING_RIGHT:
-//			if (hitRightWall()) {
-//				charState.action = Action.STOPPING;
-//				break;
-//			}
+
 			charAnimation.run();
 			if (charState.xspeed < 7)
 				charState.xspeed += 1;
@@ -140,18 +134,19 @@ public class Player extends Character {
 
 			break;
 		case IN_AIR:
-			if (charState.y >= HakkStage.GROUNDLEVEL){
-				if (tryingToRunLeft && tryingToRunRight || !(tryingToRunLeft || tryingToRunRight)) {
+			if (charState.y >= HakkStage.GROUNDLEVEL) {
+				if (tryingToRunLeft && tryingToRunRight
+						|| !(tryingToRunLeft || tryingToRunRight)) {
 					charState.action = Action.STOPPING;
-				} else if (tryingToRunLeft){
+				} else if (tryingToRunLeft) {
 					charState.action = Action.RUNNING_LEFT;
 				} else {
 					charState.action = Action.RUNNING_RIGHT;
 				}
-			} 
-//			else if(hitLeftWall() || hitRightWall()){
-//				charState.xspeed = 0;
-//			}
+			}
+			// else if(hitLeftWall() || hitRightWall()){
+			// charState.xspeed = 0;
+			// }
 			break;
 		default:
 			break;

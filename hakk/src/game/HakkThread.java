@@ -1,5 +1,6 @@
 package game;
 
+import java.awt.image.BufferStrategy;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -19,11 +20,13 @@ public class HakkThread extends Thread {
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
+		frame.createBufferStrategy(2);
+		BufferStrategy strategy = frame.getBufferStrategy();
 		new Timer().schedule(new TimerTask() {
 
 			public void run() {
 				stage.doPhysics();
-				stage.repaint();
+				stage.draw(strategy);
 			}
 		}, 0, 17);
 	}

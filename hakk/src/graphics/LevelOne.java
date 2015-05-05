@@ -38,14 +38,14 @@ public class LevelOne extends Level {
 
 	@Override
 	public void drawGround(Graphics2D g2d) {
-		g2d.drawImage(ground, -offSetX,
-				HakkStage.GROUNDLEVEL - ground.getHeight() / 2, null);
+		g2d.drawImage(ground, -offSetX, HakkStage.HEIGHT - ground.getHeight(),
+				null);
 		if (offSetX > HakkStage.LEVEL_WIDTH - HakkStage.WIDTH) {
 			g2d.drawImage(ground, -offSetX + ground.getWidth(),
-					HakkStage.GROUNDLEVEL - ground.getHeight() / 2, null);
+					HakkStage.HEIGHT - ground.getHeight(), null);
 		} else if (offSetX < 0) {
 			g2d.drawImage(ground, -offSetX - ground.getWidth(),
-					HakkStage.GROUNDLEVEL - ground.getHeight() / 2, null);
+					HakkStage.HEIGHT - ground.getHeight(), null);
 		}
 	}
 
