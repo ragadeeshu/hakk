@@ -56,7 +56,7 @@ public class HakkStage extends JPanel {
 			e.printStackTrace();
 		}
 		platforms = new ArrayList<Platform>();
-		platforms.add(new Platform(200, GROUNDLEVEL-160));
+		platforms.add(new Platform(200, GROUNDLEVEL-50));
 		platforms.add(new Platform(500, GROUNDLEVEL-200));
 		
 		flyingPlane = new FlyingPlane(-50, -500);

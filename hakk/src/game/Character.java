@@ -34,7 +34,7 @@ public abstract class Character {
 		// g2d.drawString(playerName, intx, inty-height-10);
 	}
 
-	protected void doGravity() {
+	protected void doGravity(ArrayList<Platform> platforms) {
 		state.yspeed -= -.5;
 	}
 
@@ -52,8 +52,8 @@ public abstract class Character {
 	}
 
 	public void doPhysics(ArrayList<Platform> platforms) {
-		doAction();
-		doGravity();
+		doAction(platforms);
+		doGravity(platforms);
 		doMovement();
 	}
 
@@ -65,7 +65,7 @@ public abstract class Character {
 		return state.x > 846;
 	}
 
-	protected abstract void doAction();
+	protected abstract void doAction(ArrayList<Platform> platforms);
 
 	public void rename(String name) {
 		this.playerName = name;

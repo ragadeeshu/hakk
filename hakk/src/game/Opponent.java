@@ -3,6 +3,7 @@ package game;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.util.ArrayList;
 
 public class Opponent extends Character {
 
@@ -13,7 +14,7 @@ public class Opponent extends Character {
 
 	}
 
-	protected void doAction() {
+	protected void doAction(ArrayList<Platform> platforms) {
 		switch (state.action) {
 		case JUMPING:
 

@@ -30,4 +30,12 @@ public class Platform {
 		g2d.drawImage(image, (int)x, (int)y, null);
 	}
 	
+	public double getX(){
+		return x;
+	}
+	
+	public double getY(){
+		return y;
+	}
+	
 }

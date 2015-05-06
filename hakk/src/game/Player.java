@@ -6,6 +6,7 @@ import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 public class Player extends Character {
 	private boolean tryingToRunLeft;
@@ -90,7 +91,7 @@ public class Player extends Character {
 
 	}
 
-	protected void doAction() {
+	protected void doAction(ArrayList<Platform> platforms) {
 		switch (state.action) {
 		case JUMPING:
 
@@ -130,6 +131,15 @@ public class Player extends Character {
 
 			break;
 		case IN_AIR:
+			for (Platform platform : platforms){
+				if(state.x > platform.getX() && state.x < platform.getX()+100){
+					System.out.println("gubbe: " + state.y + " platform: " + platform.getY());
+					if(state.y > platform.getY() && state.y < platform.getY()+20){
+					System.out.println("träff!");
+					state.yspeed = 0;
+					}
+				}
+			}
 			if (state.y >= HakkStage.GROUNDLEVEL){
 				if (tryingToRunLeft && tryingToRunRight || !(tryingToRunLeft || tryingToRunRight)) {
 					state.action = Action.STOPPING;
