@@ -119,7 +119,7 @@ public class HakkStage extends JPanel {
 		}
 		level.computeOffset(player.charState.x, player.charState.y);
 		pb.update();
-//		pb.doRain(level.getXOffset());
+		pb.doRain(level.getXOffset());
 	}
 
 	public synchronized void addCharacter(String address, Character character) {
