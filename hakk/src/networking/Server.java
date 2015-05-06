@@ -1,8 +1,8 @@
 package networking;
 
-import game.CharacterAnimation;
 import game.CharacterState;
-import game.Sword;
+import game.SwordState;
+import graphics.CharacterAnimation;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,15 +17,18 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server {
+	private static final double HIGHHEAVEN = -902;
+	private static final double HEAVEN = -900;
+
 	private ArrayList<RequestHandler> handlers;
 	private HashMap<String, CharacterState> characterStates;
-	private HashMap<String, Sword> swordStates;
+	private HashMap<String, SwordState> swordStates;
 	private HashMap<String, String> playerNames;
 	private HashMap<String, String> playerAnimations;
 
 	public Server() {
 		characterStates = new HashMap<String, CharacterState>();
-		swordStates = new HashMap<String, Sword>();
+		swordStates = new HashMap<String, SwordState>();
 		playerNames = new HashMap<String, String>();
 		playerAnimations = new HashMap<String, String>();
 		handlers = new ArrayList<>();
@@ -63,10 +66,6 @@ public class Server {
 						System.out.println("Waiting for handshake");
 						clientHandshake = Networking.getUpdate(inputStream);
 					}
-					System.out.println("ch " + clientHandshake);
-					System.out.println("chs "
-							+ clientHandshake
-									.split(Networking.SEPARATOR_ATTRIBUTE)[1]);
 					String clientIdentity = socket.getInetAddress()
 							.getHostName() + ":" + socket.getPort();
 					String playerName = clientHandshake
@@ -98,25 +97,25 @@ public class Server {
 
 	}
 
-	public static void main(String[] args) {
-		Server server = new Server();
-	}
-
 	public synchronized void updateCharacterState(String inetAddress,
 			String state) {
-		characterStates.put(inetAddress, new CharacterState(state));
+		CharacterState oldState = characterStates.get(inetAddress);
+		if (oldState == null || ++oldState.y > HEAVEN)
+			characterStates.put(inetAddress, new CharacterState(state));
 
 	}
 
 	public synchronized void updateSwordState(String inetAddress, String state) {
-		Sword s = new Sword(state);
+		SwordState s = new SwordState(state);
 		swordStates.put(inetAddress, s);
-		for (CharacterState chState : characterStates.values()) {
-			if (chState.isHit(s)) {
+		for (Entry<String, CharacterState> chState : characterStates.entrySet()) {
+			if (!chState.getKey().equals(inetAddress)
+					&& chState.getValue().isHit(s)) {
 				for (RequestHandler handler : handlers) {
-					handler.putDeath(inetAddress, chState.x, chState.y);
+					handler.putDeath(chState.getKey(), chState.getValue().x,
+							chState.getValue().y);
 				}
-				chState.reSpawn();
+				chState.getValue().y = HIGHHEAVEN;
 			}
 		}
 	}
@@ -129,8 +128,14 @@ public class Server {
 			sb.append(Networking.SEPARATOR_STATE);
 			sb.append(e.getValue().toString().trim());
 		}
-		sb.append(Networking.SEPARATOR_MESSAGES);
-		return sb.substring(1);
+		sb.append(Networking.SEPARATOR_SWORD);
+		for (Entry<String, SwordState> e : swordStates.entrySet()) {
+			sb.append(e.getKey());
+			sb.append(Networking.SEPARATOR_STATE);
+			sb.append(e.getValue().toString().trim());
+			sb.append(Networking.SEPARATOR_PLAYER);
+		}
+		return sb.substring(1, sb.lastIndexOf(Networking.SEPARATOR_PLAYER));
 	}
 
 	public synchronized String getName(String address) {

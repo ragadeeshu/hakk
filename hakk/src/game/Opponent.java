@@ -9,46 +9,44 @@ public class Opponent extends Character {
 
 	public Opponent(HakkStage stage, String playerName) {
 		super(playerName, "player2");
-		// Action.STOPPING;
-		// animation = new CharacterAnimation("player2");
-
+		nameColour = Color.RED;
 	}
 
-	protected void doAction(ArrayList<Platform> platforms) {
-		switch (state.action) {
+	protected void doAction() {
+		switch (charState.action) {
 		case JUMPING:
 
-			state.yspeed -= 10;
-			state.action = Action.IN_AIR;
+			charState.yspeed -= 17;
+			charState.action = Action.IN_AIR;
 
 			break;
 		case RUNNING_LEFT:
-			animation.run();
+			charAnimation.run();
 
-			if (state.xspeed > -5)
-				state.xspeed -= 1;
+			if (charState.xspeed > -7)
+				charState.xspeed -= 1;
 			else
-				state.xspeed = -5;
+				charState.xspeed = -7;
 
 			break;
 		case RUNNING_RIGHT:
-			animation.run();
+			charAnimation.run();
 
-			if (state.xspeed < 5)
-				state.xspeed += 1;
+			if (charState.xspeed < 7)
+				charState.xspeed += 1;
 			else
-				state.xspeed = 5;
+				charState.xspeed = 7;
 
 			break;
 		case STOPPING:
-			if (state.xspeed != 0) {
-				state.xspeed += state.xspeed * -0.7;
+			if (charState.xspeed != 0) {
+				charState.xspeed += charState.xspeed * -0.7;
 			}
 
 			break;
 		case IN_AIR:
-			if (state.y > HakkStage.GROUNDLEVEL)
-				state.action = Action.STOPPING;
+			if (charState.y > HakkStage.GROUNDLEVEL)
+				charState.action = Action.STOPPING;
 			break;
 		default:
 			break;

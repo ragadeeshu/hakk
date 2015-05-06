@@ -1,87 +1,104 @@
 package game;
 
-import java.awt.Graphics;
+import graphics.CharacterAnimation;
+import graphics.FlyingBird;
+import graphics.FlyingPlane;
+import graphics.Level;
+import graphics.LevelOne;
+
+import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.awt.RenderingHints;
+import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map.Entry;
 
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
-import javax.swing.Timer;
 
 import networking.Client;
 import networking.Networking;
 import particle.ParticleBatcher;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 @SuppressWarnings("serial")
 public class HakkStage extends JPanel {
-	public static final int GROUNDLEVEL = 293;
+	public static final int GROUNDLEVEL = 510;
+	public static final int WIDTH = 1200;
+	public static final int HEIGHT = 600;
+	public static final int LEVEL_WIDTH = 8100;
+	public static final int LEVEL_HEIGHT = 900;
 
-	private String currentImage;
+	private static final Font NAME_FONT = new Font("Names", Font.BOLD, 12);
+
 	private String identification;
-	private BufferedImage background;
-	private BufferedImage ground;
 	private HashMap<String, Character> characters;
-	private HashMap<String, Sword> swords;
 	private HashMap<String, String> playerNames;
+	private Level level;
 	private ArrayList<Platform> platforms;
 	private ParticleBatcher pb;
-	
+
 	private FlyingPlane flyingPlane;
 	private FlyingBird flyingBird;
+	private Character player;
 
 	public HakkStage() {
 		super();
+		level = new LevelOne();
 		characters = new HashMap<String, Character>();
-		swords = new HashMap<String, Sword>();
 		playerNames = new HashMap<String, String>();
 		pb = new ParticleBatcher();
-		currentImage = "background.png";
-		try {
-			String name = "sprites/" + currentImage;
-			background = ImageIO.read(new File(name));
-			ground = ImageIO.read(new File("sprites/ground.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+
 		platforms = new ArrayList<Platform>();
-		platforms.add(new Platform(200, GROUNDLEVEL-50));
-		platforms.add(new Platform(500, GROUNDLEVEL-200));
-		
+		platforms.add(new Platform(200, GROUNDLEVEL - 160));
+		platforms.add(new Platform(500, GROUNDLEVEL - 200));
+
 		flyingPlane = new FlyingPlane(-50, -500);
 		flyingBird = new FlyingBird(920, -300);
+
 	}
 
-	@Override
-	public synchronized void paint(Graphics g) {
-		super.paint(g);
-		Graphics2D g2d = (Graphics2D) g;
-		g2d.drawImage(background, 0, 0, null);
-		flyingPlane.drawPlane(g2d);
-		flyingBird.drawBird(g2d);
-		for (Entry<String, Character> character : characters.entrySet()) {
-			character.getValue().draw(g2d);
-		}
-		for (Sword sword : swords.values()) {
-			sword.draw(g2d);
-		}
-		for (Platform platform : platforms){
-			platform.draw(g2d);
-		}
-		pb.draw(g);
-		g2d.drawImage(ground, 0, GROUNDLEVEL, null);
-		g2d.dispose();
+	public synchronized void draw(BufferStrategy strategy) {
+
+		do {
+			// The following loop ensures that the contents of the drawing
+			// buffer
+			// are consistent in case the underlying surface was recreated
+			do {
+				// Get a new graphics context every time through the loop
+				// to make sure the strategy is validated
+				Graphics2D graphics = (Graphics2D) strategy.getDrawGraphics();
+				graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+						RenderingHints.VALUE_ANTIALIAS_ON);
+				graphics.setFont(NAME_FONT);
+
+				// Render to graphics
+				// ...
+
+				// Dispose the graphics
+				level.drawBackground(graphics);
+				flyingPlane.drawPlane(graphics);
+				flyingBird.drawBird(graphics);
+				level.drawGround(graphics);
+				int xOffset = level.getXOffset();
+				int yOffset = level.getYOffset();
+				for (Entry<String, Character> character : characters.entrySet()) {
+					character.getValue().draw(graphics, xOffset, yOffset);
+				}
+
+				for (Platform platform : platforms) {
+					platform.draw(graphics);
+				}
+				pb.draw(graphics, xOffset, yOffset);
+				level.drawForeground(graphics);
+
+				graphics.dispose();
+
+			} while (strategy.contentsRestored());
+
+			strategy.show();
+
+		} while (strategy.contentsLost());
 	}
 
 	public synchronized void doPhysics() {
@@ -90,16 +107,27 @@ public class HakkStage extends JPanel {
 		for (Entry<String, Character> character : characters.entrySet()) {
 			character.getValue().doPhysics(platforms);
 		}
+		level.computeOffset(player.charState.x, player.charState.y);
 		pb.update();
+		pb.doRain(level.getXOffset());
 	}
 
 	public synchronized void addCharacter(String address, Character character) {
 		characters.put(address.trim(), character);
 	}
 
-	public synchronized void addSword(String address, Sword sword) {
-		swords.put(address, sword);
+	public synchronized void addPlayerCharacter(String address,
+			Player playerCharacter) {
+		identification = address.trim();
+		this.player = playerCharacter;
+		System.out.println(player.toString());
+		characters.put(address.trim(), playerCharacter);
+
 	}
+
+	// public synchronized void addSword(String address, SwordState sword) {
+	// swords.put(address, sword);
+	// }
 
 	public void addName(String address, String name) {
 		playerNames.put(address, name);
@@ -110,32 +138,39 @@ public class HakkStage extends JPanel {
 	}
 
 	public void update(Client client) {
-		identification = client.getAddress();
-		// HashSet<String> keyset = new HashSet<String>(characters.keySet());
-
-		client.send(characters.get(client.getAddress()).state.toString()
-				+ Networking.SEPARATOR_SWORD
-				+ swords.get(client.getAddress()).toString());
+		client.send(player.charState.toString() + Networking.SEPARATOR_SWORD
+				+ player.getSwordState().toString());
 		String clientUpdate = client.getUpdate();
 		// System.out.println("Update from server: " + clientUpdate);
-		String[] gup = clientUpdate.split(Networking.SEPARATOR_MESSAGES);
-		if (!gup[1].trim().equals(""))
-			readMessages(gup[1].trim());
-		for (String ent : gup[0].split(Networking.SEPARATOR_PLAYER)) {
-			String[] splatEnt = ent.split(Networking.SEPARATOR_STATE);
-			// keyset.remove(splatEnt[0].trim());
-			Character character = getCharacter(splatEnt[0]);
+		String[] statesAndMsgs = clientUpdate
+				.split(Networking.SEPARATOR_MESSAGES);
+		if (!statesAndMsgs[1].trim().equals(""))
+			readMessages(statesAndMsgs[1].trim());
 
-			if (!splatEnt[0].equals(client.getAddress())) {
-				character.setState(new CharacterState(splatEnt[1]));
+		String[] chStsAndSwSts = statesAndMsgs[0]
+				.split(Networking.SEPARATOR_SWORD);
+
+		for (String ipState : chStsAndSwSts[0]
+				.split(Networking.SEPARATOR_PLAYER)) {
+			String[] ipAndState = ipState.split(Networking.SEPARATOR_STATE);
+			Character character = getCharacter(ipAndState[0]);
+			if (!ipAndState[0].equals(client.getAddress())) {
+				character.setState(new CharacterState(ipAndState[1]));
 			}
 		}
-		// for (String key : keyset) {
-		// if (removeCharacter(key)) {
-		// playerNames.remove(key);
-		// System.out.println("Removing player " + key);
-		// }
-		// }
+
+		for (String ipState : chStsAndSwSts[1]
+				.split(Networking.SEPARATOR_PLAYER)) {
+			String[] ipAndState = ipState.split(Networking.SEPARATOR_STATE);
+			// Character character = getCharacter(ipAndState[0]);
+
+			Character character = characters.get(ipAndState[0]);
+			if (character != null) {
+				if (!ipAndState[0].equals(client.getAddress())) {
+					character.swordState = new SwordState(ipAndState[1]);
+				}
+			}
+		}
 	}
 
 	private synchronized Character getCharacter(String identification) {
@@ -170,16 +205,26 @@ public class HakkStage extends JPanel {
 
 				if (typeAndData[0].equals(Networking.MESSAGE_NEWPLAYER)) {
 					addName(attributes[0].trim(), attributes[1]);
-					getCharacter(attributes[0].trim()).animation = new CharacterAnimation(
+					getCharacter(attributes[0].trim()).charAnimation = new CharacterAnimation(
 							attributes[2]);
-				}else if(typeAndData[0].equals(Networking.MESSAGE_DEATH)){
-					if(attributes[0].equals(identification))
-						characters.get(identification).state.reSpawn();
-					double x = Double.parseDouble(attributes[1])+CharacterAnimation.getImage(characters.get(identification).animation.getCurrentImageName()).getWidth(null)/2;
-					double y = Double.parseDouble(attributes[2])-CharacterAnimation.getImage(characters.get(identification).animation.getCurrentImageName()).getHeight(null)/2;
+				} else if (typeAndData[0].equals(Networking.MESSAGE_DEATH)) {
+					if (attributes[0].equals(identification))
+						characters.get(identification).charState.reSpawn();
+					double x = Double.parseDouble(attributes[1])
+							+ CharacterAnimation
+									.getImage(
+											characters.get(identification).charAnimation
+													.getCurrentImageName())
+									.getWidth(null) / 2;
+					double y = Double.parseDouble(attributes[2])
+							- CharacterAnimation
+									.getImage(
+											characters.get(identification).charAnimation
+													.getCurrentImageName())
+									.getHeight(null) / 2;
 					pb.doDeath(x, y);
 
-				}else if (typeAndData[0].equals(Networking.MESSAGE_DISCONNECT)) {
+				} else if (typeAndData[0].equals(Networking.MESSAGE_DISCONNECT)) {
 					disconnect = true;
 					keyset.remove(attributes[0].trim());
 				}
@@ -189,4 +234,5 @@ public class HakkStage extends JPanel {
 					removeCharacter(key);
 		}
 	}
+
 }

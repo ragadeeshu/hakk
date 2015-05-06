@@ -1,5 +1,10 @@
 package game;
 
+import graphics.CharacterAnimation;
+import graphics.SwordAnimation;
+
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -7,31 +12,83 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 public abstract class Character {
-	protected CharacterState state;
-	protected CharacterAnimation animation;
+	protected CharacterState charState;
+	protected SwordState swordState;
+	protected CharacterAnimation charAnimation;
+	protected SwordAnimation swordAnimation;
 	private String playerName = "Default name";
+	protected Color nameColour = Color.BLACK;
 
 	public Character(String playerName, String baseImageName) {
 		this.playerName = playerName;
-		this.animation = new CharacterAnimation(baseImageName);
-		state = new CharacterState(Action.STOPPING,
-				animation.getCurrentImageName());
+		this.charAnimation = new CharacterAnimation(baseImageName);
+		charState = new CharacterState(Action.STOPPING,
+				charAnimation.getCurrentImageName());
+		swordState = new SwordState(charState.x, charState.y);
+		swordAnimation = new SwordAnimation(SwordAnimation.BASENAMES[0]);
 	}
 
-	public void draw(Graphics2D g2d) {
-		int intx = (int) Math.round(state.x);
-		int inty = (int) Math.round(state.y);
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
-		int height = animation.getImage(state.currentImage).getHeight(null);
-		g2d.drawImage(animation.getImage(state.currentImage), intx, inty - height, null);
+	public void draw(Graphics2D g2d, int xOffset, int yOffset) {
+		int intx = (int) Math.round(charState.x);
+		int inty = (int) Math.round(charState.y+ yOffset);
+		int height = CharacterAnimation.getImage(charState.currentImage)
+				.getHeight(null);
+		g2d.drawImage(CharacterAnimation.getImage(charState.currentImage), intx
+				- xOffset, inty - height , null);
 
 		FontMetrics fm = g2d.getFontMetrics();
 		Rectangle2D rect = fm.getStringBounds(playerName, g2d);
-		g2d.drawString(playerName,
-				(int) (intx + animation.getImage(state.currentImage).getWidth(null) / 2 - rect
-						.getWidth() / 2), inty - height - 10);
-		// g2d.drawString(playerName, intx, inty-height-10);
+		int nameCoordX = (int) (intx
+				+ CharacterAnimation.getImage(charState.currentImage).getWidth(
+						null) / 2 - rect.getWidth() / 2)
+				- xOffset;
+		int nameCoordY = inty - height - 10;
+
+		g2d.setPaint(new Color(0.0f, 0.0f, 0.0f, 0.6f));
+		g2d.fill(new Rectangle2D.Double(nameCoordX - 3, nameCoordY
+				- rect.getHeight() + 2, rect.getWidth() + 6,
+				rect.getHeight() + 2));
+
+		g2d.setColor(nameColour);
+		g2d.drawString(playerName, nameCoordX, nameCoordY);
+		if (intx < HakkStage.WIDTH) {
+			g2d.drawImage(CharacterAnimation.getImage(charState.currentImage),
+					intx - xOffset + HakkStage.LEVEL_WIDTH, inty - height, null);
+			g2d.setPaint(new Color(0.0f, 0.0f, 0.0f, 0.6f));
+			g2d.fill(new Rectangle2D.Double(nameCoordX - 3
+					+ HakkStage.LEVEL_WIDTH, nameCoordY - rect.getHeight() + 2,
+					rect.getWidth() + 6, rect.getHeight() + 2));
+
+			g2d.setColor(nameColour);
+			g2d.drawString(playerName, nameCoordX + HakkStage.LEVEL_WIDTH,
+					nameCoordY);
+		} else if (intx > HakkStage.LEVEL_WIDTH - HakkStage.WIDTH) {
+			g2d.drawImage(CharacterAnimation.getImage(charState.currentImage),
+					intx - xOffset - HakkStage.LEVEL_WIDTH, inty - height, null);
+			g2d.setPaint(new Color(0.0f, 0.0f, 0.0f, 0.6f));
+			g2d.fill(new Rectangle2D.Double(nameCoordX - 3
+					- HakkStage.LEVEL_WIDTH, nameCoordY - rect.getHeight() + 2,
+					rect.getWidth() + 6, rect.getHeight() + 2));
+
+			g2d.setColor(nameColour);
+			g2d.drawString(playerName, nameCoordX - HakkStage.LEVEL_WIDTH,
+					nameCoordY);
+
+		}
+
+		intx = (int) Math.round(swordState.getX());
+		inty = (int) Math.round(swordState.getY())+ yOffset;
+		height = SwordAnimation.getImage(swordState.currentImage()).getHeight(
+				null);
+		g2d.drawImage(SwordAnimation.getImage(swordState.currentImage()), intx
+				- xOffset, inty - height, null);
+		if (intx < HakkStage.WIDTH) {
+			g2d.drawImage(SwordAnimation.getImage(swordState.currentImage()),
+					intx - xOffset + HakkStage.LEVEL_WIDTH, inty - height, null);
+		} else if (intx > HakkStage.LEVEL_WIDTH - HakkStage.WIDTH) {
+			g2d.drawImage(SwordAnimation.getImage(swordState.currentImage()),
+					intx - xOffset - HakkStage.LEVEL_WIDTH, inty - height, null);
+		}
 	}
 
 	protected void doGravity(ArrayList<Platform> platforms) {
@@ -39,16 +96,24 @@ public abstract class Character {
 	}
 
 	protected void doMovement() {
-		state.x += state.xspeed;
-		state.y += state.yspeed;
-		if (state.y >= HakkStage.GROUNDLEVEL+CharacterAnimation.GROUND_OFFSET) {
-			state.y = HakkStage.GROUNDLEVEL+CharacterAnimation.GROUND_OFFSET;
-			state.yspeed = 0;
+		charState.x += charState.xspeed;
+		if (charState.x < 0)
+			charState.x += HakkStage.LEVEL_WIDTH;
+		else if (charState.x > HakkStage.LEVEL_WIDTH)
+			charState.x -= HakkStage.LEVEL_WIDTH;
+		charState.y += charState.yspeed;
+
+		if (charState.y >= HakkStage.GROUNDLEVEL
+				+ CharacterAnimation.GROUND_OFFSET) {
+			charState.y = HakkStage.GROUNDLEVEL
+					+ CharacterAnimation.GROUND_OFFSET;
+			charState.yspeed = 0;
 		}
+		swordState.move(charState.x, charState.y);
 	}
 
 	public void setState(CharacterState value) {
-		state = value;
+		charState = value;
 	}
 
 	public void doPhysics(ArrayList<Platform> platforms) {
@@ -57,18 +122,13 @@ public abstract class Character {
 		doMovement();
 	}
 
-	protected boolean hitLeftWall() {
-		return state.x < 0;
-	}
-	
-	protected boolean hitRightWall(){
-		return state.x > 846;
-	}
-
-	protected abstract void doAction(ArrayList<Platform> platforms);
+	protected abstract void doAction();
 
 	public void rename(String name) {
 		this.playerName = name;
 	}
 
+	public SwordState getSwordState() {
+		return swordState;
+	}
 }

@@ -1,10 +1,8 @@
 package game;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
-import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
@@ -14,6 +12,7 @@ public class Player extends Character {
 
 	public Player(HakkStage stage, String playerName) {
 		super(playerName, "player");
+		nameColour = Color.GREEN;
 
 		KeyboardFocusManager.getCurrentKeyboardFocusManager()
 				.addKeyEventDispatcher(new KeyEventDispatcher() {
@@ -30,6 +29,13 @@ public class Player extends Character {
 								break;
 							case KeyEvent.VK_RIGHT:
 								runRight();
+								break;
+							case KeyEvent.VK_Z:
+							case KeyEvent.VK_X:
+							case KeyEvent.VK_C:
+							case KeyEvent.VK_V:
+							case KeyEvent.VK_NUMPAD0:
+								swing();
 								break;
 							}
 						}
@@ -52,81 +58,79 @@ public class Player extends Character {
 
 	private void stopLeft() {
 		tryingToRunLeft = false;
-		if (state.action != Action.IN_AIR) {
+		if (charState.action != Action.IN_AIR) {
 			if (!tryingToRunRight) {
-				state.action = Action.STOPPING;
+				charState.action = Action.STOPPING;
 			} else
-				state.action = Action.RUNNING_RIGHT;
+				charState.action = Action.RUNNING_RIGHT;
 		}
 
 	}
 
 	private void stopRight() {
 		tryingToRunRight = false;
-		if (state.action != Action.IN_AIR) {
+		if (charState.action != Action.IN_AIR) {
 			if (!tryingToRunLeft) {
-				state.action = Action.STOPPING;
+				charState.action = Action.STOPPING;
 			} else
-				state.action = Action.RUNNING_LEFT;
+				charState.action = Action.RUNNING_LEFT;
 		}
 
 	}
 
 	private void runLeft() {
 		tryingToRunLeft = true;
-		if (state.action != Action.IN_AIR) {
-			state.action = Action.RUNNING_LEFT;
+		if (charState.action != Action.IN_AIR) {
+			charState.action = Action.RUNNING_LEFT;
 		}
 	}
 
 	protected void runRight() {
 		tryingToRunRight = true;
-		if (state.action != Action.IN_AIR)
-			state.action = Action.RUNNING_RIGHT;
+		if (charState.action != Action.IN_AIR)
+			charState.action = Action.RUNNING_RIGHT;
 	}
 
 	protected void jump() {
-		if (state.action != Action.IN_AIR)
-			state.action = Action.JUMPING;
+		if (charState.action != Action.IN_AIR)
+			charState.action = Action.JUMPING;
+	}
 
+	private void swing() {
+		swordState.action = Action.SWINGING;
+		swordAnimation.swing();
 	}
 
 	protected void doAction(ArrayList<Platform> platforms) {
 		switch (state.action) {
 		case JUMPING:
 
-			state.yspeed -= 10;
-			state.action = Action.IN_AIR;
+			charState.yspeed -= 17;
+			charState.action = Action.IN_AIR;
 
 			break;
 		case RUNNING_LEFT:
-			if (hitLeftWall()) {
-				state.action = Action.STOPPING;
-				break;
-			}
-			animation.run();
-			
-			if (state.xspeed > -5)
-				state.xspeed -= 1;
+
+			charAnimation.run();
+
+			if (charState.xspeed > -7)
+				charState.xspeed -= 1;
 			else
-				state.xspeed = -5;
+				charState.xspeed = -7;
 
 			break;
 		case RUNNING_RIGHT:
-			if (hitRightWall()) {
-				state.action = Action.STOPPING;
-				break;
-			}
-			animation.run();
-			if (state.xspeed < 5)
-				state.xspeed += 1;
+
+			charAnimation.run();
+			if (charState.xspeed < 7)
+				charState.xspeed += 1;
 			else
-				state.xspeed = 5;
+				charState.xspeed = 7;
 
 			break;
 		case STOPPING:
-			if (state.xspeed != 0) {
-				state.xspeed += state.xspeed * -0.7;
+			if (charState.xspeed != 0) {
+				charState.xspeed += charState.xspeed * -0.7;
 			}
 
 			break;
@@ -146,17 +150,18 @@ public class Player extends Character {
 				} else if (tryingToRunLeft){
 					state.action = Action.RUNNING_LEFT;
 				} else {
-					state.action = Action.RUNNING_RIGHT;
+					charState.action = Action.RUNNING_RIGHT;
 				}
-			} else if(hitLeftWall() || hitRightWall()){
-				state.xspeed = 0;
 			}
+			// else if(hitLeftWall() || hitRightWall()){
+			// charState.xspeed = 0;
+			// }
 			break;
 		default:
 			break;
 
 		}
-		state.currentImage = animation.getCurrentImageName();
-
+		charState.currentImage = charAnimation.getCurrentImageName();
+		swordState.currentImage = swordAnimation.getCurrentImageName();
 	}
 }

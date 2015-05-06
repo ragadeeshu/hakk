@@ -1,7 +1,6 @@
-package game;
+package graphics;
 
-import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +24,7 @@ public class FlyingBird {
 		this.y = y;
 	}
 
-	public void drawBird(Graphics g) {
+	public void drawBird(Graphics2D g) {
 		g.drawImage(flyingBird, x, y, panel);
 	}
 

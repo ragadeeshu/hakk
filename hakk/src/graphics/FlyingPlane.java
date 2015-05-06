@@ -1,7 +1,6 @@
-package game;
+package graphics;
 
-import java.awt.Graphics;
-import java.awt.Image;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -25,12 +24,12 @@ public class FlyingPlane {
 		this.y = y;
 	}
 
-	public void drawPlane(Graphics g) {
+	public void drawPlane(Graphics2D g) {
 		g.drawImage(flyingPlane, x, y, panel);
 	}
 
 	public void move() {
-		if(y == -950) {
+		if (y == -950) {
 			x = -50;
 			y = 150;
 		}

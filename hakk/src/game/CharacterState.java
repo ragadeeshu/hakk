@@ -1,5 +1,7 @@
 package game;
 
+import graphics.SwordAnimation;
+
 import java.awt.Rectangle;
 
 import networking.BitMask;
@@ -7,10 +9,11 @@ import networking.BitMaskResources;
 import networking.Networking;
 
 public class CharacterState {
-	public double x = 0;
-	public double y = 0;
-	public double xspeed = 0;
-	public double yspeed = 0;
+	public double x;
+	public double y;
+
+	public double xspeed;
+	public double yspeed;
 	public Action action;
 	public String currentImage;
 
@@ -27,6 +30,8 @@ public class CharacterState {
 	}
 
 	public CharacterState(Action action, String currentImage) {
+		x = Math.random() * HakkStage.LEVEL_WIDTH;
+		y = HakkStage.HEIGHT - HakkStage.LEVEL_HEIGHT -200;
 		this.action = action;
 		this.currentImage = currentImage;
 	}
@@ -42,13 +47,24 @@ public class CharacterState {
 		return sb.toString();
 	}
 
-	public boolean isHit(Sword s) {
+	public boolean isHit(SwordState s) {
+		if (x < HakkStage.WIDTH) {
+			return (isHit(x, y, s) || isHit(x + HakkStage.LEVEL_WIDTH, y, s));
 
+		} else if (x > HakkStage.LEVEL_WIDTH - HakkStage.WIDTH) {
+			return (isHit(x, y, s) || isHit(x - HakkStage.LEVEL_WIDTH, y, s));
+		} else {
+			return isHit(x, y, s);
+		}
+
+	}
+
+	private boolean isHit(double chx, double chy, SwordState s) {
 		BitMask characterMask = BitMaskResources.getBitmask(currentImage);
-		BitMask swordMask = BitMaskResources.getBitmask(s.getImage());
+		BitMask swordMask = BitMaskResources.getBitmask(s.currentImage());
 
-		int intx = (int) Math.round(x);
-		int inty = (int) Math.round(y) - characterMask.getHeight();
+		int intx = (int) Math.round(chx);
+		int inty = (int) Math.round(chy) - characterMask.getHeight();
 		int intsx = (int) Math.round(s.getX());
 		int intsy = (int) Math.round(s.getY()) - swordMask.getHeight();
 
@@ -63,8 +79,8 @@ public class CharacterState {
 	}
 
 	public void reSpawn() {
-		x = 0;
-		y = 0;
+		x = Math.random() * HakkStage.LEVEL_WIDTH;
+		y = HakkStage.HEIGHT - HakkStage.LEVEL_HEIGHT-200;
 		xspeed = 0;
 		yspeed = 0;
 		action = Action.STOPPING;
