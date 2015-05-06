@@ -2,20 +2,23 @@ package game;
 
 import java.awt.Color;
 
+import Music.*;
+
 public class Opponent extends Character {
+	
+//	private SoundEffect jumpPlayer;
 
 	public Opponent(HakkStage stage, String playerName) {
 		super(playerName, "player2");
 		nameColour = Color.RED;
+//		jumpPlayer = new SoundEffect("bgm/jump2.mp3");
 	}
 
 	protected void doAction() {
 		switch (charState.action) {
 		case JUMPING:
-
 			charState.yspeed -= 17;
 			charState.action = Action.IN_AIR;
-
 			break;
 		case RUNNING_LEFT:
 			charAnimation.run();
