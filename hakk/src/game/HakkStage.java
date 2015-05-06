@@ -35,8 +35,8 @@ public class HakkStage extends JPanel {
 	private HashMap<String, Character> characters;
 	private HashMap<String, String> playerNames;
 	private Level level;
-	private ArrayList<Platform> platforms;
 	private ParticleBatcher pb;
+	private ArrayList<Platform> platforms;
 
 	private FlyingPlane flyingPlane;
 	private FlyingBird flyingBird;
@@ -48,11 +48,8 @@ public class HakkStage extends JPanel {
 		characters = new HashMap<String, Character>();
 		playerNames = new HashMap<String, String>();
 		pb = new ParticleBatcher();
-
-		platforms = new ArrayList<Platform>();
-		platforms.add(new Platform(200, GROUNDLEVEL - 160));
-		platforms.add(new Platform(500, GROUNDLEVEL - 200));
-
+		platforms = level.getPlatforms(); 
+		
 		flyingPlane = new FlyingPlane(-50, -500);
 		flyingBird = new FlyingBird(920, -300);
 
@@ -82,12 +79,9 @@ public class HakkStage extends JPanel {
 				level.drawGround(graphics);
 				int xOffset = level.getXOffset();
 				int yOffset = level.getYOffset();
+				level.drawPlatforms(graphics, xOffset, yOffset);
 				for (Entry<String, Character> character : characters.entrySet()) {
 					character.getValue().draw(graphics, xOffset, yOffset);
-				}
-
-				for (Platform platform : platforms) {
-					platform.draw(graphics);
 				}
 				pb.draw(graphics, xOffset, yOffset);
 				level.drawForeground(graphics);
@@ -105,7 +99,7 @@ public class HakkStage extends JPanel {
 		flyingPlane.move();
 		flyingBird.move();
 		for (Entry<String, Character> character : characters.entrySet()) {
-			character.getValue().doPhysics(platforms);
+			character.getValue().doPhysics(level);
 		}
 		level.computeOffset(player.charState.x, player.charState.y);
 		pb.update();
@@ -172,6 +166,8 @@ public class HakkStage extends JPanel {
 			}
 		}
 	}
+	
+	
 
 	private synchronized Character getCharacter(String identification) {
 		Character character = characters.get(identification);

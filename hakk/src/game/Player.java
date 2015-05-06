@@ -1,5 +1,8 @@
 package game;
 
+import graphics.CharacterAnimation;
+import graphics.Level;
+
 import java.awt.Color;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
@@ -101,8 +104,8 @@ public class Player extends Character {
 		swordAnimation.swing();
 	}
 
-	protected void doAction(ArrayList<Platform> platforms) {
-		switch (state.action) {
+	protected void doAction(Level level) {
+		switch (charState.action) {
 		case JUMPING:
 
 			charState.yspeed -= 17;
@@ -135,27 +138,18 @@ public class Player extends Character {
 
 			break;
 		case IN_AIR:
-			for (Platform platform : platforms){
-				if(state.x > platform.getX() && state.x < platform.getX()+100){
-					System.out.println("gubbe: " + state.y + " platform: " + platform.getY());
-					if(state.y > platform.getY() && state.y < platform.getY()+20){
-					System.out.println("träff!");
-					state.yspeed = 0;
-					}
-				}
+			if(level.hitPlatform(charState.x, charState.y, CharacterAnimation.getImage(charState.currentImage).getWidth(null)) != 0){
+				charState.action = Action.STOPPING;
 			}
-			if (state.y >= HakkStage.GROUNDLEVEL){
+			if (charState.y >= HakkStage.GROUNDLEVEL){
 				if (tryingToRunLeft && tryingToRunRight || !(tryingToRunLeft || tryingToRunRight)) {
-					state.action = Action.STOPPING;
+					charState.action = Action.STOPPING;
 				} else if (tryingToRunLeft){
-					state.action = Action.RUNNING_LEFT;
+					charState.action = Action.RUNNING_LEFT;
 				} else {
 					charState.action = Action.RUNNING_RIGHT;
 				}
 			}
-			// else if(hitLeftWall() || hitRightWall()){
-			// charState.xspeed = 0;
-			// }
 			break;
 		default:
 			break;

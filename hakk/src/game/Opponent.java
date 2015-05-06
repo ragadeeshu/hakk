@@ -1,5 +1,7 @@
 package game;
 
+import graphics.Level;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -53,5 +55,11 @@ public class Opponent extends Character {
 
 		}
 
+	}
+
+	@Override
+	protected void doAction(Level level) {
+		// TODO Auto-generated method stub
+		
 	}
 }
