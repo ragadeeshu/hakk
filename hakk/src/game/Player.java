@@ -9,14 +9,22 @@ import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
+import Music.MusicPlayer;
+import Music.SoundEffect;
+
 public class Player extends Character {
 	private boolean tryingToRunLeft;
 	private boolean tryingToRunRight;
+	
+	private SoundEffect jumpEffect;
 
 	public Player(HakkStage stage, String playerName) {
 		super(playerName, "player");
 		nameColour = Color.GREEN;
-
+		jumpEffect = new SoundEffect("bgm/jump.mp3");
+		jumpEffect.start();
+//		jumpEffect.initiateSound();
+		
 		KeyboardFocusManager.getCurrentKeyboardFocusManager()
 				.addKeyEventDispatcher(new KeyEventDispatcher() {
 					@Override
@@ -90,13 +98,15 @@ public class Player extends Character {
 
 	protected void runRight() {
 		tryingToRunRight = true;
-		if (charState.action != Action.IN_AIR)
+		if (charState.action != Action.IN_AIR) {
 			charState.action = Action.RUNNING_RIGHT;
+		}
 	}
 
 	protected void jump() {
-		if (charState.action != Action.IN_AIR)
+		if (charState.action != Action.IN_AIR) {
 			charState.action = Action.JUMPING;
+		}
 	}
 
 	private void swing() {
@@ -107,10 +117,9 @@ public class Player extends Character {
 	protected void doAction(Level level) {
 		switch (charState.action) {
 		case JUMPING:
-
 			charState.yspeed -= 17;
 			charState.action = Action.IN_AIR;
-
+			jumpEffect.notifyPlayer();
 			break;
 		case RUNNING_LEFT:
 

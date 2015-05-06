@@ -17,6 +17,7 @@ import java.util.Map.Entry;
 
 import javax.swing.JPanel;
 
+import Music.SoundEffect;
 import networking.Client;
 import networking.Networking;
 import particle.ParticleBatcher;
@@ -42,8 +43,15 @@ public class HakkStage extends JPanel {
 	private FlyingBird flyingBird;
 	private Character player;
 
-	public HakkStage() {
+	private SoundEffect deathEffect;
+
+	private BufferStrategy strategy;
+	
+
+
+	public HakkStage(BufferStrategy strategy) {
 		super();
+		this.strategy = strategy;
 		level = new LevelOne();
 		characters = new HashMap<String, Character>();
 		playerNames = new HashMap<String, String>();
@@ -53,9 +61,11 @@ public class HakkStage extends JPanel {
 		flyingPlane = new FlyingPlane(-50, -500);
 		flyingBird = new FlyingBird(920, -300);
 
+		deathEffect = new SoundEffect("bgm/scream.mp3");
+		deathEffect.start();
 	}
 
-	public synchronized void draw(BufferStrategy strategy) {
+	public synchronized void draw() {
 
 		do {
 			// The following loop ensures that the contents of the drawing
@@ -219,6 +229,7 @@ public class HakkStage extends JPanel {
 													.getCurrentImageName())
 									.getHeight(null) / 2;
 					pb.doDeath(x, y);
+					deathEffect.notifyPlayer();
 
 				} else if (typeAndData[0].equals(Networking.MESSAGE_DISCONNECT)) {
 					disconnect = true;

@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
 
+import Music.MusicPlayer;
+
 public class ParticleBatcher {
 	private LinkedList<Particle> particles;
 	Random rand;

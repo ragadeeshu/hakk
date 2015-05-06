@@ -7,20 +7,25 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
 
+import Music.*;
+
 public class Opponent extends Character {
+	
+	private SoundEffect jumpEffect;
 
 	public Opponent(HakkStage stage, String playerName) {
 		super(playerName, "player2");
 		nameColour = Color.RED;
+		jumpEffect = new SoundEffect("bgm/jump2.mp3");
+		jumpEffect.start();
 	}
 
 	protected void doAction() {
 		switch (charState.action) {
 		case JUMPING:
-
 			charState.yspeed -= 17;
 			charState.action = Action.IN_AIR;
-
+			jumpEffect.notifyPlayer();
 			break;
 		case RUNNING_LEFT:
 			charAnimation.run();
