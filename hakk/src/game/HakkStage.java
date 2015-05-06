@@ -17,7 +17,6 @@ import java.util.Map.Entry;
 
 import javax.swing.JPanel;
 
-import Music.MusicPlayer;
 import Music.SoundEffect;
 import networking.Client;
 import networking.Networking;
