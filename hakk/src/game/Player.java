@@ -18,6 +18,7 @@ public class Player extends Character {
 		super(playerName, "player");
 		nameColour = Color.GREEN;
 		jumpEffect = new SoundEffect("bgm/jump.mp3");
+		jumpEffect.start();
 //		jumpEffect.initiateSound();
 		
 		KeyboardFocusManager.getCurrentKeyboardFocusManager()
@@ -101,7 +102,6 @@ public class Player extends Character {
 	protected void jump() {
 		if (charState.action != Action.IN_AIR) {
 			charState.action = Action.JUMPING;
-			jumpEffect.play();
 		}
 	}
 
@@ -115,6 +115,7 @@ public class Player extends Character {
 		case JUMPING:
 			charState.yspeed -= 17;
 			charState.action = Action.IN_AIR;
+			jumpEffect.notifyPlayer();
 			break;
 		case RUNNING_LEFT:
 

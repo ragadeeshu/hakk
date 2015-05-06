@@ -5,9 +5,12 @@ import game.HakkThread;
 import game.Player;
 import game.UpdateThread;
 
+import java.awt.image.BufferStrategy;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
+
+import javax.swing.JFrame;
 
 import Music.MusicPlayer;
 import networking.Client;
@@ -32,12 +35,23 @@ public class ClientLauncher {
 
 		scan.close();
 		Client client = new Client(serverAddress, playerName);
-		HakkStage stage = new HakkStage();
+		JFrame frame = new JFrame("hakk");
+		frame.setSize(HakkStage.WIDTH, HakkStage.HEIGHT);
+		frame.setVisible(true);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setResizable(false);
+		frame.createBufferStrategy(2);
+
+		BufferStrategy strategy = frame.getBufferStrategy();
+		HakkStage stage = new HakkStage(strategy);
+		frame.add(stage);
 		stage.addPlayerCharacter(client.getAddress(), new Player(stage,
 				playerName));
 		new HakkThread(stage).start();
 		new UpdateThread(client, stage, playerName).start();
 		System.out.println("Music by Gichco from http://opengameart.org/");
-//		new MusicPlayer("bgm/cave-loop.mp3", true).start();
+
+		new MusicPlayer("bgm/cave-loop.mp3", true).start();
+
 	}
 }

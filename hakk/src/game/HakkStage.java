@@ -43,11 +43,16 @@ public class HakkStage extends JPanel {
 	private FlyingPlane flyingPlane;
 	private FlyingBird flyingBird;
 	private Character player;
-	
+
 	private SoundEffect deathEffect;
 
-	public HakkStage() {
+	private BufferStrategy strategy;
+	
+
+
+	public HakkStage(BufferStrategy strategy) {
 		super();
+		this.strategy = strategy;
 		level = new LevelOne();
 		characters = new HashMap<String, Character>();
 		playerNames = new HashMap<String, String>();
@@ -64,7 +69,7 @@ public class HakkStage extends JPanel {
 		deathEffect.start();
 	}
 
-	public synchronized void draw(BufferStrategy strategy) {
+	public synchronized void draw() {
 
 		do {
 			// The following loop ensures that the contents of the drawing
@@ -115,7 +120,7 @@ public class HakkStage extends JPanel {
 		}
 		level.computeOffset(player.charState.x, player.charState.y);
 		pb.update();
-		pb.doRain(level.getXOffset());
+//		pb.doRain(level.getXOffset());
 	}
 
 	public synchronized void addCharacter(String address, Character character) {
