@@ -15,7 +15,7 @@ import Music.SoundEffect;
 public class Player extends Character {
 	private boolean tryingToRunLeft;
 	private boolean tryingToRunRight;
-	
+
 	private SoundEffect jumpEffect;
 
 	public Player(HakkStage stage, String playerName) {
@@ -23,8 +23,8 @@ public class Player extends Character {
 		nameColour = Color.GREEN;
 		jumpEffect = new SoundEffect("bgm/jump.mp3");
 		jumpEffect.start();
-//		jumpEffect.initiateSound();
-		
+		// jumpEffect.initiateSound();
+
 		KeyboardFocusManager.getCurrentKeyboardFocusManager()
 				.addKeyEventDispatcher(new KeyEventDispatcher() {
 					@Override
@@ -119,7 +119,7 @@ public class Player extends Character {
 		case JUMPING:
 			charState.yspeed -= 17;
 			charState.action = Action.IN_AIR;
-			jumpEffect.notifyPlayer();
+			// jumpEffect.notifyPlayer();
 			break;
 		case RUNNING_LEFT:
 
@@ -147,13 +147,15 @@ public class Player extends Character {
 
 			break;
 		case IN_AIR:
-			if(level.hitPlatform(charState.x, charState.y, CharacterAnimation.getImage(charState.currentImage).getWidth(null)) != 0){
-				charState.action = Action.STOPPING;
-			}
-			if (charState.y >= HakkStage.GROUNDLEVEL){
-				if (tryingToRunLeft && tryingToRunRight || !(tryingToRunLeft || tryingToRunRight)) {
+			if (charState.y >= HakkStage.GROUNDLEVEL
+					|| charState.yspeed >=0
+					&& level.hitPlatform(charState.x, charState.y,
+							CharacterAnimation.getImage(charState.currentImage)
+									.getWidth(null)) != 0) {
+				if (tryingToRunLeft && tryingToRunRight
+						|| !(tryingToRunLeft || tryingToRunRight)) {
 					charState.action = Action.STOPPING;
-				} else if (tryingToRunLeft){
+				} else if (tryingToRunLeft) {
 					charState.action = Action.RUNNING_LEFT;
 				} else {
 					charState.action = Action.RUNNING_RIGHT;

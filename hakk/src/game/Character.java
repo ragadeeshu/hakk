@@ -115,10 +115,10 @@ public abstract class Character {
 			charState.yspeed = 0;
 		} else if(platformHitY != 0){
 			charState.yspeed = 0;
-			charState.y = platformHitY;
-			if(charState.action==Action.IN_AIR){
-				charState.action=Action.STOPPING;
-			}
+			charState.y = platformHitY+ CharacterAnimation.GROUND_OFFSET;;
+//			if(charState.action==Action.IN_AIR){
+//				charState.action=Action.STOPPING;
+//			}
 		}
 		swordState.move(charState.x, charState.y);
 	}

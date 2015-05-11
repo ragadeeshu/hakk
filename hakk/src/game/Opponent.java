@@ -25,7 +25,7 @@ public class Opponent extends Character {
 		case JUMPING:
 			charState.yspeed -= 17;
 			charState.action = Action.IN_AIR;
-			jumpEffect.notifyPlayer();
+//			jumpEffect.notifyPlayer();
 			break;
 		case RUNNING_LEFT:
 			charAnimation.run();

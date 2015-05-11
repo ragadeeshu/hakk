@@ -40,11 +40,10 @@ public class ClientLauncher {
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
-		frame.createBufferStrategy(2);
-
-		BufferStrategy strategy = frame.getBufferStrategy();
-		HakkStage stage = new HakkStage(strategy);
+		HakkStage stage = new HakkStage();
 		frame.add(stage);
+		frame.validate();
+		frame.repaint();
 		stage.addPlayerCharacter(client.getAddress(), new Player(stage,
 				playerName));
 		new HakkThread(stage).start();
