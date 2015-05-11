@@ -15,6 +15,7 @@ public class LevelOne extends Level {
 			background = ImageIO.read(new File("sprites/background_long.png"));
 			ground = ImageIO.read(new File("sprites/ground_long.png"));
 			foreground = ImageIO.read(new File("sprites/foreground.png"));
+//			System.out.println(getClass().getResource("/sprites/foreground.png"));
 			stageWidth = ground.getWidth();
 
 		} catch (IOException e) {
