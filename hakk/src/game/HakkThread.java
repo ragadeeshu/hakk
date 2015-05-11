@@ -81,7 +81,7 @@ public class HakkThread extends Thread {
 			// This saves the CPU from hogging.
 			while (now - lastRenderTime < TARGET_TIME_BETWEEN_RENDERS
 					&& now - lastUpdateTime < TIME_BETWEEN_UPDATES) {
-				Thread.yield();
+				// Thread.yield();
 
 				// This stops the app from consuming all your CPU. It makes this
 				// slightly less accurate, but is worth it.
@@ -105,6 +105,6 @@ public class HakkThread extends Thread {
 	}
 
 	private void drawGame() {
-		stage.draw();
+		stage.repaint();
 	}
 }

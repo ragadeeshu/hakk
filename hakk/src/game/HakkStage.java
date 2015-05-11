@@ -7,9 +7,9 @@ import graphics.Level;
 import graphics.LevelOne;
 
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,10 +17,10 @@ import java.util.Map.Entry;
 
 import javax.swing.JPanel;
 
-import Music.SoundEffect;
 import networking.Client;
 import networking.Networking;
 import particle.ParticleBatcher;
+import Music.SoundEffect;
 
 @SuppressWarnings("serial")
 public class HakkStage extends JPanel {
@@ -36,8 +36,8 @@ public class HakkStage extends JPanel {
 	private HashMap<String, Character> characters;
 	private HashMap<String, String> playerNames;
 	private Level level;
-	private ArrayList<Platform> platforms;
 	private ParticleBatcher pb;
+	private ArrayList<Platform> platforms;
 
 	private FlyingPlane flyingPlane;
 	private FlyingBird flyingBird;
@@ -45,21 +45,16 @@ public class HakkStage extends JPanel {
 
 	private SoundEffect deathEffect;
 
-	private BufferStrategy strategy;
-	
+	// private BufferStrategy strategy;
 
-
-	public HakkStage(BufferStrategy strategy) {
+	public HakkStage() {
 		super();
-		this.strategy = strategy;
+		// this.strategy = strategy;
 		level = new LevelOne();
 		characters = new HashMap<String, Character>();
 		playerNames = new HashMap<String, String>();
 		pb = new ParticleBatcher();
-
-		platforms = new ArrayList<Platform>();
-		platforms.add(new Platform(200, GROUNDLEVEL - 160));
-		platforms.add(new Platform(500, GROUNDLEVEL - 200));
+		platforms = level.getPlatforms();
 
 		flyingPlane = new FlyingPlane(-50, -500);
 		flyingBird = new FlyingBird(920, -300);
@@ -68,58 +63,38 @@ public class HakkStage extends JPanel {
 		deathEffect.start();
 	}
 
-	public synchronized void draw() {
+	@Override
+	public synchronized void paint(Graphics g) {
+		super.paint(g);
+		Graphics2D g2d = (Graphics2D) g;
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setFont(NAME_FONT);
+		level.drawBackground(g2d);
+		flyingPlane.drawPlane(g2d);
+		flyingBird.drawBird(g2d);
+		level.drawGround(g2d);
+		int xOffset = level.getXOffset();
+		int yOffset = level.getYOffset();
+		level.drawPlatforms(g2d, xOffset, yOffset);
+		for (Entry<String, Character> character : characters.entrySet()) {
+			character.getValue().draw(g2d, xOffset, yOffset);
+		}
+		pb.draw(g2d, xOffset, yOffset);
+		level.drawForeground(g2d);
 
-		do {
-			// The following loop ensures that the contents of the drawing
-			// buffer
-			// are consistent in case the underlying surface was recreated
-			do {
-				// Get a new graphics context every time through the loop
-				// to make sure the strategy is validated
-				Graphics2D graphics = (Graphics2D) strategy.getDrawGraphics();
-				graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-						RenderingHints.VALUE_ANTIALIAS_ON);
-				graphics.setFont(NAME_FONT);
-
-				// Render to graphics
-				// ...
-
-				// Dispose the graphics
-				level.drawBackground(graphics);
-				flyingPlane.drawPlane(graphics);
-				flyingBird.drawBird(graphics);
-				level.drawGround(graphics);
-				int xOffset = level.getXOffset();
-				int yOffset = level.getYOffset();
-				for (Entry<String, Character> character : characters.entrySet()) {
-					character.getValue().draw(graphics, xOffset, yOffset);
-				}
-
-				for (Platform platform : platforms) {
-					platform.draw(graphics);
-				}
-				pb.draw(graphics, xOffset, yOffset);
-				level.drawForeground(graphics);
-
-				graphics.dispose();
-
-			} while (strategy.contentsRestored());
-
-			strategy.show();
-
-		} while (strategy.contentsLost());
+		g2d.dispose();
 	}
 
 	public synchronized void doPhysics() {
 		flyingPlane.move();
 		flyingBird.move();
 		for (Entry<String, Character> character : characters.entrySet()) {
-			character.getValue().doPhysics(platforms);
+			character.getValue().doPhysics(level);
 		}
 		level.computeOffset(player.charState.x, player.charState.y);
 		pb.update();
-//		pb.doRain(level.getXOffset());
+		pb.doRain(level.getXOffset());
 	}
 
 	public synchronized void addCharacter(String address, Character character) {

@@ -1,6 +1,7 @@
 package game;
 
 import graphics.CharacterAnimation;
+import graphics.Level;
 import graphics.SwordAnimation;
 
 import java.awt.Color;
@@ -95,19 +96,29 @@ public abstract class Character {
 		charState.yspeed -= -.8;
 	}
 
-	protected void doMovement() {
+	protected void doMovement(Level level) {
 		charState.x += charState.xspeed;
-		if (charState.x < 0)
+		if (charState.x < 0){
 			charState.x += HakkStage.LEVEL_WIDTH;
-		else if (charState.x > HakkStage.LEVEL_WIDTH)
+		} else if (charState.x > HakkStage.LEVEL_WIDTH){
 			charState.x -= HakkStage.LEVEL_WIDTH;
+		}	
 		charState.y += charState.yspeed;
-
-		if (charState.y >= HakkStage.GROUNDLEVEL
-				+ CharacterAnimation.GROUND_OFFSET) {
-			charState.y = HakkStage.GROUNDLEVEL
-					+ CharacterAnimation.GROUND_OFFSET;
+		
+		int platformHitY = 0;
+		if(charState.yspeed >=0){
+			platformHitY =level.hitPlatform(charState.x, charState.y, CharacterAnimation.getImage(charState.currentImage).getWidth(null));
+		}
+		
+		if (charState.y >= HakkStage.GROUNDLEVEL + CharacterAnimation.GROUND_OFFSET) {
+			charState.y = HakkStage.GROUNDLEVEL + CharacterAnimation.GROUND_OFFSET;
 			charState.yspeed = 0;
+		} else if(platformHitY != 0){
+			charState.yspeed = 0;
+			charState.y = platformHitY+ CharacterAnimation.GROUND_OFFSET;;
+//			if(charState.action==Action.IN_AIR){
+//				charState.action=Action.STOPPING;
+//			}
 		}
 		swordState.move(charState.x, charState.y);
 	}
@@ -116,13 +127,13 @@ public abstract class Character {
 		charState = value;
 	}
 
-	public void doPhysics(ArrayList<Platform> platforms) {
-		doAction();
+	public void doPhysics(Level level) {
+		doAction(level);
 		doGravity();
-		doMovement();
+		doMovement(level);
 	}
 
-	protected abstract void doAction();
+	protected abstract void doAction(Level level);
 
 	public void rename(String name) {
 		this.playerName = name;

@@ -25,11 +25,11 @@ public class FlyingBird {
 	}
 
 	public void drawBird(Graphics2D g) {
-		g.drawImage(flyingBird, x, y, panel);
+		g.drawImage(flyingBird, x, y, null);
 	}
 
 	public void move() {
-		if(y == -450) {
+		if (y == -450) {
 			x = 920;
 			y = 150;
 		}

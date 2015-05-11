@@ -1,9 +1,13 @@
 package game;
 
+import graphics.CharacterAnimation;
+import graphics.Level;
+
 import java.awt.Color;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 import Music.MusicPlayer;
 import Music.SoundEffect;
@@ -11,7 +15,7 @@ import Music.SoundEffect;
 public class Player extends Character {
 	private boolean tryingToRunLeft;
 	private boolean tryingToRunRight;
-	
+
 	private SoundEffect jumpEffect;
 
 	public Player(HakkStage stage, String playerName) {
@@ -19,8 +23,8 @@ public class Player extends Character {
 		nameColour = Color.GREEN;
 		jumpEffect = new SoundEffect("bgm/jump.mp3");
 		jumpEffect.start();
-//		jumpEffect.initiateSound();
-		
+		// jumpEffect.initiateSound();
+
 		KeyboardFocusManager.getCurrentKeyboardFocusManager()
 				.addKeyEventDispatcher(new KeyEventDispatcher() {
 					@Override
@@ -110,12 +114,12 @@ public class Player extends Character {
 		swordAnimation.swing();
 	}
 
-	protected void doAction() {
+	protected void doAction(Level level) {
 		switch (charState.action) {
 		case JUMPING:
 			charState.yspeed -= 17;
 			charState.action = Action.IN_AIR;
-			jumpEffect.notifyPlayer();
+			// jumpEffect.notifyPlayer();
 			break;
 		case RUNNING_LEFT:
 
@@ -143,7 +147,11 @@ public class Player extends Character {
 
 			break;
 		case IN_AIR:
-			if (charState.y >= HakkStage.GROUNDLEVEL) {
+			if (charState.y >= HakkStage.GROUNDLEVEL
+					|| charState.yspeed >=0
+					&& level.hitPlatform(charState.x, charState.y,
+							CharacterAnimation.getImage(charState.currentImage)
+									.getWidth(null)) != 0) {
 				if (tryingToRunLeft && tryingToRunRight
 						|| !(tryingToRunLeft || tryingToRunRight)) {
 					charState.action = Action.STOPPING;
@@ -153,9 +161,6 @@ public class Player extends Character {
 					charState.action = Action.RUNNING_RIGHT;
 				}
 			}
-			// else if(hitLeftWall() || hitRightWall()){
-			// charState.xspeed = 0;
-			// }
 			break;
 		default:
 			break;
