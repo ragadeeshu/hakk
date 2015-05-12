@@ -28,7 +28,7 @@ public class RainParticle extends Particle {
 	}
 
 	public RainParticle(double x, double y, double ground) {
-		super(x, y, 0, 10, .2, 2, 0, 0.1, 100, C);
+		super(x, y, 0, 12, .2, 2, 0, 0.1, 100, C);
 		this.ground = ground;
 	}
 

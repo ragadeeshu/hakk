@@ -11,11 +11,11 @@ public abstract class Level {
 	protected int offSetX;
 	protected int offSetY;
 	protected int stageWidth;
-	public static final int SCROLL_WINDOW = 200;
+	public static final int SCROLL_WINDOW = 150;
 
-	protected BufferedImage background;
-	protected BufferedImage ground;
-	protected BufferedImage foreground;
+	protected BufferedImage background[];
+	protected BufferedImage ground[];
+	protected BufferedImage foreground[];
 	protected ArrayList<Platform> platforms;
 
 	public abstract void drawBackground(Graphics2D g2d);
@@ -23,11 +23,11 @@ public abstract class Level {
 	public abstract void drawGround(Graphics2D g2d);
 
 	public abstract void drawForeground(Graphics2D g2d);
-	
+
 	public abstract void drawPlatforms(Graphics2D g2d, int xOffset, int yOffset);
-	
+
 	public abstract ArrayList<Platform> getPlatforms();
-	
+
 	public abstract int hitPlatform(double charX, double charY, int charWidth);
 
 	public void computeOffset(double x, double y) {
