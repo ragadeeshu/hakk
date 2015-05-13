@@ -7,9 +7,7 @@ import java.awt.Color;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 
-import Music.MusicPlayer;
 import Music.SoundEffect;
 
 public class Player extends Character {
