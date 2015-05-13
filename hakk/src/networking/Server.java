@@ -113,8 +113,8 @@ public class Server {
 			if (!chState.getKey().equals(inetAddress)
 					&& chState.getValue().isHit(s)) {
 				for (RequestHandler handler : handlers) {
-					handler.putDeath(chState.getKey(), chState.getValue().x,
-							chState.getValue().y);
+					handler.putDeath(chState.getKey(), inetAddress,
+							chState.getValue().x, chState.getValue().y);
 				}
 				chState.getValue().y = HIGHHEAVEN;
 			}

@@ -96,9 +96,9 @@ public class RequestHandler implements Runnable {
 		newDisconnect = true;
 	}
 
-	public void putDeath(String inetAddress, double x, double y) {
+	public void putDeath(String inetAddress, String murderer, double x, double y) {
 		synchronized (deaths) {
-			deaths.push(new Death(inetAddress, x, y));
+			deaths.push(new Death(inetAddress, murderer, x, y));
 		}
 	}
 }

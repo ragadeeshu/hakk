@@ -12,7 +12,6 @@ public class UpdateThread extends Thread {
 	public UpdateThread(Client client, HakkStage stage, String playerName) {
 		this.client = client;
 		this.stage = stage;
-		
 
 	}
 
@@ -21,6 +20,6 @@ public class UpdateThread extends Thread {
 			public void run() {
 				stage.update(client);
 			}
-		}, 0, 17);
+		}, 0, 10);
 	}
 }
