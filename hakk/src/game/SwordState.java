@@ -1,5 +1,6 @@
 package game;
 
+import graphics.SwordAnimation;
 import networking.Networking;
 
 public class SwordState {
@@ -12,7 +13,7 @@ public class SwordState {
 	public SwordState(double x, double y) {
 		this.x = x;
 		this.y = y;
-		currentImage = "sword_attacking_left___000.png";
+		currentImage = SwordAnimation.BASENAMES[0] + String.format("%03d", 0) + ".png";
 	}
 
 	public SwordState(String state) {
