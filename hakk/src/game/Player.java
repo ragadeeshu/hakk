@@ -44,7 +44,13 @@ public class Player extends Character {
 							case KeyEvent.VK_C:
 							case KeyEvent.VK_V:
 							case KeyEvent.VK_NUMPAD0:
-								swing();
+								swordSwing(); //swing 360 degrees
+								break;
+							case KeyEvent.VK_A:
+								swordRotateLeft(); // tba
+								break;
+							case KeyEvent.VK_D:
+								swordRotateRight(); // tba
 								break;
 							}
 						}
@@ -107,9 +113,28 @@ public class Player extends Character {
 		}
 	}
 
-	private void swing() {
+	private void swordSwing() {
+		if(!swordAnimation.doingSwing){
 		swordState.action = Action.SWINGING;
 		swordAnimation.swing();
+		}
+	}
+	
+	private void swordRotateLeft() {
+//		if(swordState.action != )
+		swordState.action = Action.ROT_LEFT;
+		swordAnimation.rotateLeft();
+	}
+	
+	private void swordRotateRight() {
+		swordState.action = Action.ROT_RIGHT;
+		swordAnimation.rotateRight();
+	}
+	
+	private void swordStop() {
+		swordState.action = Action.STOPPING;
+//		swordAnimation.doingSwing = false;
+//		swordAnimation.animate();
 	}
 
 	protected void doAction(Level level) {

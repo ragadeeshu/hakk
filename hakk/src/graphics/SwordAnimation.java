@@ -9,11 +9,14 @@ import java.util.HashMap;
 import javax.imageio.ImageIO;
 
 public class SwordAnimation {
-	public static final int NUM_ATTACK = 29;
-	public static String[] BASENAMES = { "sword_attacking_left___" };
+	public static final int NUM_ATTACK = 16;
+	public static String[] BASENAMES = { "sword_swing_right__", "sword_swing_left__" };
 	private static HashMap<String, Image> IMAGES;
 	private int current;
 	private String baseName;
+
+	public boolean doingSwing = false;
+	public int swingOrigin = 0;
 
 	// public static BufferedImage getImage(String name) {
 	// return bitmasks.get(name);
@@ -28,13 +31,14 @@ public class SwordAnimation {
 				// System.out.println("sprites"+File.pathSeparator+baseName+"runni__"+String.format("%03d",
 				// i)+".png");
 				try {
-					String name = "sprites/" + BASENAMES[i] + String.format("%03d", j) + ".png";
+					String name = "sprites/" + BASENAMES[i]
+							+ String.format("%03d", j) + ".png";
 					img = ImageIO.read(new File(name));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				IMAGES.put(BASENAMES[i] + String.format("%03d", j)
-						+ ".png", img);
+				IMAGES.put(BASENAMES[i] + String.format("%03d", j) + ".png",
+						img);
 			}
 		}
 	}
@@ -44,11 +48,34 @@ public class SwordAnimation {
 		current = 0;
 	}
 
-	public void swing() {
+	public void animate() {
+		// switch()
+
+	}
+
+	public void rotateLeft() {
+		System.out.println("SWANGL;");
+		if (--current < 0)
+			current += NUM_ATTACK;
+	}
+
+	public void rotateRight() {
+		System.out.println("SWANGR;");
 		current = (current + 1) % NUM_ATTACK;
+		// current = (current - 1) % NUM_ATTACK;
+	}
+
+	public void swing() {
+		System.out.println("SWANGGGGGGGGGGGGG;");
+		doingSwing = true;
+		swingOrigin = current;
 	}
 
 	public String getCurrentImageName() {
+		if (doingSwing)
+			current = (current + 1) % NUM_ATTACK;
+		if (current == swingOrigin)
+			doingSwing = false;
 		return baseName + String.format("%03d.png", current);
 	}
 
