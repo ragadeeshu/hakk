@@ -50,6 +50,16 @@ public class LevelOne extends Level {
 		platforms = new ArrayList<Platform>();
 		platforms.add(new Platform(200, HakkStage.GROUNDLEVEL - 100));
 		platforms.add(new Platform(500, HakkStage.GROUNDLEVEL - 200));
+		platforms.add(new Platform(1500, HakkStage.GROUNDLEVEL - 150));
+		platforms.add(new Platform(700, HakkStage.GROUNDLEVEL - 200));
+		platforms.add(new Platform(1700, HakkStage.GROUNDLEVEL - 150));
+		platforms.add(new Platform(1000, HakkStage.GROUNDLEVEL - 100));
+		platforms.add(new Platform(4500, HakkStage.GROUNDLEVEL - 100));
+		platforms.add(new Platform(1450, HakkStage.GROUNDLEVEL - 200));
+		platforms.add(new Platform(2350, HakkStage.GROUNDLEVEL - 150));
+		platforms.add(new Platform(5500, HakkStage.GROUNDLEVEL - 150));
+		platforms.add(new Platform(2500, HakkStage.GROUNDLEVEL - 150));
+		platforms.add(new Platform(3000, HakkStage.GROUNDLEVEL - 100));
 	}
 
 	// @Override
