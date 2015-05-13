@@ -35,10 +35,9 @@ public class Server {
 		BitMaskResources.init();
 
 		ServerSocket serverSocket = null;
-		int portNbr = 4444;
 
 		try {
-			serverSocket = new ServerSocket(portNbr);
+			serverSocket = new ServerSocket(Networking.PORT);
 		} catch (IOException e) {
 			System.out.println(e);
 			System.exit(1);
@@ -76,7 +75,9 @@ public class Server {
 							.put(clientIdentity,
 									CharacterAnimation.BASENAMES[rng
 											.nextInt(CharacterAnimation.BASENAMES.length)]);
-					Networking.send(outputStream, Networking.SERVER_HANDSHAKE + Networking.SEPARATOR_ATTRIBUTE + socket.getInetAddress().getHostName());
+					Networking.send(outputStream, Networking.SERVER_HANDSHAKE
+							+ Networking.SEPARATOR_ATTRIBUTE
+							+ socket.getInetAddress().getHostName());
 					RequestHandler handler = new RequestHandler(socket, this);
 					handlers.add(handler);
 					pool.submit(handler);

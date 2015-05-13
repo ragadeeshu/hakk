@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
 
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 
 import networking.Client;
@@ -23,7 +24,7 @@ import particle.ParticleBatcher;
 import Music.SoundEffect;
 
 @SuppressWarnings("serial")
-public class HakkStage extends JPanel {
+public class HakkStage extends JLayeredPane {
 	public static final int GROUNDLEVEL = 510;
 	public static final int WIDTH = 1200;
 	public static final int HEIGHT = 600;

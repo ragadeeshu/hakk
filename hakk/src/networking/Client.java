@@ -9,7 +9,6 @@ import java.net.Socket;
 public class Client {
 	private String myIP = "127.0.0.1";
 	private String playerName = "Default Name";
-	private int portNbr = 4444;
 	private Socket socket = null;
 	private InputStream inputStream = null;
 	private OutputStream outputStream = null;
@@ -21,7 +20,7 @@ public class Client {
 
 	private void connect(String serverAddress) {
 		try {
-			socket = new Socket(serverAddress, portNbr);
+			socket = new Socket(serverAddress, Networking.PORT);
 			socket.setTcpNoDelay(true);
 			socket.setReceiveBufferSize(Networking.BUFFER_SIZE);
 			socket.setSendBufferSize(Networking.BUFFER_SIZE);
