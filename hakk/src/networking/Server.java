@@ -76,7 +76,7 @@ public class Server {
 							.put(clientIdentity,
 									CharacterAnimation.BASENAMES[rng
 											.nextInt(CharacterAnimation.BASENAMES.length)]);
-					Networking.send(outputStream, Networking.SERVER_HANDSHAKE);
+					Networking.send(outputStream, Networking.SERVER_HANDSHAKE + Networking.SEPARATOR_ATTRIBUTE + socket.getInetAddress());
 					RequestHandler handler = new RequestHandler(socket, this);
 					handlers.add(handler);
 					pool.submit(handler);

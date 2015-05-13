@@ -3,11 +3,8 @@ package game;
 import graphics.Level;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.util.ArrayList;
 
-import Music.*;
+import Music.SoundEffect;
 
 public class Opponent extends Character {
 	

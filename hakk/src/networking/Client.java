@@ -7,6 +7,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 
 public class Client {
+	private String myIP = "127.0.0.1";
 	private String playerName = "Default Name";
 	private int portNbr = 4444;
 	private Socket socket = null;
@@ -27,10 +28,14 @@ public class Client {
 			System.out.println("Client socket established");
 			outputStream = socket.getOutputStream();
 			inputStream = socket.getInputStream();
-			send(Networking.CLIENT_HANDSHAKE + Networking.SEPARATOR_ATTRIBUTE + playerName);
+			send(Networking.CLIENT_HANDSHAKE + Networking.SEPARATOR_ATTRIBUTE
+					+ playerName);
 			String reply = getUpdate();
-			if (!reply.trim().equals(Networking.SERVER_HANDSHAKE))
+			System.out.println("Reply: " + reply);
+			String[] splatReply = reply.split(Networking.SEPARATOR_ATTRIBUTE);
+			if (!splatReply[0].equals(Networking.SERVER_HANDSHAKE))
 				System.exit(1);
+			myIP = splatReply[1].trim();
 		} catch (IOException e) {
 			disconnect();
 			System.out.println(e);
@@ -49,7 +54,7 @@ public class Client {
 	}
 
 	public String getAddress() {
-		return socket.getInetAddress().getHostName()
+		return myIP
 				+ ":"
 				+ ((InetSocketAddress) socket.getLocalSocketAddress())
 						.getPort();

@@ -45,11 +45,8 @@ public class HakkStage extends JPanel {
 
 	private SoundEffect deathEffect;
 
-	// private BufferStrategy strategy;
-
 	public HakkStage() {
 		super();
-		// this.strategy = strategy;
 		level = new LevelOne();
 		characters = new HashMap<String, Character>();
 		playerNames = new HashMap<String, String>();

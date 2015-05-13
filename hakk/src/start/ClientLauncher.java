@@ -5,15 +5,14 @@ import game.HakkThread;
 import game.Player;
 import game.UpdateThread;
 
-import java.awt.image.BufferStrategy;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
 import javax.swing.JFrame;
 
-import Music.MusicPlayer;
 import networking.Client;
+import Music.MusicPlayer;
 
 public class ClientLauncher {
 
@@ -23,6 +22,7 @@ public class ClientLauncher {
 		// System.out.println("Enter server address: ");
 		// String serverAddress = scan.nextLine();
 		String serverAddress = "127.0.0.1";
+//		serverAddress = "val-10";
 
 		// System.out.println("Enter playername (alphanumerical): ");
 		// while (!scan.hasNext("[A-Za-z0-9\\s]+")) {
@@ -44,6 +44,7 @@ public class ClientLauncher {
 		frame.add(stage);
 		frame.validate();
 		frame.repaint();
+		System.out.println("I am " + client.getAddress());
 		stage.addPlayerCharacter(client.getAddress(), new Player(stage,
 				playerName));
 		new HakkThread(stage).start();
