@@ -8,11 +8,15 @@ public class SwordState {
 	private double x;
 	private double y;
 	public String currentImage;
+	private int swordOffsetY = -4;
+	private int[] swordOffsetX = new int[]{10, -36};
+	public int left = 0;
+	
 	public Action action = Action.STOPPING;
 
 	public SwordState(double x, double y) {
-		this.x = x;
-		this.y = y;
+		this.x = x + swordOffsetX[left];
+		this.y = y + swordOffsetY;;
 		currentImage = SwordAnimation.BASENAMES[0] + String.format("%03d", 0) + ".png";
 	}
 
@@ -25,8 +29,8 @@ public class SwordState {
 	}
 
 	public void move(double nx, double ny) {
-		x = nx;
-		y = ny;
+		x = nx + swordOffsetX[left];
+		y = ny + swordOffsetY;
 	}
 
 	public String toString() {

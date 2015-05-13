@@ -44,6 +44,7 @@ public class Player extends Character {
 							case KeyEvent.VK_C:
 							case KeyEvent.VK_V:
 							case KeyEvent.VK_NUMPAD0:
+							case KeyEvent.VK_SPACE:
 								swordSwing(); //swing 360 degrees
 								break;
 							case KeyEvent.VK_A:
@@ -94,6 +95,8 @@ public class Player extends Character {
 	}
 
 	private void runLeft() {
+		swordState.left = 1;
+		swordAnimation.left = 1;
 		tryingToRunLeft = true;
 		if (charState.action != Action.IN_AIR) {
 			charState.action = Action.RUNNING_LEFT;
@@ -101,6 +104,8 @@ public class Player extends Character {
 	}
 
 	protected void runRight() {
+		swordState.left = 0;
+		swordAnimation.left = 0;
 		tryingToRunRight = true;
 		if (charState.action != Action.IN_AIR) {
 			charState.action = Action.RUNNING_RIGHT;

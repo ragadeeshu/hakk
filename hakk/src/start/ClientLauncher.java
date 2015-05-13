@@ -22,7 +22,7 @@ public class ClientLauncher {
 		// System.out.println("Enter server address: ");
 		// String serverAddress = scan.nextLine();
 		String serverAddress = "127.0.0.1";
-//		serverAddress = "val-10";
+//		serverAddress = "falk-2";
 
 		// System.out.println("Enter playername (alphanumerical): ");
 		// while (!scan.hasNext("[A-Za-z0-9\\s]+")) {

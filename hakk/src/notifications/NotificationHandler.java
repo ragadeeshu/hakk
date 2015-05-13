@@ -26,7 +26,7 @@ public class NotificationHandler {
 		}
 	}
 
-	public void draw(Graphics2D g2d) {
+	public synchronized void draw(Graphics2D g2d) {
 		int pos = 20;
 		Iterator<Notification> iter = notifications.iterator();
 		while (iter.hasNext()) {
