@@ -18,7 +18,9 @@ import javax.swing.JPanel;
 
 import networking.Client;
 import networking.Networking;
+import notifications.ConnectNotification;
 import notifications.DeathNotification;
+import notifications.DisconnectNotification;
 import notifications.NotificationHandler;
 import particle.ParticleBatcher;
 import Music.SoundEffect;
@@ -98,15 +100,15 @@ public class HakkStage extends JPanel {
 	}
 
 	public synchronized void addCharacter(String address, Character character) {
-		characters.put(address.trim(), character);
+		characters.put(address, character);
 	}
 
 	public synchronized void addPlayerCharacter(String address,
 			Player playerCharacter) {
-		identification = address.trim();
+		identification = address;
 		this.player = playerCharacter;
 		System.out.println(player.toString());
-		characters.put(address.trim(), playerCharacter);
+		characters.put(address, playerCharacter);
 
 	}
 
@@ -114,12 +116,14 @@ public class HakkStage extends JPanel {
 	// swords.put(address, sword);
 	// }
 
-	public void addName(String address, String name) {
+	public boolean addName(String address, String name) {
 		playerNames.put(address, name);
 		Character character = characters.get(address);
 		if (character != null) {
 			characters.get(address).rename(name);
+			return false;
 		}
+		return true;
 	}
 
 	public void update(Client client) {
@@ -129,8 +133,8 @@ public class HakkStage extends JPanel {
 		// System.out.println("Update from server: " + clientUpdate);
 		String[] statesAndMsgs = clientUpdate
 				.split(Networking.SEPARATOR_MESSAGES);
-		if (!statesAndMsgs[1].trim().equals(""))
-			readMessages(statesAndMsgs[1].trim());
+		if (statesAndMsgs.length > 1)
+			readMessages(statesAndMsgs[1]);
 
 		String[] chStsAndSwSts = statesAndMsgs[0]
 				.split(Networking.SEPARATOR_SWORD);
@@ -189,8 +193,11 @@ public class HakkStage extends JPanel {
 						.split(Networking.SEPARATOR_ATTRIBUTE);
 
 				if (typeAndData[0].equals(Networking.MESSAGE_NEWPLAYER)) {
-					addName(attributes[0].trim(), attributes[1]);
-					getCharacter(attributes[0].trim()).charAnimation = new CharacterAnimation(
+					if (addName(attributes[0], attributes[1])) {
+						notifications
+								.put(new ConnectNotification(attributes[1]));
+					}
+					getCharacter(attributes[0]).charAnimation = new CharacterAnimation(
 							attributes[2]);
 				} else if (typeAndData[0].equals(Networking.MESSAGE_DEATH)) {
 					if (attributes[0].equals(identification))
@@ -215,12 +222,15 @@ public class HakkStage extends JPanel {
 
 				} else if (typeAndData[0].equals(Networking.MESSAGE_DISCONNECT)) {
 					disconnect = true;
-					keyset.remove(attributes[0].trim());
+					keyset.remove(attributes[0]);
 				}
 			}
 			if (disconnect)
-				for (String key : keyset)
+				for (String key : keyset) {
+					notifications.put(new DisconnectNotification(playerNames
+							.get(key)));
 					removeCharacter(key);
+				}
 		}
 	}
 

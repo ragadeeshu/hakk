@@ -73,7 +73,7 @@ public class Client {
 		try {
 			byte[] bytes = new byte[Networking.BUFFER_SIZE];
 			inputStream.read(bytes);
-			return new String(bytes);
+			return new String(bytes).trim();
 		} catch (IOException e) {
 			System.out.println("Disconnected from server");
 			System.exit(1);

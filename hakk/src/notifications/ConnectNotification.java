@@ -2,11 +2,15 @@ package notifications;
 
 public class ConnectNotification extends Notification {
 
-	@Override
-	protected String getString() {
-		// TODO Auto-generated method stub
-		return null;
+	private String player;
+
+	public ConnectNotification(String player) {
+		this.player = player;
 	}
 
+	@Override
+	protected String getString() {
+		return String.format("%s has connected.", player);
+	}
 
 }
