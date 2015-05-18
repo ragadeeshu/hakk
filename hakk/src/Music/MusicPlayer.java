@@ -1,6 +1,7 @@
 package Music;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 
 import javazoom.jl.player.Player;
 

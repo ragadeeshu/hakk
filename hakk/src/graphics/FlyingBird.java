@@ -1,5 +1,7 @@
 package graphics;
 
+import game.HakkStage;
+
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -24,8 +26,15 @@ public class FlyingBird {
 		this.y = y;
 	}
 
-	public void drawBird(Graphics2D g) {
-		g.drawImage(flyingBird, x, y, null);
+	public void drawBird(Graphics2D g2d, int xOffset, int yOffset) {
+		g2d.drawImage(flyingBird, x - xOffset, y + yOffset, null);
+		if (xOffset > HakkStage.LEVEL_WIDTH - HakkStage.WIDTH) {
+			g2d.drawImage(flyingBird, x - xOffset + HakkStage.LEVEL_WIDTH, y
+					+ yOffset, null);
+		} else if (xOffset < 0) {
+			g2d.drawImage(flyingBird, -xOffset - HakkStage.LEVEL_WIDTH,
+					HakkStage.HEIGHT  + yOffset, null);
+		}
 	}
 
 	public void move() {

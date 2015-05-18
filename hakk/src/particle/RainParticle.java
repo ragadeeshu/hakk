@@ -1,16 +1,14 @@
 package particle;
 
+import game.HakkStage;
+
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 
 import javax.imageio.ImageIO;
-
-import game.HakkStage;
 
 public class RainParticle extends Particle {
 	private static BufferedImage IMAGE;
@@ -28,7 +26,7 @@ public class RainParticle extends Particle {
 	}
 
 	public RainParticle(double x, double y, double ground) {
-		super(x, y, 0, 10, .2, 2, 0, 0.1, 100, C);
+		super(x, y, 0, 12, .2, 2, 0, 0.1, 100, C);
 		this.ground = ground;
 	}
 

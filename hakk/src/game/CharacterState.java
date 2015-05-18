@@ -1,7 +1,5 @@
 package game;
 
-import graphics.SwordAnimation;
-
 import java.awt.Rectangle;
 
 import networking.BitMask;

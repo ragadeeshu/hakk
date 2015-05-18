@@ -7,9 +7,7 @@ import java.awt.Color;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 
-import Music.MusicPlayer;
 import Music.SoundEffect;
 
 public class Player extends Character {
@@ -46,7 +44,14 @@ public class Player extends Character {
 							case KeyEvent.VK_C:
 							case KeyEvent.VK_V:
 							case KeyEvent.VK_NUMPAD0:
-								swing();
+							case KeyEvent.VK_SPACE:
+								swordSwing(); //swing 360 degrees
+								break;
+							case KeyEvent.VK_A:
+								swordRotateLeft(); // tba
+								break;
+							case KeyEvent.VK_D:
+								swordRotateRight(); // tba
 								break;
 							}
 						}
@@ -90,6 +95,8 @@ public class Player extends Character {
 	}
 
 	private void runLeft() {
+		swordState.left = 1;
+		swordAnimation.left = 1;
 		tryingToRunLeft = true;
 		if (charState.action != Action.IN_AIR) {
 			charState.action = Action.RUNNING_LEFT;
@@ -97,6 +104,8 @@ public class Player extends Character {
 	}
 
 	protected void runRight() {
+		swordState.left = 0;
+		swordAnimation.left = 0;
 		tryingToRunRight = true;
 		if (charState.action != Action.IN_AIR) {
 			charState.action = Action.RUNNING_RIGHT;
@@ -109,9 +118,28 @@ public class Player extends Character {
 		}
 	}
 
-	private void swing() {
+	private void swordSwing() {
+		if(!swordAnimation.doingSwing){
 		swordState.action = Action.SWINGING;
 		swordAnimation.swing();
+		}
+	}
+	
+	private void swordRotateLeft() {
+//		if(swordState.action != )
+		swordState.action = Action.ROT_LEFT;
+		swordAnimation.rotateLeft();
+	}
+	
+	private void swordRotateRight() {
+		swordState.action = Action.ROT_RIGHT;
+		swordAnimation.rotateRight();
+	}
+	
+	private void swordStop() {
+		swordState.action = Action.STOPPING;
+//		swordAnimation.doingSwing = false;
+//		swordAnimation.animate();
 	}
 
 	protected void doAction(Level level) {

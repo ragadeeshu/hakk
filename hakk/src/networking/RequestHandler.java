@@ -61,6 +61,8 @@ public class RequestHandler implements Runnable {
 						state.append(server.getDisconnectMessage());
 						newDisconnect = false;
 					}
+				}
+				synchronized (deaths) {
 					if (!deaths.isEmpty()) {
 						state.append(Networking.MESSAGE_DEATH);
 						state.append(Networking.SEPARATOR_STATE);
@@ -94,7 +96,9 @@ public class RequestHandler implements Runnable {
 		newDisconnect = true;
 	}
 
-	public synchronized void putDeath(String inetAddress, double x, double y) {
-		deaths.push(new Death(inetAddress, x, y));
+	public void putDeath(String inetAddress, String murderer, double x, double y) {
+		synchronized (deaths) {
+			deaths.push(new Death(inetAddress, murderer, x, y));
+		}
 	}
 }

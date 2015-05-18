@@ -8,11 +8,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
 
-import Music.MusicPlayer;
-
 public class ParticleBatcher {
 	private LinkedList<Particle> particles;
 	Random rand;
+	boolean rain;
 	private LinkedList<Particle> splashParticles;
 
 	public ParticleBatcher() {
@@ -22,12 +21,13 @@ public class ParticleBatcher {
 	}
 
 	public synchronized void doRain(int offset) {
-		particles.add(new RainParticle(rand
-				.nextInt((int) (HakkStage.WIDTH * 1.8))
-				- HakkStage.WIDTH
-				* 0.4
-				+ offset, HakkStage.HEIGHT - HakkStage.LEVEL_HEIGHT,
-				HakkStage.GROUNDLEVEL + rand.nextInt(81) - 40));
+		if (rain)
+			particles.add(new RainParticle(rand
+					.nextInt((int) (HakkStage.WIDTH * 1.8))
+					- HakkStage.WIDTH
+					* 0.4 + offset, HakkStage.HEIGHT - HakkStage.LEVEL_HEIGHT,
+					HakkStage.GROUNDLEVEL + rand.nextInt(81) - 40));
+		rain = !rain;
 
 	}
 
@@ -60,7 +60,7 @@ public class ParticleBatcher {
 	}
 
 	public void doSplash(double locx, double locy, double vely, double ground) {
-		int num = rand.nextInt(6);
+		int num = rand.nextInt(6) + 2;
 		for (int i = 0; i < num; i++) {
 			splashParticles.add(new SplashParticle(locx, locy, rand
 					.nextDouble() * 2 - 1, -vely * .2 + rand.nextDouble(),

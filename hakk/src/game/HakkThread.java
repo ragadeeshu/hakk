@@ -1,10 +1,5 @@
 package game;
 
-import java.awt.image.BufferStrategy;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import javax.swing.JFrame;
 
 public class HakkThread extends Thread {
 	private HakkStage stage;
@@ -27,7 +22,7 @@ public class HakkThread extends Thread {
 		// render.
 		// If you're worried about visual hitches more than perfect timing, set
 		// this to 1.
-		final int MAX_UPDATES_BEFORE_RENDER = 1;
+		final int MAX_UPDATES_BEFORE_RENDER = 2;
 		// We will need the last update time.
 		double lastUpdateTime = System.nanoTime();
 		// Store the last time we rendered.
