@@ -18,7 +18,7 @@ public class FlyingPlane {
 	public FlyingPlane(int x, int y) {
 		try {
 			String plane = "sprites/flyingplane.png";
-			flyingPlane = ImageIO.read(new File(plane));
+			flyingPlane = ImageIO.read(getClass().getResource("/resources/" + plane));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

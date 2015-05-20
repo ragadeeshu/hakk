@@ -34,7 +34,7 @@ public class SwordAnimation {
 				try {
 					String name = "sprites/" + BASENAMES[i]
 							+ String.format("%03d", j) + ".png";
-					img = ImageIO.read(new File(name));
+					img = ImageIO.read(SwordAnimation.class.getResource("/resources/" + name));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

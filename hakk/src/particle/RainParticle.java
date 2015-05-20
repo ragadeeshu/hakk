@@ -19,7 +19,7 @@ public class RainParticle extends Particle {
 		IMAGE = null;
 		try {
 			String path = "sprites/rain.png";
-			IMAGE = ImageIO.read(new File(path));
+			IMAGE = ImageIO.read(RainParticle.class.getResource("/resources/" + path));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

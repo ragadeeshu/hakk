@@ -2,6 +2,7 @@ package Music;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
+import java.io.InputStream;
 
 import javazoom.jl.player.Player;
 
@@ -19,7 +20,7 @@ public class MusicPlayer extends Thread {
 	public void run() {
 		try {
 			do {
-				FileInputStream fis = new FileInputStream(fileLocation);
+				InputStream fis = getClass().getResourceAsStream(fileLocation);
 				BufferedInputStream bis = new BufferedInputStream(fis);
 				player = new Player(bis);
 				player.play();
