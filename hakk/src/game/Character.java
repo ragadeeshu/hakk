@@ -25,6 +25,12 @@ public abstract class Character {
 		swordState = new SwordState(charState.x, charState.y);
 		swordAnimation = new SwordAnimation(SwordAnimation.BASENAMES[0]);
 	}
+	
+
+	public String getPlayerName() {
+		return playerName;
+	}
+
 
 	public void draw(Graphics2D g2d, int xOffset, int yOffset) {
 		int intx = (int) Math.round(charState.x);

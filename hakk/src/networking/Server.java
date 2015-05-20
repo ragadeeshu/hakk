@@ -24,6 +24,7 @@ public class Server {
 	private HashMap<String, CharacterState> characterStates;
 	private HashMap<String, SwordState> swordStates;
 	private HashMap<String, String> playerNames;
+	private HashMap<String, Integer> playerScores;
 	private HashMap<String, String> playerAnimations;
 
 	public Server() {
@@ -31,6 +32,7 @@ public class Server {
 		swordStates = new HashMap<String, SwordState>();
 		playerNames = new HashMap<String, String>();
 		playerAnimations = new HashMap<String, String>();
+		playerScores = new HashMap<String, Integer>();
 		handlers = new ArrayList<>();
 		BitMaskResources.init();
 
@@ -39,7 +41,7 @@ public class Server {
 		try {
 			serverSocket = new ServerSocket(Networking.PORT);
 		} catch (IOException e) {
-			System.out.println(e);
+			System.out.println("Unable to bind port!");
 			System.exit(1);
 		}
 
@@ -70,6 +72,7 @@ public class Server {
 					String playerName = clientHandshake
 							.split(Networking.SEPARATOR_ATTRIBUTE)[1];
 					playerNames.put(clientIdentity, playerName);
+					playerScores.put(clientIdentity, 0);
 					Random rng = new Random();
 					playerAnimations
 							.put(clientIdentity,
@@ -112,8 +115,11 @@ public class Server {
 		for (Entry<String, CharacterState> chState : characterStates.entrySet()) {
 			if (!chState.getKey().equals(inetAddress)
 					&& chState.getValue().isHit(s)) {
+				playerScores
+						.put(inetAddress, playerScores.get(inetAddress) + 1);
 				for (RequestHandler handler : handlers) {
 					handler.putDeath(chState.getKey(), inetAddress,
+							playerScores.get(inetAddress),
 							chState.getValue().x, chState.getValue().y);
 				}
 				chState.getValue().y = HIGHHEAVEN;
@@ -127,13 +133,13 @@ public class Server {
 			sb.append(Networking.SEPARATOR_PLAYER);
 			sb.append(e.getKey());
 			sb.append(Networking.SEPARATOR_STATE);
-			sb.append(e.getValue().toString().trim());
+			sb.append(e.getValue().toString());
 		}
 		sb.append(Networking.SEPARATOR_SWORD);
 		for (Entry<String, SwordState> e : swordStates.entrySet()) {
 			sb.append(e.getKey());
 			sb.append(Networking.SEPARATOR_STATE);
-			sb.append(e.getValue().toString().trim());
+			sb.append(e.getValue().toString());
 			sb.append(Networking.SEPARATOR_PLAYER);
 		}
 		return sb.substring(1, sb.lastIndexOf(Networking.SEPARATOR_PLAYER));
@@ -143,9 +149,10 @@ public class Server {
 		return playerNames.get(address);
 	}
 
-	public synchronized void disconnect(String string) {
-		characterStates.remove(string);
-		playerNames.remove(string);
+	public synchronized void disconnect(String identity) {
+		characterStates.remove(identity);
+		playerNames.remove(identity);
+		playerScores.remove(identity);
 		for (RequestHandler h : handlers) {
 			h.flagNewDisconnect();
 		}
@@ -161,11 +168,13 @@ public class Server {
 			sb.append(Networking.SEPARATOR_ATTRIBUTE);
 			sb.append(e.getValue().trim()); // name
 			sb.append(Networking.SEPARATOR_ATTRIBUTE);
-			sb.append(playerAnimations.get(e.getKey()).trim()); // anim
+			sb.append(playerAnimations.get(e.getKey()));
+			sb.append(Networking.SEPARATOR_ATTRIBUTE);
+			sb.append(playerScores.get(e.getKey()));
 			sb.append(Networking.SEPARATOR_PLAYER);
 		}
-		System.out.println("getNameMessage: "
-				+ sb.substring(0, sb.lastIndexOf(Networking.SEPARATOR_PLAYER)));
+		// System.out.println("getNameMessage: "
+		// + sb.substring(0, sb.lastIndexOf(Networking.SEPARATOR_PLAYER)));
 		return sb.substring(0, sb.lastIndexOf(Networking.SEPARATOR_PLAYER));
 	}
 
@@ -178,8 +187,8 @@ public class Server {
 			sb.append(ip);
 			sb.append(Networking.SEPARATOR_PLAYER);
 		}
-		System.out.println("getDisconnectMessage: "
-				+ sb.substring(0, sb.lastIndexOf(Networking.SEPARATOR_PLAYER)));
+		// System.out.println("getDisconnectMessage: "
+		// + sb.substring(0, sb.lastIndexOf(Networking.SEPARATOR_PLAYER)));
 		return sb.substring(0, sb.lastIndexOf(Networking.SEPARATOR_PLAYER));
 	}
 

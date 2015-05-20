@@ -22,8 +22,9 @@ import notifications.ConnectNotification;
 import notifications.DeathNotification;
 import notifications.DisconnectNotification;
 import notifications.NotificationHandler;
+import notifications.Score;
+import notifications.Scorekeeper;
 import particle.ParticleBatcher;
-import Music.SoundEffect;
 
 @SuppressWarnings("serial")
 public class HakkStage extends JPanel {
@@ -39,6 +40,7 @@ public class HakkStage extends JPanel {
 	private HashMap<String, Character> characters;
 	private HashMap<String, String> playerNames;
 	private NotificationHandler notifications;
+	private Scorekeeper score;
 	private Level level;
 	private ParticleBatcher pb;
 
@@ -46,7 +48,7 @@ public class HakkStage extends JPanel {
 	private FlyingBird flyingBird;
 	private Character player;
 
-//	private SoundEffect deathEffect;
+	// private SoundEffect deathEffect;
 
 	public HakkStage() {
 		super();
@@ -55,6 +57,7 @@ public class HakkStage extends JPanel {
 		playerNames = new HashMap<String, String>();
 		pb = new ParticleBatcher();
 		notifications = new NotificationHandler();
+		score = new Scorekeeper();
 
 		flyingPlane = new FlyingPlane(50, 20);
 		flyingBird = new FlyingBird(920, 200);
@@ -83,6 +86,7 @@ public class HakkStage extends JPanel {
 		pb.draw(g2d, xOffset, yOffset);
 		level.drawForeground(g2d);
 		notifications.draw(g2d);
+		score.draw(g2d);
 
 		g2d.dispose();
 	}
@@ -109,6 +113,7 @@ public class HakkStage extends JPanel {
 		this.player = playerCharacter;
 		System.out.println(player.toString());
 		characters.put(address, playerCharacter);
+		score.put(address, new Score(player.getPlayerName(), 0));
 
 	}
 
@@ -180,7 +185,7 @@ public class HakkStage extends JPanel {
 
 	private void readMessages(String messages) {
 		boolean disconnect = false;
-		System.out.println("readMessages: " + messages);
+//		System.out.println("readMessages: " + messages);
 		for (String msg : messages.split(Networking.SEPARATOR_MESSAGE)) {
 			String[] typeAndData = msg.split(Networking.SEPARATOR_STATE);
 
@@ -193,9 +198,12 @@ public class HakkStage extends JPanel {
 						.split(Networking.SEPARATOR_ATTRIBUTE);
 
 				if (typeAndData[0].equals(Networking.MESSAGE_NEWPLAYER)) {
+					System.out.println(player);
 					if (addName(attributes[0], attributes[1])) {
 						notifications
 								.put(new ConnectNotification(attributes[1]));
+						score.put(attributes[0], new Score(attributes[1],
+								Integer.parseInt(attributes[3])));
 					}
 					getCharacter(attributes[0]).charAnimation = new CharacterAnimation(
 							attributes[2]);
@@ -217,6 +225,10 @@ public class HakkStage extends JPanel {
 							.put(new DeathNotification(playerNames
 									.get(attributes[0]), playerNames
 									.get(attributes[1])));
+					score.put(
+							attributes[1],
+							new Score(playerNames.get(attributes[1]), Integer
+									.parseInt(attributes[4])));
 
 					// deathEffect.notifyPlayer();
 
@@ -229,6 +241,7 @@ public class HakkStage extends JPanel {
 				for (String key : keyset) {
 					notifications.put(new DisconnectNotification(playerNames
 							.get(key)));
+					score.remove(key);
 					removeCharacter(key);
 				}
 		}

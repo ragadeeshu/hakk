@@ -43,10 +43,10 @@ public class RequestHandler implements Runnable {
 			try {
 				byte[] bytes = new byte[Networking.BUFFER_SIZE];
 				inputStream.read(bytes);
-				String[] input = new String(bytes)
-						.split(Networking.SEPARATOR_SWORD);
+				String[] input = new String(bytes).trim().split(
+						Networking.SEPARATOR_SWORD);
 				String characterState = input[0];
-				String swordState = input[1].trim();
+				String swordState = input[1];
 				server.updateCharacterState(hostIdentifier, characterState);
 				server.updateSwordState(hostIdentifier, swordState);
 				StringBuilder state = new StringBuilder();
@@ -73,7 +73,7 @@ public class RequestHandler implements Runnable {
 						}
 					}
 				}
-				outputStream.write(state.toString().trim().getBytes());
+				outputStream.write(state.toString().getBytes());
 				outputStream.flush();
 			} catch (IOException | ArrayIndexOutOfBoundsException e) {
 
@@ -96,9 +96,10 @@ public class RequestHandler implements Runnable {
 		newDisconnect = true;
 	}
 
-	public void putDeath(String inetAddress, String murderer, double x, double y) {
+	public void putDeath(String inetAddress, String murderer, int score,
+			double x, double y) {
 		synchronized (deaths) {
-			deaths.push(new Death(inetAddress, murderer, x, y));
+			deaths.push(new Death(inetAddress, murderer, score, x, y));
 		}
 	}
 }
