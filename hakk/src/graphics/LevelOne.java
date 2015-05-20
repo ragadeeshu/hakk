@@ -28,13 +28,6 @@ public class LevelOne extends Level {
 		foreground = new BufferedImage[FOREGROURND_PARTS];
 		try {
 
-			// background = ImageIO.read(new
-			// File("sprites/background_long.png"));
-			// ground = ImageIO.read(new File("sprites/ground_long.png"));
-			// foreground = ImageIO.read(new File("sprites/foreground.png"));
-			// //
-			// System.out.println(getClass().getResource("/sprites/foreground.png"));
-			// stageWidth = ground.getWidth();
 			platforms = new ArrayList<Platform>();
 			platforms.add(new Platform(200, HakkStage.GROUNDLEVEL - 100));
 			platforms.add(new Platform(500, HakkStage.GROUNDLEVEL - 200));
@@ -42,17 +35,17 @@ public class LevelOne extends Level {
 			for (int j = 0; j < BACKGROURND_PARTS; j++) {
 				String name = "sprites/background_long [www.imagesplitter.net]-0-"
 						+ j + ".png";
-				background[j] = ImageIO.read(new File(name));
+				background[j] = ImageIO.read(getClass().getResource("/resources/" + name));
 			}
 			for (int j = 0; j < GROURND_PARTS; j++) {
 				String name = "sprites/ground_long [www.imagesplitter.net]-0-"
 						+ j + ".png";
-				ground[j] = ImageIO.read(new File(name));
+				ground[j] = ImageIO.read(getClass().getResource("/resources/" + name));
 			}
 			for (int j = 0; j < FOREGROURND_PARTS; j++) {
 				String name = "sprites/foreground [www.imagesplitter.net]-0-"
 						+ j + ".png";
-				foreground[j] = ImageIO.read(new File(name));
+				foreground[j] = ImageIO.read(getClass().getResource("/resources/" + name));
 			}
 
 		} catch (IOException e) {

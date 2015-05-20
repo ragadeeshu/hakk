@@ -19,7 +19,7 @@ public class SplashParticle extends Particle {
 		IMAGE = null;
 		try {
 			String path = "sprites/splash.png";
-			IMAGE = ImageIO.read(new File(path));
+			IMAGE = ImageIO.read(SplashParticle.class.getResource("/resources/" + path));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

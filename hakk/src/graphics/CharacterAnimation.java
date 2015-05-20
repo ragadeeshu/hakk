@@ -32,7 +32,7 @@ public class CharacterAnimation {
 				try {
 					String name = "sprites/" + BASENAMES[i] + "runni__"
 							+ String.format("%03d", j) + ".png";
-					img = ImageIO.read(new File(name));
+					img = ImageIO.read(CharacterAnimation.class.getResource("/resources/" + name));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

@@ -16,7 +16,7 @@ public class Platform {
 	
 	static {
 		try {
-			image = ImageIO.read(new File("sprites/platform.png"));
+			image = ImageIO.read(Platform.class.getResource("/resources/sprites/platform.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

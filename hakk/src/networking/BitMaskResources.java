@@ -21,7 +21,7 @@ public abstract class BitMaskResources {
 				try {
 					String name = "sprites/" + CharacterAnimation.BASENAMES[i]
 							+ "runni__" + String.format("%03d", j) + ".png";
-					img = ImageIO.read(new File(name));
+					img = ImageIO.read(CharacterAnimation.class.getResource("/resources/" + name));
 					bitmasks.put(CharacterAnimation.BASENAMES[i] + "runni__"
 							+ String.format("%03d", j) + ".png", new BitMask(
 							img));
@@ -35,7 +35,7 @@ public abstract class BitMaskResources {
 			for (int j = 0; j < SwordAnimation.NUM_ATTACK; j++) {
 				try {
 					String name = "sprites/" + SwordAnimation.BASENAMES[i] + String.format("%03d", j) + ".png";
-					BufferedImage image = ImageIO.read(new File(name));
+					BufferedImage image = ImageIO.read(BitMaskResources.class.getResource("/resources/" + name));
 					bitmasks.put(SwordAnimation.BASENAMES[i] + String.format("%03d", j) + ".png", new BitMask(image));
 				} catch (IOException e) {
 					e.printStackTrace();
