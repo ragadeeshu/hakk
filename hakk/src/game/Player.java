@@ -136,11 +136,6 @@ public class Player extends Character {
 		swordAnimation.rotateRight();
 	}
 	
-	private void swordStop() {
-		swordState.action = Action.STOPPING;
-//		swordAnimation.doingSwing = false;
-//		swordAnimation.animate();
-	}
 
 	protected void doAction(Level level) {
 		switch (charState.action) {

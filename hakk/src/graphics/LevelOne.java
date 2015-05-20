@@ -28,11 +28,13 @@ public class LevelOne extends Level {
 		foreground = new BufferedImage[FOREGROURND_PARTS];
 		try {
 
-//			background = ImageIO.read(new File("sprites/background_long.png"));
-//			ground = ImageIO.read(new File("sprites/ground_long.png"));
-//			foreground = ImageIO.read(new File("sprites/foreground.png"));
-////			System.out.println(getClass().getResource("/sprites/foreground.png"));
-//			stageWidth = ground.getWidth();
+			// background = ImageIO.read(new
+			// File("sprites/background_long.png"));
+			// ground = ImageIO.read(new File("sprites/ground_long.png"));
+			// foreground = ImageIO.read(new File("sprites/foreground.png"));
+			// //
+			// System.out.println(getClass().getResource("/sprites/foreground.png"));
+			// stageWidth = ground.getWidth();
 			platforms = new ArrayList<Platform>();
 			platforms.add(new Platform(200, HakkStage.GROUNDLEVEL - 100));
 			platforms.add(new Platform(500, HakkStage.GROUNDLEVEL - 200));
@@ -125,10 +127,10 @@ public class LevelOne extends Level {
 		/ (GROURND_WIDTH / GROURND_PARTS) + HakkStage.WIDTH
 				/ (GROURND_WIDTH / GROURND_PARTS) + 2; i++) {
 			if (i < 0) {
-//				g2d.drawImage(ground[i + GROURND_PARTS], -offSetX + i
-//						* GROURND_WIDTH / GROURND_PARTS,
-//						(int) (HakkStage.HEIGHT - GROURND_HEIGHT + offSetY),
-//						null);
+				// g2d.drawImage(ground[i + GROURND_PARTS], -offSetX + i
+				// * GROURND_WIDTH / GROURND_PARTS,
+				// (int) (HakkStage.HEIGHT - GROURND_HEIGHT + offSetY),
+				// null);
 
 			} else {
 				g2d.drawImage(ground[i % GROURND_PARTS], -offSetX + i
@@ -160,19 +162,19 @@ public class LevelOne extends Level {
 				+ HakkStage.WIDTH
 				/ (FOREGROURND_WIDTH / FOREGROURND_PARTS) + 2; i++) {
 			if (i < 0) {
-//				g2d.drawImage(
-//						foreground[i + FOREGROURND_PARTS],
-//						-offSetX * 2 + i * FOREGROURND_WIDTH
-//								/ FOREGROURND_PARTS,
-//						(int) (HakkStage.HEIGHT - FOREGROURND_HEIGHT + offSetY),
-//						null);
+				// g2d.drawImage(
+				// foreground[i + FOREGROURND_PARTS],
+				// -offSetX * 2 + i * FOREGROURND_WIDTH
+				// / FOREGROURND_PARTS,
+				// (int) (HakkStage.HEIGHT - FOREGROURND_HEIGHT + offSetY),
+				// null);
 
 			} else {
 				g2d.drawImage(
 						foreground[i % FOREGROURND_PARTS],
 						-offSetX * 2 + i * FOREGROURND_WIDTH
 								/ FOREGROURND_PARTS,
-						(int) (HakkStage.HEIGHT - FOREGROURND_HEIGHT + offSetY),
+						(int) (HakkStage.HEIGHT - FOREGROURND_HEIGHT + offSetY * .75),
 						null);
 			}
 
@@ -184,7 +186,7 @@ public class LevelOne extends Level {
 						foreground[FOREGROURND_PARTS - i],
 						-offSetX * 2 - i * FOREGROURND_WIDTH
 								/ FOREGROURND_PARTS,
-						(int) (HakkStage.HEIGHT - FOREGROURND_HEIGHT + offSetY),
+						(int) (HakkStage.HEIGHT - FOREGROURND_HEIGHT + offSetY * .75),
 						null);
 
 			}

@@ -46,7 +46,7 @@ public class Server {
 		System.out.println("Server setup successfully.");
 		System.out.println("Waiting for clients to connect...");
 
-		ExecutorService pool = Executors.newFixedThreadPool(4);
+		ExecutorService pool = Executors.newFixedThreadPool(10);
 
 		while (true) {
 			Socket socket = null;

@@ -33,7 +33,6 @@ public class HakkThread extends Thread {
 		final double TARGET_TIME_BETWEEN_RENDERS = 1000000000 / TARGET_FPS;
 
 		// Simple way of finding FPS.
-		int lastSecondTime = (int) (lastUpdateTime / 1000000000);
 		while (true) {
 			double now = System.nanoTime();
 			int updateCount = 0;

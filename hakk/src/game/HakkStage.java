@@ -46,7 +46,7 @@ public class HakkStage extends JPanel {
 	private FlyingBird flyingBird;
 	private Character player;
 
-	private SoundEffect deathEffect;
+//	private SoundEffect deathEffect;
 
 	public HakkStage() {
 		super();
@@ -56,8 +56,8 @@ public class HakkStage extends JPanel {
 		pb = new ParticleBatcher();
 		notifications = new NotificationHandler();
 
-		flyingPlane = new FlyingPlane(-50, -500);
-		flyingBird = new FlyingBird(920, -300);
+		flyingPlane = new FlyingPlane(50, 20);
+		flyingBird = new FlyingBird(920, 200);
 
 		// deathEffect = new SoundEffect("bgm/scream.mp3");
 		// deathEffect.start();
@@ -74,7 +74,7 @@ public class HakkStage extends JPanel {
 		level.drawGround(g2d);
 		int xOffset = level.getXOffset();
 		int yOffset = level.getYOffset();
-		flyingPlane.drawPlane(g2d, yOffset, yOffset);
+		flyingPlane.drawPlane(g2d, xOffset, yOffset);
 		flyingBird.drawBird(g2d, xOffset, yOffset);
 		level.drawPlatforms(g2d, xOffset, yOffset);
 		for (Entry<String, Character> character : characters.entrySet()) {

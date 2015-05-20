@@ -4,8 +4,6 @@ import java.awt.Graphics2D;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import particle.Particle;
-
 public class NotificationHandler {
 
 	private LinkedList<Notification> notifications;
