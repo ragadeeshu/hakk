@@ -51,7 +51,7 @@ public class ClientLauncher {
 		new UpdateThread(client, stage, playerName).start();
 		System.out.println("Music by Gichco from http://opengameart.org/");
 
-		new MusicPlayer("bgm/cave-loop.mp3", true).start();
+//		new MusicPlayer("bgm/cave-loop.mp3", true).start();
 
 	}
 }
