@@ -34,7 +34,13 @@ public class ClientLauncher {
 				+ new SimpleDateFormat("mm:ss").format(new Date());
 
 		scan.close();
-		Client client = new Client(serverAddress, playerName);
+		Client client = null;
+		try{
+			client = new Client(serverAddress, playerName);
+		} catch (NullPointerException e) {
+			System.out.println("Unable to connect to server.");
+			System.exit(1);
+		}
 		JFrame frame = new JFrame("hakk");
 		frame.setSize(HakkStage.WIDTH, HakkStage.HEIGHT);
 		frame.setVisible(true);
