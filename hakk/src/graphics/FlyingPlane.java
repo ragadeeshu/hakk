@@ -2,16 +2,16 @@ package graphics;
 
 import game.HakkStage;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.JPanel;
 
 public class FlyingPlane {
-	private JPanel panel;
 	private BufferedImage flyingPlane;
 	int x, y;
 
@@ -27,23 +27,21 @@ public class FlyingPlane {
 	}
 
 	public void drawPlane(Graphics2D g2d, int xOffset, int yOffset) {
-		g2d.drawImage(flyingPlane, x - xOffset, y + yOffset, null);
-		if (xOffset > HakkStage.LEVEL_WIDTH - HakkStage.WIDTH) {
-			g2d.drawImage(flyingPlane, x - xOffset + HakkStage.LEVEL_WIDTH, y
-					+ yOffset, null);
-		} else if (xOffset < 0) {
-			g2d.drawImage(flyingPlane, -xOffset - HakkStage.LEVEL_WIDTH,
-					HakkStage.HEIGHT + yOffset, null);
+		g2d.drawImage(flyingPlane, x - xOffset/2, (int) (y + yOffset*1.5), null);
+		if (x<HakkStage.WIDTH) {
+			g2d.drawImage(flyingPlane, x - xOffset/2 + HakkStage.LEVEL_WIDTH, (int) (y
+					+ yOffset*1.5), null);
+		} else if (x> HakkStage.LEVEL_WIDTH-HakkStage.WIDTH) {
+			g2d.drawImage(flyingPlane, -xOffset/2 - HakkStage.LEVEL_WIDTH,
+					(int) (HakkStage.HEIGHT + yOffset*1.5), null);
 		}
+		
 	}
 
 	public void move() {
-		if (y == -950) {
-			x = -50;
-			y = 150;
-		}
-		x += 2;
-		y -= 1;
+		x += 8;
+		if(x> 0)
+			x-= HakkStage.LEVEL_WIDTH;
 	}
 
 }
