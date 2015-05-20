@@ -32,8 +32,8 @@ public class FlyingPlane {
 			g2d.drawImage(flyingPlane, x - xOffset/2 + HakkStage.LEVEL_WIDTH, (int) (y
 					+ yOffset*1.5), null);
 		} else if (x> HakkStage.LEVEL_WIDTH-HakkStage.WIDTH) {
-			g2d.drawImage(flyingPlane, -xOffset/2 - HakkStage.LEVEL_WIDTH,
-					(int) (HakkStage.HEIGHT + yOffset*1.5), null);
+			g2d.drawImage(flyingPlane, x -xOffset/2 - HakkStage.LEVEL_WIDTH,
+					(int) (y + HakkStage.HEIGHT + yOffset*1.5), null);
 		}
 		
 	}

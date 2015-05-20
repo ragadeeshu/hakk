@@ -30,7 +30,7 @@ public class FlyingBird {
 			g2d.drawImage(flyingBird, x - xOffset - HakkStage.LEVEL_WIDTH, y
 					+ yOffset, null);
 		} else if (x<HakkStage.WIDTH) {
-			g2d.drawImage(flyingBird, -xOffset + HakkStage.LEVEL_WIDTH,
+			g2d.drawImage(flyingBird,x -xOffset + HakkStage.LEVEL_WIDTH,y +
 					HakkStage.HEIGHT + yOffset, null);
 		}
 	}
