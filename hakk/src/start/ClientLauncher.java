@@ -18,23 +18,29 @@ public class ClientLauncher {
 
 	public static void main(String[] args) throws InterruptedException {
 		Scanner scan = new Scanner(System.in);
-
+		
+		String serverAddress = "127.0.0.1";
+		// serverAddress = "falk-2";
 		// System.out.println("Enter server address: ");
 		// String serverAddress = scan.nextLine();
-		String serverAddress = "127.0.0.1";
-//		serverAddress = "falk-2";
 
+		String playerName = "Player "
+				+ new SimpleDateFormat("mm:ss").format(new Date());
 		// System.out.println("Enter playername (alphanumerical): ");
 		// while (!scan.hasNext("[A-Za-z0-9\\s]+")) {
 		// System.out.println("THAT'S NOT VERY ALPHANUMERICAL. Try again: ");
 		// scan.nextLine();
 		// }
 		// String playerName = scan.nextLine();
-		String playerName = "Player "
-				+ new SimpleDateFormat("mm:ss").format(new Date());
 
 		scan.close();
-		Client client = new Client(serverAddress, playerName);
+		Client client = null;
+		try {
+			client = new Client(serverAddress, playerName);
+		} catch (NullPointerException e) {
+			System.out.println("Unable to connect to server.");
+			System.exit(1);
+		}
 		JFrame frame = new JFrame("hakk");
 		frame.setSize(HakkStage.WIDTH, HakkStage.HEIGHT);
 		frame.setVisible(true);
