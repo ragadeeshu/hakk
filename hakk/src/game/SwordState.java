@@ -22,10 +22,10 @@ public class SwordState {
 
 	public SwordState(String state) {
 		String[] s = state.split(Networking.SEPARATOR_ATTRIBUTE);
-
-		this.x = Double.parseDouble(s[0]);
-		this.y = Double.parseDouble(s[1]);
-		this.currentImage = s[2];
+		x = Double.parseDouble(s[0]);
+		y = Double.parseDouble(s[1]);
+		currentImage = s[2];
+		left = Integer.parseInt(s[3]);
 	}
 
 	public void move(double nx, double ny) {
@@ -40,6 +40,8 @@ public class SwordState {
 		sb.append(y);
 		sb.append(Networking.SEPARATOR_ATTRIBUTE);
 		sb.append(currentImage);
+		sb.append(Networking.SEPARATOR_ATTRIBUTE);
+		sb.append(left);
 		return sb.toString();
 	}
 
