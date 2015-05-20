@@ -36,6 +36,10 @@ public class ClientLauncher {
 					.showInputDialog("Enter playername (alphanumerical): ");
 
 		}
+		if(serverAddress==null || playerName==null){
+			JOptionPane.showMessageDialog(null, "Invalid input",
+					"Input error", JOptionPane.ERROR_MESSAGE);
+		}
 		// String playerName = scan.nextLine();
 
 		// scan.close();
