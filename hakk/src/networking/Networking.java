@@ -12,7 +12,7 @@ public abstract class Networking {
 	public static final String SEPARATOR_MESSAGES = "&";
 	public static final String SEPARATOR_MESSAGE = "@";
 
-	public static final int BUFFER_SIZE = 2048;
+	public static final int BUFFER_SIZE = 8192;
 	public static final int PORT = 13577;
 
 	public static final String CLIENT_HANDSHAKE = "CHS_CONN";
